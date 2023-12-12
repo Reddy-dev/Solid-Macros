@@ -145,6 +145,10 @@
 #define NOEXCEPT noexcept
 #endif // NOEXCEPT
 
+#ifndef NO_EXCEPT
+#define NO_EXCEPT NOEXCEPT
+#endif // NO_EXCEPT
+
 #ifndef CONSTEXPR
 #define CONSTEXPR constexpr
 #endif // CONSTEXPR
