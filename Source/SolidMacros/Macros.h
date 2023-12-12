@@ -14,9 +14,9 @@
 #define ATTRIBUTE __attribute__
 #endif // ATTRIBUTE
 
-#ifndef REQUIRES
-#define REQUIRES(...) UE_REQUIRES(__VA_ARGS__)
-#endif // REQUIRES
+#ifndef CONSTEXPR
+#define CONSTEXPR constexpr
+#endif // CONSTEXPR
 
 #ifndef FORCEINLINE_CALLS
 #define [[msvc::forceinline_calls]]
@@ -278,5 +278,36 @@
 #endif // CPP_VERSION >= CPP_VERSION_20
 
 #endif // DEFINE_ATTRIBUTE
+
+/*	namespace
+	{
+// Only needed for the UE_REQUIRES macro to work, to allow for a trailing > token after the macro
+template <bool B>
+concept BoolIdentityConcept = B;
+}
+
+#define UE_REQUIRES(...) > requires (!!(__VA_ARGS__)) && UE::Core::Private::BoolIdentityConcept<true*/
+
+#ifndef REQUIRES
+
+#if CPP_VERSION >= CPP_VERSION_20
+
+namespace UE::Core::Private
+{
+	// Only needed for the UE_REQUIRES macro to work, to allow for a trailing > token after the macro
+	template <bool Value>
+	concept TBoolIdentityConcept = Value;
+}; // namespace UE::Core::Private
+
+#define REQUIRES(...) \
+	requires ((__VA_ARGS__) && UE::Core::Private::TBoolIdentityConcept<true>)
+
+#else // CPP_VERSION >= CPP_VERSION_20
+
+#define REQUIRES(...) ,std::enable_if_t<(__VA_ARGS__), bool> = true
+
+#endif // CPP_VERSION >= CPP_VERSION_20
+
+#endif // REQUIRES
 
 
