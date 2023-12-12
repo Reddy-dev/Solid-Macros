@@ -22,13 +22,13 @@
 #define [[msvc::forceinline_calls]]
 #endif // FORCEINLINE_CALLS
 
-#ifndef likely
-#define likely(x) [[likely]]
-#endif // likely
+#ifndef LIKELY_ATTRIBUTE
+#define LIKELY_ATTRIBUTE(x) [[likely]]
+#endif // LIKELY_ATTRIBUTE
 
-#ifndef unlikely
-#define unlikely(x) [[unlikely]]
-#endif // unlikely
+#ifndef UNLIKELY_ATTRIBUTE
+#define UNLIKELY_ATTRIBUTE(x) [[unlikely]]
+#endif // UNLIKELY_ATTRIBUTE
 
 #ifndef CPP_VERSION
 #define CPP_VERSION __cplusplus
@@ -278,15 +278,6 @@
 #endif // CPP_VERSION >= CPP_VERSION_20
 
 #endif // DEFINE_ATTRIBUTE
-
-/*	namespace
-	{
-// Only needed for the UE_REQUIRES macro to work, to allow for a trailing > token after the macro
-template <bool B>
-concept BoolIdentityConcept = B;
-}
-
-#define UE_REQUIRES(...) > requires (!!(__VA_ARGS__)) && UE::Core::Private::BoolIdentityConcept<true*/
 
 #ifndef REQUIRES
 
