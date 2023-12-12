@@ -165,7 +165,7 @@
 
 #if defined(__GNUC__) || defined(__clang__)
 #define FUNCTION_NAME __PRETTY_FUNCTION__
-#else
+#else // defined(__GNUC__) || defined(__clang__)
 #define FUNCTION_NAME __FUNCTION__
 #endif // defined(__GNUC__) || defined(__clang__)
 
