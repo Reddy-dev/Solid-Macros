@@ -51,6 +51,90 @@ public:
 		return std::get<ErrorType>(Value);
 	}
 
+	OPTIONAL_FORCEINLINE NO_DISCARD ValueType& operator*()
+	{
+		return GetValue();
+	}
+	
+	OPTIONAL_FORCEINLINE NO_DISCARD const ValueType& operator*() const
+	{
+		return GetValue();
+	}
+
+	OPTIONAL_FORCEINLINE NO_DISCARD ValueType* operator->()
+	{
+		return &GetValue();
+	}
+
+	OPTIONAL_FORCEINLINE NO_DISCARD const ValueType* operator->() const
+	{
+		return &GetValue();
+	}
+
+	OPTIONAL_FORCEINLINE NO_DISCARD operator bool() const
+	{
+		return IsOk();
+	}
+
+	OPTIONAL_FORCEINLINE NO_DISCARD bool operator!() const
+	{
+		return IsError();
+	}
+
+	OPTIONAL_FORCEINLINE NO_DISCARD bool operator==(const TSolidResult& Other) const
+	{
+		return Value == Other.Value;
+	}
+
+	OPTIONAL_FORCEINLINE NO_DISCARD bool operator!=(const TSolidResult& Other) const
+	{
+		return Value != Other.Value;
+	}
+
+	OPTIONAL_FORCEINLINE NO_DISCARD bool operator==(const ValueType& Other) const
+	{
+		return Value == Other;
+	}
+
+	OPTIONAL_FORCEINLINE NO_DISCARD bool operator!=(const ValueType& Other) const
+	{
+		return Value != Other;
+	}
+
+	OPTIONAL_FORCEINLINE NO_DISCARD bool operator==(const ErrorType& Other) const
+	{
+		return Value == Other;
+	}
+
+	OPTIONAL_FORCEINLINE NO_DISCARD bool operator!=(const ErrorType& Other) const
+	{
+		return Value != Other;
+	}
+
+	OPTIONAL_FORCEINLINE TSolidResult& operator=(const ValueType& Other) NOEXCEPT
+	{
+		Value = Other;
+		return *this;
+	}
+
+	OPTIONAL_FORCEINLINE TSolidResult& operator=(ValueType&& Other) NOEXCEPT
+	{
+		Value = std::move(Other);
+		return *this;
+	}
+
+	OPTIONAL_FORCEINLINE TSolidResult& operator=(const ErrorType& Other) NOEXCEPT
+	{
+		Value = Other;
+		return *this;
+	}
+
+	OPTIONAL_FORCEINLINE TSolidResult& operator=(ErrorType&& Other) NOEXCEPT
+	{
+		Value = std::move(Other);
+		return *this;
+	}
+
 private:
 	std::variant<ValueType, ErrorType> Value;
 }; // class TSolidResult
