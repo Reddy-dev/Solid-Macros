@@ -14,25 +14,57 @@
 #define ATTRIBUTE __attribute__
 #endif // ATTRIBUTE
 
+#ifndef IS_CLANG
+#define IS_CLANG defined(__clang__)
+#endif // IS_CLANG
+
+#ifndef IS_GNU
+#define IS_GNU defined(__GNUC__)
+#endif // IS_GNU
+
+#ifndef IS_MSVC
+#define IS_MSVC defined(_MSC_VER)
+#endif // IS_MSVC
+
+#ifndef IS_UNIX
+#define IS_UNIX PLATFORM_UNIX
+#endif // IS_UNIX
+
+#ifndef IS_WINDOWS
+#define IS_WINDOWS PLATFORM_WINDOWS
+#endif // IS_WINDOWS
+
+#ifndef IS_LINUX
+#define IS_LINUX PLATFORM_LINUX
+#endif // IS_LINUX
+
 #ifndef CONSTEXPR
 #define CONSTEXPR constexpr
 #endif // CONSTEXPR
+
+#ifndef DECLSPEC
+#define DECLSPEC __declspec
+#endif // DECLSPEC
 
 #ifndef FORCEINLINE_CALLS
 #define [[msvc::forceinline_calls]]
 #endif // FORCEINLINE_CALLS
 
 #ifndef LIKELY_ATTRIBUTE
-#define LIKELY_ATTRIBUTE(x) [[likely]]
+#define LIKELY_ATTRIBUTE [[likely]]
 #endif // LIKELY_ATTRIBUTE
 
 #ifndef UNLIKELY_ATTRIBUTE
-#define UNLIKELY_ATTRIBUTE(x) [[unlikely]]
+#define UNLIKELY_ATTRIBUTE [[unlikely]]
 #endif // UNLIKELY_ATTRIBUTE
 
 #ifndef CPP_VERSION
 #define CPP_VERSION __cplusplus
 #endif // CPP_VERSION
+
+#ifndef CPP_VERSION_98
+#define CPP_VERSION_98 199711L
+#endif // CPP_VERSION_98
 
 #ifndef CPP_VERSION_11
 #define CPP_VERSION_11 201103L
@@ -49,6 +81,10 @@
 #ifndef CPP_VERSION_20
 #define CPP_VERSION_20 202002L
 #endif // CPP_VERSION_20
+
+#ifndef CPP_VERSION_23
+#define CPP_VERSION_23 202300L
+#endif // CPP_VERSION_23
 
 // only for 
 #if CPP_VERSION >= CPP_VERSION_20 && !((defined(__clang__) || defined(__GNUC__) ) && (PLATFORM_UNIX))
@@ -85,6 +121,14 @@
 #define OPTIONAL_FORCEINLINE INLINE
 #endif // OPTIONAL_FORCEINLINE
 
+#ifndef FORCEINLINE_OPTIMIZED
+#define FORCEINLINE_OPTIMIZED [[msvc::forceinline]]
+#endif // FORCEINLINE_OPTIMIZED
+
+#ifndef SOLID_INLINE
+#define SOLID_INLINE FORCEINLINE_DEBUGGABLE_ACTUAL
+#endif // SOLID_INLINE
+
 #ifndef NO_DISCARD
 #define NO_DISCARD [[nodiscard]]
 #endif // NO_DISCARD
@@ -98,7 +142,17 @@
 #endif // NO_UNIQUE_ADDRESS
 
 #ifndef NO_VTABLE
+
+#if CPP_VERSION > CPP_VERSION_20
+
 #define NO_VTABLE [[no_vtable]]
+
+#else // CPP_VERSION > CPP_VERSION_20
+
+#define NO_VTABLE DECLSPEC(novtable)
+
+#endif // CPP_VERSION > CPP_VERSION_20
+
 #endif // NO_VTABLE
 
 #ifndef NO_THROW
@@ -175,8 +229,34 @@
 #define FUNCTION_SIGNATURE __FUNCSIG__
 #endif // FUNCTION_SIGNATURE
 
+#ifndef FUNCTION_SIG
+#define FUNCTION_SIG FUNCTION_SIGNATURE
+#endif // FUNCTION_SIG
+
+#ifndef FUNC_SIG
+#define FUNC_SIG FUNCTION_SIGNATURE
+#endif // FUNC_SIG
+
+#ifndef FUNC_SIGNATURE
+#define FUNC_SIGNATURE FUNCTION_SIGNATURE
+#endif // FUNC_SIGNATURE
+
+#ifndef FUNC_NAME
+#define FUNC_NAME FUNCTION_NAME
+#endif // FUNC_NAME
+
 #ifndef ASSUME
+
+#if CPP_VERSION >= CPP_VERSION_23
+
 #define ASSUME(x) [[assume(x)]]
+
+#else // CPP_VERSION <= CPP_VERSION_23
+
+#define ASSUME(x) UE_ASSUME(x)
+
+#endif // CPP_VERSION <= CPP_VERSION_23
+
 #endif // ASSUME
 
 #ifndef FALLTHROUGH
@@ -275,6 +355,8 @@
 
 #if CPP_VERSION >= CPP_VERSION_20
 
+UE_REQUIRES()
+
 namespace UE::Core::Private
 {
 	// Only needed for the UE_REQUIRES macro to work, to allow for a trailing > token after the macro
@@ -293,4 +375,7 @@ namespace UE::Core::Private
 
 #endif // REQUIRES
 
+#ifndef UNREACHABLE
+#define UNREACHABLE ASSUME(false)
+#endif // UNREACHABLE
 

@@ -15,121 +15,121 @@ class TSolidResult
 	using ErrorType = E;
 	
 public:
-	OPTIONAL_FORCEINLINE TSolidResult() = default;
-	OPTIONAL_FORCEINLINE TSolidResult(const ValueType& Value) : Value(Value) {}
-	OPTIONAL_FORCEINLINE TSolidResult(ValueType&& Value) : Value(std::move(Value)) {}
-	OPTIONAL_FORCEINLINE TSolidResult(const ErrorType& Error) : Value(Error) {}
-	OPTIONAL_FORCEINLINE TSolidResult(ErrorType&& Error) : Value(std::move(Error)) {}
+	SOLID_INLINE TSolidResult() = default;
+	SOLID_INLINE TSolidResult(const ValueType& Value) : Value(Value) {}
+	SOLID_INLINE TSolidResult(ValueType&& Value) : Value(std::move(Value)) {}
+	SOLID_INLINE TSolidResult(const ErrorType& Error) : Value(Error) {}
+	SOLID_INLINE TSolidResult(ErrorType&& Error) : Value(std::move(Error)) {}
 	
-	OPTIONAL_FORCEINLINE NO_DISCARD bool IsOk() const
+	SOLID_INLINE NO_DISCARD bool IsOk() const
 	{
 		return std::holds_alternative<ValueType>(Value);
 	}
 	
-	OPTIONAL_FORCEINLINE NO_DISCARD bool IsError() const
+	SOLID_INLINE NO_DISCARD bool IsError() const
 	{
 		return std::holds_alternative<ErrorType>(Value);
 	}
 	
-	OPTIONAL_FORCEINLINE NO_DISCARD ValueType& GetValue()
+	SOLID_INLINE NO_DISCARD ValueType& GetValue()
 	{
 		return std::get<ValueType>(Value);
 	}
 
-	OPTIONAL_FORCEINLINE NO_DISCARD const ValueType& GetValue() const
+	SOLID_INLINE NO_DISCARD const ValueType& GetValue() const
 	{
 		return std::get<ValueType>(Value);
 	}
 	
-	OPTIONAL_FORCEINLINE NO_DISCARD ErrorType& GetError()
+	SOLID_INLINE NO_DISCARD ErrorType& GetError()
 	{
 		return std::get<ErrorType>(Value);
 	}
 
-	OPTIONAL_FORCEINLINE NO_DISCARD const ErrorType& GetError() const
+	SOLID_INLINE NO_DISCARD const ErrorType& GetError() const
 	{
 		return std::get<ErrorType>(Value);
 	}
 
-	OPTIONAL_FORCEINLINE NO_DISCARD ValueType& operator*()
+	SOLID_INLINE NO_DISCARD ValueType& operator*()
 	{
 		return GetValue();
 	}
 	
-	OPTIONAL_FORCEINLINE NO_DISCARD const ValueType& operator*() const
+	SOLID_INLINE NO_DISCARD const ValueType& operator*() const
 	{
 		return GetValue();
 	}
 
-	OPTIONAL_FORCEINLINE NO_DISCARD ValueType* operator->()
+	SOLID_INLINE NO_DISCARD ValueType* operator->()
 	{
 		return &GetValue();
 	}
 
-	OPTIONAL_FORCEINLINE NO_DISCARD const ValueType* operator->() const
+	SOLID_INLINE NO_DISCARD const ValueType* operator->() const
 	{
 		return &GetValue();
 	}
 
-	OPTIONAL_FORCEINLINE NO_DISCARD operator bool() const
+	SOLID_INLINE NO_DISCARD operator bool() const
 	{
 		return IsOk();
 	}
 
-	OPTIONAL_FORCEINLINE NO_DISCARD bool operator!() const
+	SOLID_INLINE NO_DISCARD bool operator!() const
 	{
 		return IsError();
 	}
 
-	OPTIONAL_FORCEINLINE NO_DISCARD bool operator==(const TSolidResult& Other) const
+	SOLID_INLINE NO_DISCARD bool operator==(const TSolidResult& Other) const
 	{
 		return Value == Other.Value;
 	}
 
-	OPTIONAL_FORCEINLINE NO_DISCARD bool operator!=(const TSolidResult& Other) const
+	SOLID_INLINE NO_DISCARD bool operator!=(const TSolidResult& Other) const
 	{
 		return Value != Other.Value;
 	}
 
-	OPTIONAL_FORCEINLINE NO_DISCARD bool operator==(const ValueType& Other) const
+	SOLID_INLINE NO_DISCARD bool operator==(const ValueType& Other) const
 	{
 		return Value == Other;
 	}
 
-	OPTIONAL_FORCEINLINE NO_DISCARD bool operator!=(const ValueType& Other) const
+	SOLID_INLINE NO_DISCARD bool operator!=(const ValueType& Other) const
 	{
 		return Value != Other;
 	}
 
-	OPTIONAL_FORCEINLINE NO_DISCARD bool operator==(const ErrorType& Other) const
+	SOLID_INLINE NO_DISCARD bool operator==(const ErrorType& Other) const
 	{
 		return Value == Other;
 	}
 
-	OPTIONAL_FORCEINLINE NO_DISCARD bool operator!=(const ErrorType& Other) const
+	SOLID_INLINE NO_DISCARD bool operator!=(const ErrorType& Other) const
 	{
 		return Value != Other;
 	}
 
-	OPTIONAL_FORCEINLINE TSolidResult& operator=(const ValueType& Other) NOEXCEPT
+	SOLID_INLINE TSolidResult& operator=(const ValueType& Other) NOEXCEPT
 	{
 		Value = Other;
 		return *this;
 	}
 
-	OPTIONAL_FORCEINLINE TSolidResult& operator=(ValueType&& Other) NOEXCEPT
+	SOLID_INLINE TSolidResult& operator=(ValueType&& Other) NOEXCEPT
 	{
 		Value = std::move(Other);
 		return *this;
 	}
 
-	OPTIONAL_FORCEINLINE TSolidResult& operator=(const ErrorType& Other) NOEXCEPT
+	SOLID_INLINE TSolidResult& operator=(const ErrorType& Other) NOEXCEPT
 	{
 		Value = Other;
 		return *this;
 	}
 
-	OPTIONAL_FORCEINLINE TSolidResult& operator=(ErrorType&& Other) NOEXCEPT
+	SOLID_INLINE TSolidResult& operator=(ErrorType&& Other) NOEXCEPT
 	{
 		Value = std::move(Other);
 		return *this;
