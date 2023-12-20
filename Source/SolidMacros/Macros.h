@@ -54,6 +54,14 @@
 #define LIKELY_ATTRIBUTE [[likely]]
 #endif // LIKELY_ATTRIBUTE
 
+#ifndef LIKELY_IF
+#define LIKELY_IF(x) (x) LIKELY_ATTRIBUTE
+#endif // LIKELY_IF
+
+#ifndef UNLIKELY_IF
+#define UNLIKELY_IF(x) (x) UNLIKELY_ATTRIBUTE
+#endif // UNLIKELY_IF
+
 #ifndef UNLIKELY_ATTRIBUTE
 #define UNLIKELY_ATTRIBUTE [[unlikely]]
 #endif // UNLIKELY_ATTRIBUTE
@@ -86,33 +94,6 @@
 #define CPP_VERSION_23 202300L
 #endif // CPP_VERSION_23
 
-// only for 
-#if CPP_VERSION >= CPP_VERSION_20 && !((defined(__clang__) || defined(__GNUC__) ) && (PLATFORM_UNIX))
-
-#ifdef LIKELY
-#undef LIKELY
-#endif // LIKELY
-
-#ifdef UNLIKELY
-#undef UNLIKELY
-#endif // UNLIKELY
-
-#ifndef LIKELY
-#define LIKELY(x) \
-	( \
-		([](bool Value) [[likely]] -> bool { return Value; })(x) \
-	)
-#endif // LIKELY
-
-#ifndef UNLIKELY
-#define UNLIKELY(x) \
-	( \
-		([](bool Value) [[unlikely]] -> bool { return Value; })(x) \
-	)
-#endif // UNLIKELY
-
-#endif // CPP_VERSION >= CPP_VERSION_20 && !((defined(__clang__) || defined(__GNUC__) ) && (PLATFORM_UNIX))
-
 #ifndef INLINE
 #define INLINE inline
 #endif // INLINE
@@ -124,6 +105,32 @@
 #ifndef FORCEINLINE_OPTIMIZED
 #define FORCEINLINE_OPTIMIZED [[msvc::forceinline]]
 #endif // FORCEINLINE_OPTIMIZED
+
+#if IS_MSVC
+
+#ifdef LIKELY
+#undef LIKELY
+#endif // LIKELY
+
+#ifdef UNLIKELY
+#undef UNLIKELY
+#endif // UNLIKELY
+
+#ifndef LIKELY
+#define LIKELY(x) \
+( \
+([](bool Value) [[likely]] -> bool FORCEINLINE_OPTIMIZED { return Value; })(x) \
+)
+#endif // LIKELY
+
+#ifndef UNLIKELY
+#define UNLIKELY(x) \
+( \
+([](bool Value) [[unlikely]] -> bool FORCEINLINE_OPTIMIZED { return Value; })(x) \
+)
+#endif // UNLIKELY
+
+#endif // IS_MSVC
 
 #ifndef SOLID_INLINE
 #define SOLID_INLINE FORCEINLINE_DEBUGGABLE_ACTUAL
