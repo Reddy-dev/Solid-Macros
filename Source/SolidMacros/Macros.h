@@ -2,6 +2,62 @@
 
 #pragma once
 
+#ifndef SOLID_MACROS_H
+#define SOLID_MACROS_H
+
+#include <string>
+#include <array>
+#include <utility>
+
+template <std::size_t...Idxs>
+constexpr auto substring_as_array(std::string_view str, std::index_sequence<Idxs...>)
+{
+	return std::array{str[Idxs]..., '\n'};
+}
+
+template <typename T>
+constexpr auto type_name_array() -> std::array<char, 5>
+{
+	#if defined(__clang__)
+	constexpr auto prefix   = std::string_view{"[T = "};
+	constexpr auto suffix   = std::string_view{"]"};
+	constexpr auto function = std::string_view{__PRETTY_FUNCTION__};
+	#elif defined(__GNUC__)
+	constexpr auto prefix   = std::string_view{"with T = "};
+	constexpr auto suffix   = std::string_view{"]"};
+	constexpr auto function = std::string_view{__PRETTY_FUNCTION__};
+	#elif defined(_MSC_VER)
+	constexpr auto prefix   = std::string_view{"type_name_array<"};
+	constexpr auto suffix   = std::string_view{">(void)"};
+	constexpr auto function = std::string_view{__FUNCSIG__};
+	#else
+	# error Unsupported compiler
+	#endif
+
+	constexpr uint64 start = function.find(prefix) + prefix.size();
+	constexpr uint32 end = function.rfind(suffix);
+
+	static_assert(start < end);
+
+	constexpr std::string_view name = function.substr(start, (end - start));
+	return substring_as_array(name, std::make_index_sequence<name.size()>{});
+}
+
+template <typename T>
+struct type_name_holder
+{
+	static inline constexpr auto value = type_name_array<T>();
+};
+
+template <typename T>
+constexpr auto type_name() -> std::string_view
+{
+	constexpr auto& value = type_name_holder<T>::value;
+	return std::string_view{value.data(), value.size()};
+}
+
+#endif // SOLID_MACROS_H
+
 #ifndef EXPECTS
 #define EXPECTS(x) [[expects : x]]
 #endif // EXPECTS
@@ -106,8 +162,6 @@
 #define FORCEINLINE_OPTIMIZED [[msvc::forceinline]]
 #endif // FORCEINLINE_OPTIMIZED
 
-#if IS_MSVC
-
 #ifdef LIKELY
 #undef LIKELY
 #endif // LIKELY
@@ -117,23 +171,49 @@
 #endif // UNLIKELY
 
 #ifndef LIKELY
+
+#if IS_MSVC
+
 #define LIKELY(x) \
 ( \
 ([](bool Value) [[likely]] -> bool FORCEINLINE_OPTIMIZED { return Value; })(x) \
 )
+
+#elif IS_CLANG || IS_GNU
+
+#define LIKELY(x) __builtin_expect(!!(x), 1)
+
+#else // IS_MSVC
+
+#define LIKELY(x) (!!(x))
+
+#endif // IS_MSVC
+
 #endif // LIKELY
 
 #ifndef UNLIKELY
+
+#if IS_MSVC
+
 #define UNLIKELY(x) \
 ( \
 ([](bool Value) [[unlikely]] -> bool FORCEINLINE_OPTIMIZED { return Value; })(x) \
 )
-#endif // UNLIKELY
+
+#elif IS_CLANG || IS_GNU
+
+#define UNLIKELY(x) __builtin_expect(!!(x), 0)
+
+#else // IS_MSVC
+
+#define UNLIKELY(x) (!!(x))
 
 #endif // IS_MSVC
 
+#endif // UNLIKELY
+
 #ifndef SOLID_INLINE
-#define SOLID_INLINE FORCEINLINE_DEBUGGABLE_ACTUAL
+#define SOLID_INLINE FORCEINLINE_DEBUGGABLE
 #endif // SOLID_INLINE
 
 #ifndef NO_DISCARD
@@ -215,7 +295,7 @@
 #endif // CONSTEXPR
 
 #ifndef nameof
-#define nameof(x) typeid(x).name()
+#define nameof(x) type_name<x>()
 #endif // nameof
 
 #ifndef NAME_OF
@@ -386,3 +466,30 @@ namespace UE::Core::Private
 #define UNREACHABLE ASSUME(false)
 #endif // UNREACHABLE
 
+#ifndef VECTOR_CALL
+#define VECTOR_CALL __vectorcall
+#endif // VECTOR_CALL
+
+#ifndef SOLID_INTERFACE
+#define SOLID_INTERFACE __interface
+#endif // SOLID_INTERFACE
+
+#ifndef BINARY_LITERAL
+#define BINARY_LITERAL(x) 0b##x
+#endif // BINARY_LITERAL
+
+#ifndef FAST_CALL
+#define FAST_CALL __fastcall
+#endif // FAST_CALL
+
+#ifndef IF_EXISTS
+#define IF_EXISTS(x) if CONSTEXPR (std::is_same_v<decltype(x), void>) {}
+#endif // IF_EXISTS
+
+#ifndef IF_NOT_EXISTS
+#define IF_NOT_EXISTS(x) if CONSTEXPR (!std::is_same_v<decltype(x), void>) {}
+#endif // IF_NOT_EXISTS
+
+#ifndef FINALLY
+#define FINALLY(x) __finally
+#endif // FINALLY
