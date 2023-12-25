@@ -213,7 +213,7 @@ constexpr auto type_name() -> std::string_view
 #endif // UNLIKELY
 
 #ifndef SOLID_INLINE
-#define SOLID_INLINE FORCEINLINE_DEBUGGABLE
+#define SOLID_INLINE INLINE
 #endif // SOLID_INLINE
 
 #ifndef NO_DISCARD
