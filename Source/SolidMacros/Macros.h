@@ -9,7 +9,7 @@
 #include <array>
 #include <utility>
 
-template <std::size_t...Idxs>
+template <std::size_t ...Idxs>
 constexpr auto substring_as_array(std::string_view str, std::index_sequence<Idxs...>)
 {
 	return std::array{str[Idxs]..., '\n'};
@@ -47,7 +47,7 @@ template <typename T>
 struct type_name_holder
 {
 	static inline constexpr auto value = type_name_array<T>();
-};
+}; // struct type_name_holder
 
 template <typename T>
 constexpr auto type_name() -> std::string_view
@@ -441,8 +441,6 @@ constexpr auto type_name() -> std::string_view
 #ifndef REQUIRES
 
 #if CPP_VERSION >= CPP_VERSION_20
-
-UE_REQUIRES()
 
 namespace UE::Core::Private
 {
