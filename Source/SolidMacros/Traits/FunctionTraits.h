@@ -141,7 +141,7 @@ namespace Solid
 
 		return []<typename ...Args>(Args ...InArgs) FORCEINLINE_ATTRIBUTE -> decltype(auto)
 		{
-			return Lambda_Copy(InArgs ...);
+			return Lambda_Copy(InArgs...);
 		};
 	}
 
