@@ -116,11 +116,6 @@ namespace Solid
 	{
 	}; // struct TFunctionTraits
 
-	//template <typename Cls, typename Ret, typename ...Args>
-	//struct function_traits<Ret(Cls::*)(Args ...) const> : function_traits<Ret(Args ...)>
-	//{
-	//}; // struct function_traits
-
 	template <typename ReturnType, typename ClassType, typename ...Ts>
 	struct TFunctionTraits<ReturnType(ClassType::*)(Ts...)>
 	{
@@ -135,7 +130,7 @@ namespace Solid
 		{
 			Lambda_Copy();
 		};
-	} // LambdaToVoidFunctionPtr
+	}
 
 #if CPP_VERSION >= CPP_VERSION_20
 	
@@ -148,7 +143,7 @@ namespace Solid
 		{
 			return Lambda_Copy(InArgs ...);
 		};
-	} // LambdaToPtr
+	}
 
 #endif // CPP_VERSION >= CPP_VERSION_20
 	
