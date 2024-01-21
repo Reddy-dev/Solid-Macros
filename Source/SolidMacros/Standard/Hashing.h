@@ -8,29 +8,29 @@
 
 namespace Solid
 {
-	FORCEINLINE NO_DISCARD int32 Match(const uint8 Byte, const uint8* Data)
+	FORCEINLINE NO_DISCARD static int32 Match(const uint8 Byte, const uint8* Data)
 	{
 		const __m128i M = _mm_set1_epi8(Byte);
 		const __m128i Control = _mm_load_si128(reinterpret_cast<const __m128i*>(Data));
 		return _mm_movemask_epi8(_mm_cmpeq_epi8(M, Control));
 	}
 	
-	FORCEINLINE static NO_DISCARD uint32 GetTypeHashUniversal(const void* Ptr, uint32 Size)
+	FORCEINLINE NO_DISCARD static uint32 GetTypeHashUniversal(const void* Ptr, uint32 Size)
 	{
 		using SIMDType = __m256i;
 		
 		static CONSTEXPR uint32 SIMD_SIZE = sizeof(SIMDType);
 		
-		uint32_t Hash = 2166136261U;
+		uint32 Hash = 2166136261U;
 
-		// Use SIMD for larger blocks of memory
+		// Use SIMD only for larger blocks of memory
 		if (Size >= SIMD_SIZE)
 		{
 			size_t Processed = 0;
 			while (Processed + SIMD_SIZE <= Size)
 			{
 				SIMDType Data;
-				std::memcpy(&Data, static_cast<const uint8_t*>(Ptr) + Processed, SIMD_SIZE);
+				std::memcpy(&Data, static_cast<const uint8*>(Ptr) + Processed, SIMD_SIZE);
 				
 				for (int32 Index = 0; Index < 8; ++Index)
 				{
@@ -41,13 +41,13 @@ namespace Solid
 			}
 
 			// Update pointer and size for remaining bytes
-			Ptr = static_cast<const uint8_t*>(Ptr) + Processed;
+			Ptr = static_cast<const uint8*>(Ptr) + Processed;
 			Size -= Processed;
 		}
 		
-		const uint8_t* Bytes = static_cast<const uint8_t*>(Ptr);
+		const uint8* Bytes = static_cast<const uint8*>(Ptr);
 		
-		for (size_t Index = 0; Index < Size; ++Index)
+		for (uint32 Index = 0; Index < Size; ++Index)
 		{
 			Hash = (Hash * 16777619U) ^ Bytes[Index];
 		}
@@ -56,7 +56,7 @@ namespace Solid
 	}
 
 	template <uint32 Count = 2>
-	FORCEINLINE static NO_DISCARD uint32 HashCombineUniversal(const uint32 (&Hashes)[Count])
+	FORCEINLINE NO_DISCARD static uint32 HashCombineUniversal(const uint32 (&Hashes)[Count])
 	{
 		uint32 Hash = 2166136261U;
 		
@@ -68,6 +68,7 @@ namespace Solid
 
 		return Hash;
 	}
+	
 } // namespace Solid
 
 template <>
