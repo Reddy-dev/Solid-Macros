@@ -1,10 +1,10 @@
 ﻿// Solstice Games © 2023. All Rights Reserved.
 
-#ifndef SOLIDARITY_UTILS_SOLID_RESULT_H
-#define SOLIDARITY_UTILS_SOLID_RESULT_H
+#ifndef SOLID_RESULT_H
+#define SOLID_RESULT_H
 
 #include "CoreMinimal.h"
-#include "Macros.h"
+#include "SolidMacros/Macros.h"
 
 #include <variant>
 
@@ -139,4 +139,4 @@ private:
 	std::variant<ValueType, ErrorType> Value;
 }; // class TSolidResult
 
-#endif //SOLIDARITY_UTILS_SOLID_RESULT_H
+#endif // SOLID_RESULT_H

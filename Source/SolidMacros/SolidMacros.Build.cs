@@ -10,7 +10,7 @@ public class SolidMacros : ModuleRules
 		
 		PublicIncludePaths.AddRange(
 			new string[] {
-				
+				ModuleDirectory
 			}
 			);
 				
@@ -25,6 +25,7 @@ public class SolidMacros : ModuleRules
 			new string[]
 			{
 				"Core",
+				"CoreUObject"
 			}
 			);
 			
@@ -32,7 +33,7 @@ public class SolidMacros : ModuleRules
 		PrivateDependencyModuleNames.AddRange(
 			new string[]
 			{
-				
+				"PropertyPath"
 			}
 			);
 		

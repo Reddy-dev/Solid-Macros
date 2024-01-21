@@ -10,32 +10,32 @@
 #include <utility>
 
 template <std::size_t ...Idxs>
-constexpr auto substring_as_array(std::string_view str, std::index_sequence<Idxs...>)
+FORCEINLINE constexpr auto substring_as_array(std::string_view str, std::index_sequence<Idxs...>)
 {
 	return std::array{str[Idxs]..., '\n'};
 }
 
 template <typename T>
-constexpr auto type_name_array() -> std::array<char, 5>
+FORCEINLINE constexpr auto type_name_array() -> std::array<char, 5>
 {
 	#if defined(__clang__)
 	constexpr auto prefix   = std::string_view{"[T = "};
 	constexpr auto suffix   = std::string_view{"]"};
 	constexpr auto function = std::string_view{__PRETTY_FUNCTION__};
-	#elif defined(__GNUC__)
+	#elif defined(__GNUC__) // defined(__clang__)
 	constexpr auto prefix   = std::string_view{"with T = "};
 	constexpr auto suffix   = std::string_view{"]"};
 	constexpr auto function = std::string_view{__PRETTY_FUNCTION__};
-	#elif defined(_MSC_VER)
+	#elif defined(_MSC_VER) // defined(__GNUC__)
 	constexpr auto prefix   = std::string_view{"type_name_array<"};
 	constexpr auto suffix   = std::string_view{">(void)"};
 	constexpr auto function = std::string_view{__FUNCSIG__};
-	#else
+	#else // defined(_MSC_VER)
 	# error Unsupported compiler
-	#endif
+	#endif // defined(_MSC_VER)
 
-	constexpr uint64 start = function.find(prefix) + prefix.size();
-	constexpr uint32 end = function.rfind(suffix);
+	constexpr uint_fast64_t start = function.find(prefix) + prefix.size();
+	constexpr uint_fast32_t end = function.rfind(suffix);
 
 	static_assert(start < end);
 
@@ -50,6 +50,7 @@ struct type_name_holder
 }; // struct type_name_holder
 
 template <typename T>
+// ReSharper disable once CppUE4CodingStandardNamingViolationWarning
 constexpr auto type_name() -> std::string_view
 {
 	constexpr auto& value = type_name_holder<T>::value;
@@ -58,12 +59,36 @@ constexpr auto type_name() -> std::string_view
 
 #endif // SOLID_MACROS_H
 
+#ifndef HAS_CPP_ATTRIBUTE
+#define HAS_CPP_ATTRIBUTE(x) __has_cpp_attribute(x)
+#endif // HAS_CPP_ATTRIBUTE
+
 #ifndef EXPECTS
+
+#if HAS_CPP_ATTRIBUTE(expects)
+
 #define EXPECTS(x) [[expects : x]]
+
+#else // HAS_CPP_ATTRIBUTE(expects)
+
+#define EXPECTS(x)
+
+#endif // HAS_CPP_ATTRIBUTE(expects)
+
 #endif // EXPECTS
 
 #ifndef ENSURES
+
+#if HAS_CPP_ATTRIBUTE(ensures)
+
 #define ENSURES(x) [[ensures : x]]
+
+#else // HAS_CPP_ATTRIBUTE(ensures)
+
+#define ENSURES(x)
+
+#endif // HAS_CPP_ATTRIBUTE(ensures)
+
 #endif // ENSURES
 
 #ifndef ATTRIBUTE
@@ -71,16 +96,50 @@ constexpr auto type_name() -> std::string_view
 #endif // ATTRIBUTE
 
 #ifndef IS_CLANG
-#define IS_CLANG defined(__clang__)
+
+#if defined(__clang__)
+
+#define IS_CLANG 1
+
+#else // defined(__clang__)
+
+#define IS_CLANG 0
+
+#endif // defined(__clang__)
+
 #endif // IS_CLANG
 
 #ifndef IS_GNU
-#define IS_GNU defined(__GNUC__)
+
+#if defined(__GNUC__)
+
+#define IS_GNU 1
+
+#else // defined(__GNUC__)
+
+#define IS_GNU 0
+
+#endif // defined(__GNUC__)
+
 #endif // IS_GNU
 
 #ifndef IS_MSVC
-#define IS_MSVC defined(_MSC_VER)
+
+#if defined(_MSC_VER)
+
+#define IS_MSVC 1
+
+#else // defined(_MSC_VER)
+
+#define IS_MSVC 0
+
+#endif // defined(_MSC_VER
+
 #endif // IS_MSVC
+
+#ifndef IS_GCC
+#define IS_GCC IS_GNU
+#endif // IS_GCC
 
 #ifndef IS_UNIX
 #define IS_UNIX PLATFORM_UNIX
@@ -102,9 +161,31 @@ constexpr auto type_name() -> std::string_view
 #define DECLSPEC __declspec
 #endif // DECLSPEC
 
+#ifndef NAKED
+#define NAKED DECLSPEC(naked)
+#endif // NAKED
+
 #ifndef FORCEINLINE_CALLS
-#define [[msvc::forceinline_calls]]
+#define FORCEINLINE_CALLS [[msvc::forceinline_calls]]
 #endif // FORCEINLINE_CALLS
+
+#ifndef FORCEINLINE_ATTRIBUTE
+
+#if IS_MSVC
+
+#define FORCEINLINE_ATTRIBUTE [[msvc::forceinline]]
+
+#elif IS_CLANG || IS_GNU
+
+#define FORCEINLINE_ATTRIBUTE __attribute__((always_inline))
+
+#else // IS_MSVC
+
+#define FORCEINLINE_ATTRIBUTE [[gnu::always_inline]]
+
+#endif // IS_MSVC
+
+#endif // FORCEINLINE_ATTRIBUTE
 
 #ifndef LIKELY_ATTRIBUTE
 #define LIKELY_ATTRIBUTE [[likely]]
@@ -143,7 +224,7 @@ constexpr auto type_name() -> std::string_view
 #endif // CPP_VERSION_17
 
 #ifndef CPP_VERSION_20
-#define CPP_VERSION_20 202002L
+#define CPP_VERSION_20 STRUCTCPP
 #endif // CPP_VERSION_20
 
 #ifndef CPP_VERSION_23
@@ -158,10 +239,6 @@ constexpr auto type_name() -> std::string_view
 #define OPTIONAL_FORCEINLINE INLINE
 #endif // OPTIONAL_FORCEINLINE
 
-#ifndef FORCEINLINE_OPTIMIZED
-#define FORCEINLINE_OPTIMIZED [[msvc::forceinline]]
-#endif // FORCEINLINE_OPTIMIZED
-
 #ifdef LIKELY
 #undef LIKELY
 #endif // LIKELY
@@ -174,10 +251,7 @@ constexpr auto type_name() -> std::string_view
 
 #if IS_MSVC
 
-#define LIKELY(x) \
-( \
-([](bool Value) [[likely]] -> bool FORCEINLINE_OPTIMIZED { return Value; })(x) \
-)
+#define LIKELY(x) ([&] FORCEINLINE_ATTRIBUTE -> bool { if (x) [[likely]] { return true; } else { return false; } }())
 
 #elif IS_CLANG || IS_GNU
 
@@ -195,10 +269,7 @@ constexpr auto type_name() -> std::string_view
 
 #if IS_MSVC
 
-#define UNLIKELY(x) \
-( \
-([](bool Value) [[unlikely]] -> bool FORCEINLINE_OPTIMIZED { return Value; })(x) \
-)
+#define UNLIKELY(x) ([&] FORCEINLINE_ATTRIBUTE -> bool { if (x) [[unlikely]] { return true; } else { return false; } }())
 
 #elif IS_CLANG || IS_GNU
 
@@ -230,20 +301,30 @@ constexpr auto type_name() -> std::string_view
 
 #ifndef NO_VTABLE
 
-#if CPP_VERSION > CPP_VERSION_20
+#if HAS_CPP_ATTRIBUTE(no_vtable)
 
 #define NO_VTABLE [[no_vtable]]
 
-#else // CPP_VERSION > CPP_VERSION_20
+#else // HAS_CPP_ATTRIBUTE(no_vtable)
 
 #define NO_VTABLE DECLSPEC(novtable)
 
-#endif // CPP_VERSION > CPP_VERSION_20
+#endif // HAS_CPP_ATTRIBUTE(no_vtable)
 
 #endif // NO_VTABLE
 
 #ifndef NO_THROW
+
+#if HAS_CPP_ATTRIBUTE(nothrow)
+
 #define NO_THROW [[nothrow]]
+
+#else // HAS_CPP_ATTRIBUTE(nothrow)
+
+#define NO_THROW
+
+#endif // HAS_CPP_ATTRIBUTE(nothrow)
+
 #endif // NO_THROW
 
 #ifndef NO_ALIAS
@@ -293,6 +374,14 @@ constexpr auto type_name() -> std::string_view
 #ifndef CONSTEXPR
 #define CONSTEXPR constexpr
 #endif // CONSTEXPR
+
+#ifndef CONSTEXPR_IF
+#define CONSTEXPR_IF(x) if CONSTEXPR (x)
+#endif // CONSTEXPR_IF
+
+#ifndef CONSTEVAL
+#define CONSTEVAL consteval
+#endif // CONSTEVAL
 
 #ifndef nameof
 #define nameof(x) type_name<x>()
@@ -386,7 +475,7 @@ constexpr auto type_name() -> std::string_view
 #define INTELLISENSE __INTELLISENSE__
 #endif // INTELLISENSE
 
-#ifndef (__JETBRAINS_IDE__)
+#if defined(__JETBRAINS_IDE__)
 
 #ifndef JETBRAINS_IDE
 #define JETBRAINS_IDE __JETBRAINS_IDE__
@@ -447,7 +536,7 @@ namespace UE::Core::Private
 	// Only needed for the UE_REQUIRES macro to work, to allow for a trailing > token after the macro
 	template <bool Value>
 	concept TBoolIdentityConcept = Value;
-}; // namespace UE::Core::Private
+} // namespace UE::Core::Private
 
 #define REQUIRES(...) \
 	requires ((__VA_ARGS__) && UE::Core::Private::TBoolIdentityConcept<true>)
@@ -464,30 +553,34 @@ namespace UE::Core::Private
 #define UNREACHABLE ASSUME(false)
 #endif // UNREACHABLE
 
-#ifndef VECTOR_CALL
-#define VECTOR_CALL __vectorcall
-#endif // VECTOR_CALL
-
-#ifndef SOLID_INTERFACE
-#define SOLID_INTERFACE __interface
-#endif // SOLID_INTERFACE
-
 #ifndef BINARY_LITERAL
 #define BINARY_LITERAL(x) 0b##x
 #endif // BINARY_LITERAL
 
-#ifndef FAST_CALL
-#define FAST_CALL __fastcall
-#endif // FAST_CALL
+#ifndef DEFINE_CUSTOM_LITERAL
+#define DEFINE_CUSTOM_LITERAL(Name, Type, Literal) \
+	constexpr Type operator"" Name(unsigned long long int Value) \
+	{ \
+		return static_cast<Type>(Value); \
+	}
+#endif // DEFINE_CUSTOM_LITERAL
+
+#ifndef EXISTS
+#define EXISTS(x) (!std::is_same_v<decltype(x), void>)
+#endif // EXISTS
+
+#ifndef NOT_EXISTS
+#define NOT_EXISTS(x) (std::is_same_v<decltype(x), void>)
+#endif // NOT_EXISTS
 
 #ifndef IF_EXISTS
-#define IF_EXISTS(x) if CONSTEXPR (std::is_same_v<decltype(x), void>) {}
+#define IF_EXISTS(x) if CONSTEXPR EXISTS(x)
 #endif // IF_EXISTS
 
 #ifndef IF_NOT_EXISTS
-#define IF_NOT_EXISTS(x) if CONSTEXPR (!std::is_same_v<decltype(x), void>) {}
+#define IF_NOT_EXISTS(x) if CONSTEXPR NOT_EXISTS(x)
 #endif // IF_NOT_EXISTS
 
-#ifndef FINALLY
-#define FINALLY(x) __finally
-#endif // FINALLY
+#ifndef UNDERLYING_TYPE
+#define UNDERLYING_TYPE(x) std::underlying_type_t<x>
+#endif // UNDERLYING_TYPE
