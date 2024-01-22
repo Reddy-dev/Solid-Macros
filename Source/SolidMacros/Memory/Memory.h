@@ -14,7 +14,7 @@ namespace Solid
 	 * @param Address The address to prefetch.
 	 */
 	template <int32 Offset>
-	FORCEINLINE static void Prefetch(const void* Address)
+	FORCEINLINE CONSTEXPR static void Prefetch(const void* Address)
 	{
 		FPlatformMisc::Prefetch(reinterpret_cast<const void*>(reinterpret_cast<UPTRINT>(Address) + Offset));
 	}
@@ -26,7 +26,7 @@ namespace Solid
 	 * @param Address The address to prefetch.
 	 */
 	template <int32 Size>
-	FORCEINLINE static void PrefetchBlock(const void* Address)
+	FORCEINLINE CONSTEXPR static void PrefetchBlock(const void* Address)
 	{
 		static constexpr int32 LinesNum = (Size + PLATFORM_CACHE_LINE_SIZE - 1) / PLATFORM_CACHE_LINE_SIZE;
 		for (int32 LineIdx = 0; LineIdx < LinesNum; LineIdx += 1)
