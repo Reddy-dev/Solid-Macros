@@ -10,7 +10,7 @@ using FSimd256 = __m256;
 using FSimd128I = __m128i;
 using FSimd256I = __m256i;
     
-template<typename T>
+template <typename T>
 concept TSIMDTypeConcept = std::is_same_v<T, FSimd128I> || std::is_same_v<T, FSimd256I>
 || std::is_same_v<T, FSimd128> || std::is_same_v<T, FSimd256>;
 
