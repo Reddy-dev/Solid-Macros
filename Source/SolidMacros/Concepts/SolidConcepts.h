@@ -10,7 +10,7 @@
 namespace Solid
 {
 	template <typename T>
-	CONSTEXPR NO_DISCARD bool IsStaticStruct()
+	FORCEINLINE CONSTEXPR NO_DISCARD bool IsStaticStruct()
 	{
 		return TModels_V<CStaticStructProvider, T>;
 	}
@@ -20,6 +20,18 @@ namespace Solid
 	{
 		requires IsStaticStruct<T>();
 	}; // concept TStaticStructConcept
+
+	template <typename T>
+	FORCEINLINE CONSTEXPR NO_DISCARD bool IsStaticClass()
+	{
+		return TModels_V<CStaticClassProvider, T>;
+	}
+
+	template <typename T>
+	concept TStaticClassConcept = requires
+	{
+		requires IsStaticClass<T>();
+	}; // concept TStaticClassConcept
 
 	template <typename T>
 	concept TClassConcept = requires
@@ -38,6 +50,16 @@ namespace Solid
 	{
 		requires IsConcreteTypeCompatibleWithReflectedType<T>();
 	}; // concept TConcreteReflectionCompConcept
-} // namespace Solid::Macros
+
+	template <typename T>
+	concept TIsOptionalConcept = requires
+	{
+		requires TIsTOptional_V<T>;
+	}; // concept TIsOptionalConcept
+
+	template<typename F, typename ...Args>
+	concept TInvocableConcept = TIsInvocable<F, Args...>::Value;
+	
+} // namespace Solid
 
 #endif // SOLID_CONCEPTS_H
