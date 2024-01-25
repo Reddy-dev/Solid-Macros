@@ -73,20 +73,36 @@ public:
     FORCEINLINE CONSTEXPR auto Then(FunctionType&& InFunction)
         -> TSolidExpected<ValueType, decltype(std::invoke(InFunction, std::declval<ErrorType>()))>
     {
-        if (HasError())
+        using ResultType = decltype(std::invoke(InFunction, std::declval<ErrorType>()));
+        
+        if (HasValue())
         {
-            return TSolidExpected<ValueType,
-                decltype(std::invoke(InFunction, std::declval<ErrorType>()))>(std::invoke(InFunction, GetError()));
+            return TSolidExpected<ResultType, ErrorType>(std::invoke(InFunction, GetValue()));
         }
         else
         {
-            return TSolidExpected<ValueType, decltype(std::invoke(InFunction, std::declval<ErrorType>()))>(GetValue());
+            return TSolidExpected<ResultType, ErrorType>(GetError());
+        }
+    }
+
+    template <Solid::TInvocableConcept<ErrorType> FunctionType>
+    FORCEINLINE CONSTEXPR auto Catch(FunctionType&& InFunction)
+        -> TSolidExpected<ValueType, decltype(std::invoke(InFunction, std::declval<ErrorType>()))>
+    {
+        using ResultType = decltype(std::invoke(InFunction, std::declval<ErrorType>()));
+        
+        if (HasError())
+        {
+            return TSolidExpected<ResultType, ErrorType>(std::invoke(InFunction, GetError()));
+        }
+        else
+        {
+            return TSolidExpected<ResultType, ErrorType>(GetValue());
         }
     }
 
 private:
     StorageType Storage;
 }; // struct TSolidExpected<T, E>
-
 
 #endif // SOLID_EXPECTED_SOLID_EXPECTED_H
