@@ -15,4 +15,10 @@
         } \
     };
 
+template <typename T>
+concept TSolidNameConcept = requires
+{
+    T::Name();
+}; // concept TSolidNameConcept
+
 #endif //SOLID_MACROS_NAMES_NAMES_H
