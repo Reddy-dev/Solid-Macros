@@ -5,8 +5,8 @@
 
 #include "CoreMinimal.h"
 
-#define DECLARE_SOLID_NAME(Name, Literal) \
-    struct F##Name final \
+#define DECLARE_SOLID_NAME(TName, Literal) \
+    struct F##TName final \
     { \
         FORCEINLINE CONSTEXPR NO_DISCARD static FName Name() \
         { \
