@@ -39,12 +39,6 @@ namespace Solid
 		requires std::is_class_v<T>;
 	}; // concept TClassConcept
 
-	template <TClassConcept T, typename FunctionType>
-	concept THasFunctionConcept = requires (T* Instance, FunctionType Function)
-	{
-		(Instance->*Function)();
-	}; // concept THasFunctionConcept
-
 	template <typename T>
 	concept TConcreteReflectionCompConcept = requires
 	{

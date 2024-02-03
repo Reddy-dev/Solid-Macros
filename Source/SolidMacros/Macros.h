@@ -9,6 +9,8 @@
 #include <array>
 #include <utility>
 
+#include "CoreMinimal.h"
+
 template <std::size_t ...Idxs>
 FORCEINLINE constexpr auto substring_as_array(std::string_view str, std::index_sequence<Idxs...>)
 {
@@ -251,7 +253,7 @@ constexpr auto type_name() -> std::string_view
 
 #if IS_MSVC
 
-#define LIKELY(x) ([&] FORCEINLINE_ATTRIBUTE -> bool { if (x) [[likely]] { return true; } else { return false; } }())
+#define LIKELY(x) (!!(x))
 
 #elif IS_CLANG || IS_GNU
 
@@ -269,7 +271,7 @@ constexpr auto type_name() -> std::string_view
 
 #if IS_MSVC
 
-#define UNLIKELY(x) ([&] FORCEINLINE_ATTRIBUTE -> bool { if (x) [[unlikely]] { return true; } else { return false; } }())
+#define UNLIKELY(x) (!!(x))
 
 #elif IS_CLANG || IS_GNU
 

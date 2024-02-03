@@ -3,25 +3,28 @@
 #ifndef SOLID_MACROS_STANDARD_HASHING_H
 #define SOLID_MACROS_STANDARD_HASHING_H
 
+#include <immintrin.h>
+#include <vector>
+
 #include "CoreMinimal.h"
 #include "SolidMacros/Macros.h"
 
 namespace Solid
 {
-	FORCEINLINE NO_DISCARD static int32 Match(const uint8 Byte, const uint8* Data)
+	static FORCEINLINE NO_DISCARD int32 Match(const uint8 Byte, const uint8* Data)
 	{
 		const __m128i M = _mm_set1_epi8(Byte);
 		const __m128i Control = _mm_load_si128(reinterpret_cast<const __m128i*>(Data));
 		return _mm_movemask_epi8(_mm_cmpeq_epi8(M, Control));
 	}
 	
-	FORCEINLINE NO_DISCARD static uint32 GetTypeHashUniversal(const void* Ptr, uint32 Size)
+	static FORCEINLINE NO_DISCARD uint64 GetTypeHashUniversal(const void* Ptr, uint32 Size)
 	{
 		using SIMDType = __m256i;
 		
-		static CONSTEXPR uint32 SIMD_SIZE = sizeof(SIMDType);
+		static CONSTEXPR uint64 SIMD_SIZE = sizeof(SIMDType);
 		
-		uint32 Hash = 2166136261U;
+		uint64 Hash = 2166136261ULL;
 
 		// Use SIMD only for larger blocks of memory
 		if (Size >= SIMD_SIZE)
@@ -32,9 +35,9 @@ namespace Solid
 				SIMDType Data;
 				std::memcpy(&Data, static_cast<const uint8*>(Ptr) + Processed, SIMD_SIZE);
 				
-				for (int32 Index = 0; Index < 8; ++Index)
+				for (uint64 Index = 0; Index < 8; ++Index)
 				{
-					Hash ^= _mm256_extract_epi32(Data, Index);
+					//Hash ^= _mm256_extract_epi32(Data, Index);
 				}
 				
 				Processed += SIMD_SIZE;
@@ -47,7 +50,7 @@ namespace Solid
 		
 		const uint8* Bytes = static_cast<const uint8*>(Ptr);
 		
-		for (uint32 Index = 0; Index < Size; ++Index)
+		for (uint64 Index = 0; Index < Size; ++Index)
 		{
 			Hash = (Hash * 16777619U) ^ Bytes[Index];
 		}
@@ -56,7 +59,7 @@ namespace Solid
 	}
 
 	template <uint32 Count = 2>
-	FORCEINLINE NO_DISCARD static uint32 HashCombineUniversal(const uint32 (&Hashes)[Count])
+	static FORCEINLINE NO_DISCARD uint32 HashCombineUniversal(const uint32 (&Hashes)[Count])
 	{
 		uint32 Hash = 2166136261U;
 		
@@ -72,12 +75,14 @@ namespace Solid
 } // namespace Solid
 
 template <>
-struct std::hash<FName>
+class std::hash<FName>
 {
-	FORCEINLINE NO_DISCARD size_t operator()(const FName& Name) const NOEXCEPT
+public:
+	std::size_t operator()(FName Name) const NOEXCEPT
 	{
-		return GetTypeHash(Name);
+		return Name.GetComparisonIndex().ToUnstableInt() ^ Name.GetDisplayIndex().ToUnstableInt();
 	}
+	
 }; // struct std::hash<FName>
 
 #endif // SOLID_MACROS_STANDARD_HASHING_H
