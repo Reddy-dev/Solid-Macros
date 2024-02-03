@@ -74,15 +74,17 @@ namespace Solid
 	
 } // namespace Solid
 
-template <>
-class std::hash<FName>
-{
-public:
-	std::size_t operator()(FName Name) const NOEXCEPT
-	{
-		return Name.GetComparisonIndex().ToUnstableInt() ^ Name.GetDisplayIndex().ToUnstableInt();
-	}
-	
-}; // struct std::hash<FName>
+#define DEFINE_STD_HASH(TYPE) \
+	template <> \
+	class std::hash<TYPE> \
+	{ \
+	public: \
+		std::size_t operator()(const TYPE& Value) const NOEXCEPT \
+		{ \
+			return GetTypeHash(Value); \
+		} \
+	}; // class std::hash<TYPE>
+
+DEFINE_STD_HASH(FName)
 
 #endif // SOLID_MACROS_STANDARD_HASHING_H
