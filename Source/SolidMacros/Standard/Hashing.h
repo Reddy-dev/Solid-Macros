@@ -81,7 +81,7 @@ namespace Solid
 	class std::hash<TYPE> \
 	{ \
 	public: \
-		std::size_t operator()(const TYPE& Value) const NOEXCEPT \
+		FORCEINLINE std::size_t operator()(const TYPE& Value) const NOEXCEPT \
 		{ \
 			return GetTypeHash(Value); \
 		} \
