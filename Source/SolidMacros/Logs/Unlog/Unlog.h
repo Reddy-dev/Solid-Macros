@@ -7,4 +7,5 @@
 
 // Default Unlog configuration. 
 // Check out https://github.com/Guganana/Unlog to learn how to configure Unlog
-using Unlog = TUnlog<>;
+//using Unlog = TUnlog<>;
+DECLARE_UNLOG_TYPE(Unlog);

@@ -861,9 +861,12 @@ namespace UnlogMacroHelpers
             UnlogMacroHelpers::Run< true, UnlogMacroHelpers::TMacroOptions< UnlogMacroHelpers::TMacroArgs< InMacroArgs >, Unlog > >( ELogVerbosity::VerbosityName, TEXT( Message ), ##__VA_ARGS__); \
         }\
     }
+
 #else
 #define UN_LOG(...) UNLOG_COMPILED_OUT
 #define UN_LOGF(...) UNLOG_COMPILED_OUT
 #define UN_CLOG(...) UNLOG_COMPILED_OUT
 #define UN_CLOGF(...) UNLOG_COMPILED_OUT
 #endif // UNLOG_ENABLED
+
+#define DECLARE_UNLOG_TYPE(TypeName, ...) using TypeName = TUnlog< __VA_ARGS__ >
