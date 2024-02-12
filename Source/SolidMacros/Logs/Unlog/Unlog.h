@@ -1,3 +1,6 @@
+// ReSharper disable CppUE4CodingStandardNamingViolationWarning
+// ReSharper disable IdentifierTypo
+// ReSharper disable CommentTypo
 #pragma once
 
 #include "UnlogImplementation.h"
