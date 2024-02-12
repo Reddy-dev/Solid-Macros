@@ -349,7 +349,7 @@ class Unlogger
 {
 private:
     // Settings should never be destroyed since they are statically created
-    UnlogRuntimeSettingsBase* Settings;
+    UnlogRuntimeSettingsBase* Settings = nullptr;
 
     // Pushed categories temporarily override the default category, usually during a certain scope
     TArray<UnlogCategoryBase*> PushedCategories;
@@ -369,7 +369,7 @@ public:
         Logger.ApplyRuntimeSettingsInternal<UnlogDefaultRuntimeSettings>();
 
 #if WITH_EDITOR
-        static const FTelemetryDispatcher TelemetryDispatcher = FTelemetryDispatcher();
+        [[maybe_unused]] static const FTelemetryDispatcher TelemetryDispatcher = FTelemetryDispatcher();
 #endif
         return Logger;
     }
@@ -377,7 +377,7 @@ public:
     template< typename TSettings >
     static void ApplyRuntimeSettings()
     {
-        Unlogger::Get().ApplyRuntimeSettingsInternal<TSettings>();
+        Get().ApplyRuntimeSettingsInternal<TSettings>();
     }
 
     template< typename TSettings >
