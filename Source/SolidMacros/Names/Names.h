@@ -13,7 +13,7 @@
             static CONSTEXPR FName StaticName = FName(Literal); \
             return StaticName; \
         } \
-    };
+    }; // struct F##TName
 
 template <typename T>
 concept TSolidNameConcept = requires
