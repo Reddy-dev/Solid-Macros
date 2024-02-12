@@ -11,15 +11,13 @@
 
 namespace Solid
 {
-	DEPRECATED_REASON("Not Currently supported")
 	static FORCEINLINE NO_DISCARD int32 Match(const uint8 Byte, const uint8* Data)
 	{
 		const __m128i M = _mm_set1_epi8(Byte);
 		const __m128i Control = _mm_load_si128(reinterpret_cast<const __m128i*>(Data));
 		return _mm_movemask_epi8(_mm_cmpeq_epi8(M, Control));
 	}
-
-	DEPRECATED_REASON("Not Currently supported")
+	
 	static FORCEINLINE NO_DISCARD uint64 GetTypeHashUniversal(const void* Ptr, uint32 Size)
 	{
 		using SIMDType = __m256i;
@@ -39,7 +37,7 @@ namespace Solid
 				
 				for (uint64 Index = 0; Index < 8; ++Index)
 				{
-					//Hash ^= _mm256_extract_epi32(Data, Index);
+					Hash ^= _mm256_extract_epi32(Data, Index);
 				}
 				
 				Processed += SIMD_SIZE;
