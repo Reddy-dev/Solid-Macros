@@ -3,6 +3,8 @@
 
 #include <DrawDebugHelpers.h>
 
+#include "Unlog/UnlogImplementation.h"
+
 // ------------------------------------------------------------------------------------
 // Debug Visualization ( Early prototype )
 // ------------------------------------------------------------------------------------
@@ -22,7 +24,7 @@ namespace Viz
 
     FORCEINLINE void DrawLabel(UWorld* World, const FVector& Position, const FString& Label, const FString& Value)
     {
-        auto CategoryName = LogGeneral::Static().GetName();
+        FName CategoryName = LogGeneral::Static().GetName();
 
         const FString& Message = FString::Format(
             TEXT("| Category: {0}\n")

@@ -5,18 +5,20 @@
 #include <Developer/MessageLog/Public/IMessageLogListing.h>
 #include <Modules/ModuleManager.h>
 
+#include "Unlog/UnlogImplementation.h"
+
 namespace Target
 {
     struct MessageLog
     {
         static TSharedRef<IMessageLogListing> GetLogListing(FMessageLogModule& MessageLogModule, const FName& CategoryName)
         {
-            auto Listing = MessageLogModule.GetLogListing(CategoryName);
+            TSharedRef<IMessageLogListing> Listing = MessageLogModule.GetLogListing(CategoryName);
             Listing->SetLabel(FText::FromString(CategoryName.ToString()));
             return Listing;
         }
 
-        static EMessageSeverity::Type VerbosityToSeverity(ELogVerbosity::Type Verbosity)
+        static EMessageSeverity::Type VerbosityToSeverity(const ELogVerbosity::Type Verbosity)
         {
             switch (Verbosity)
             {
@@ -24,15 +26,16 @@ namespace Target
                 return EMessageSeverity::Error;
             case ELogVerbosity::Warning:
                 return EMessageSeverity::Warning;
+            default: ;
             }
             return EMessageSeverity::Info;
         }
 
-        static void Call(const UnlogCategoryBase& Category, ELogVerbosity::Type Verbosity, const FString& Message)
+        static void Call(const UnlogCategoryBase& Category, const ELogVerbosity::Type Verbosity, const FString& Message)
         {
             FMessageLogModule& MessageLogModule = FModuleManager::LoadModuleChecked<FMessageLogModule>("MessageLog");
 
-            auto LogListing = GetLogListing(MessageLogModule, Category.GetName());
+            const TSharedRef<IMessageLogListing> LogListing = GetLogListing(MessageLogModule, Category.GetName());
             LogListing->AddMessage(
                 FTokenizedMessage::Create(
                     VerbosityToSeverity(Verbosity),

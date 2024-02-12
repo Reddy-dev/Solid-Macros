@@ -586,3 +586,12 @@ namespace UE::Core::Private
 #ifndef UNDERLYING_TYPE
 #define UNDERLYING_TYPE(x) std::underlying_type_t<x>
 #endif // UNDERLYING_TYPE
+
+#ifndef FUNCTION_TEXT
+
+/**
+ * @brief Takes the @String and Adds "FUNCTION_Name: ", to the beginning of the string.
+ */
+#define FUNCTION_TEXT(String) FUNCTION_NAME ": " String
+
+#endif // FUNCTION_TEXT

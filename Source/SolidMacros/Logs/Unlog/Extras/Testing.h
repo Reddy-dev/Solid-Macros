@@ -11,7 +11,7 @@ struct UnlogTesting
     // Simple test to ensure everything compiles correctly; outputs are not tested
     static void CompileTest()
     {
-        using Unlog = TUnlog<>;
+        DECLARE_UNLOG_TYPE(Unlog);
         UNLOG_CATEGORY(TestCategory)
 
         // Specific category
@@ -36,7 +36,7 @@ struct UnlogTesting
 
         // Format - numbered args
         const FString ExampleString(TEXT("Hey"));
-        const int32 ExampleInt = 42;
+        constexpr int32 ExampleInt = 42;
         Unlog::Log("{0}: {1}", ExampleString, ExampleInt);
         UNLOG(Log)("{0}: {1}", ExampleString, ExampleInt);
         UN_LOG(, Log, "{0}: {1}", ExampleString, ExampleInt);
@@ -53,7 +53,7 @@ struct UnlogTesting
         UN_LOG(CustomUnlog, Error, "X");
 
         // Contional logging
-        const bool Value = false;
+        constexpr bool Value = false;
         Unlog::Warn(Value, "Y");
         //Unlog::Warn([]{return false;}, "Y");
         Unlog::Warnf(Value, TEXT("Y"));
