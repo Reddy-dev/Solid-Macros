@@ -561,7 +561,7 @@ namespace UE::Core::Private
 
 #ifndef DEFINE_CUSTOM_LITERAL
 #define DEFINE_CUSTOM_LITERAL(Name, Type, Literal) \
-	constexpr Type operator"" Name(unsigned long long int Value) \
+	CONSTEXPR Type operator"" Name(unsigned long long int Value) \
 	{ \
 		return static_cast<Type>(Value); \
 	}
