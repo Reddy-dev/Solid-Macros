@@ -4,9 +4,25 @@
 #define SOLID_MACROS_MEMORY_H
 
 #include "CoreMinimal.h"
+#include "SolidMacros/Macros.h"
 
-namespace Solid
+namespace Solid::Memory
 {
+	/**
+	 * Returns the address of the object at the given offset from the given pointer.
+	 * 
+	 * @tparam U The type of the offset.
+	 * @tparam T The type of the pointer.
+	 * @param Ptr The pointer to the object.
+	 * @param Offset The offset from the pointer.
+	 * @return The address of the object at the given offset from the given pointer.
+	 */
+	template <typename U, typename T>
+	FORCEINLINE CONSTEXPR NO_DISCARD void* OffsetOf(const T* Ptr, const U Offset)
+	{
+		return reinterpret_cast<T*>(reinterpret_cast<uint8*>(Ptr) + Offset);
+	}
+	
 	/**
 	 * Compile-time variant of the prefetching.
 	 * 
@@ -34,6 +50,7 @@ namespace Solid
 			FPlatformMisc::Prefetch(Address, LineIdx * PLATFORM_CACHE_LINE_SIZE);
 		}
 	}
-} // namespace Solid
+	
+} // namespace Solid::Memory
 
 #endif //SOLID_MACROS_MEMORY_H
