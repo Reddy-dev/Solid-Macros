@@ -1375,7 +1375,7 @@ private:
     // Shift everything up by one element. Tries to move stuff around.
     void
     shiftUp(size_t startIdx,
-            size_t const insertion_idx) noexcept(std::is_nothrow_move_assignable<Node>::value) {
+            size_t const insertion_idx) noexcept(std::is_nothrow_move_assignable_v<Node>) {
         auto idx = startIdx;
         ::new (static_cast<void*>(mKeyVals + idx)) Node(std::move(mKeyVals[idx - 1]));
         while (--idx != insertion_idx) {
@@ -1393,7 +1393,7 @@ private:
         }
     }
 
-    void shiftDown(size_t idx) noexcept(std::is_nothrow_move_assignable<Node>::value) {
+    void shiftDown(size_t idx) noexcept(std::is_nothrow_move_assignable_v<Node>) {
         // until we find one that is either empty or has zero offset.
         // TODO(martinus) we don't need to move everything, just the last one for the same
         // bucket.
@@ -1672,7 +1672,8 @@ public:
     }
 
     // Swaps everything between the two maps.
-    void swap(Table& o) {
+    void swap(Table& o) noexcept
+    {
         ROBIN_HOOD_TRACE(this)
         using std::swap;
         swap(o, *this);
@@ -1691,8 +1692,8 @@ public:
 
         auto const numElementsWithBuffer = calcNumElementsWithBuffer(mMask + 1);
         // clear everything, then set the sentinel again
-        uint8_t const z = 0;
-        std::fill(mInfo, mInfo + calcNumBytesInfo(numElementsWithBuffer), z);
+        constexpr uint8_t z = 0;
+        std::fill_n(mInfo, calcNumBytesInfo(numElementsWithBuffer), z);
         mInfo[numElementsWithBuffer] = 1;
 
         mInfoInc = InitialInfoInc;

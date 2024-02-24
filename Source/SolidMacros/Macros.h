@@ -595,3 +595,15 @@ namespace UE::Core::Private
 #define FUNCTION_TEXT(String) FUNCTION_NAME ": " String
 
 #endif // FUNCTION_TEXT
+
+#ifndef MSVC_WARNING_PUSH
+#define MSVC_WARNING_PUSH __pragma(warning(push))
+#endif // MSVC_WARNING_PUSH
+
+#ifndef MSVC_WARNING_POP
+#define MSVC_WARNING_POP __pragma(warning(pop))
+#endif // MSVC_WARNING_POP
+
+#ifndef MSVC_WARNING_DISABLE
+#define MSVC_WARNING_DISABLE(x) __pragma(warning(disable : x))
+#endif // MSVC_WARNING_DISABLE

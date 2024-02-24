@@ -58,6 +58,21 @@ namespace Solid
 		return Hash;
 	}
 
+	static FORCEINLINE NO_DISCARD uint64 GetHash64(const void* const Data) NOEXCEPT
+	{
+		uint64 Hash = 0xcbf29ce484222325ULL;
+
+		uint64 Index = 0;
+
+		while (String[Index] != '\0')
+		{
+			Hash = (Hash ^ String[Index]) * 1099511628211ULL;
+			++Index;
+		}
+
+		return Hash;
+	}
+
 	template <uint32 Count = 2>
 	static FORCEINLINE NO_DISCARD uint32 HashCombine(const uint32 (&Hashes)[Count])
 	{
@@ -84,6 +99,17 @@ namespace Solid
 			return GetTypeHash(Value); \
 		} \
 	}; // class std::hash<TYPE>
+
+#define DEFINE_STD_HASH_CUSTOM_FUNC(TYPE, FUNC) \
+	template <> \
+	class std::hash<TYPE> \
+	{ \
+	public: \
+		FORCEINLINE std::size_t operator()(const TYPE& Value) const NOEXCEPT \
+		{ \
+			return FUNC(Value); \
+		} \
+	}; // class std::hash<T
 
 DEFINE_STD_HASH(FName)
 
