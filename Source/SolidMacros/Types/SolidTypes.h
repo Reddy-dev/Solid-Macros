@@ -102,6 +102,10 @@ namespace Solid::Meta
             std::forward<Tuple>(InTuple));
     }
 
+    /*
+     * C++'s PRE-PROCESSOR SUCKS
+     **/
+
     static CONSTEXPR uint32 STRUCT_TO_TUPLE_MAX_TYPES_BITS = 4;
     static CONSTEXPR uint32 STRUCT_TO_TUPLE_MAX_TYPES = (1 << STRUCT_TO_TUPLE_MAX_TYPES_BITS) - 1;
 
