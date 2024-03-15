@@ -1,5 +1,6 @@
 ﻿// Solstice Games © 2024. All Rights Reserved.
 
+// ReSharper disable CppUE4CodingStandardNamingViolationWarning
 #ifndef SOLID_MACROS_TYPE_TRAITS_H
 #define SOLID_MACROS_TYPE_TRAITS_H
 

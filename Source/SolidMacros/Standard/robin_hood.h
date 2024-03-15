@@ -910,9 +910,9 @@ class Table
     : public WrapHash<Hash>,
       public WrapKeyEqual<KeyEqual>,
       detail::NodeAllocator<
-          typename std::conditional<
-              std::is_void<T>::value, Key,
-              robin_hood::pair<typename std::conditional<IsFlat, Key, Key const>::type, T>>::type,
+          std::conditional_t<
+              std::is_void_v<T>, Key,
+              robin_hood::pair<std::conditional_t<IsFlat, Key, Key const>, T>>,
           4, 16384, IsFlat> {
 public:
     static constexpr bool is_flat = IsFlat;
@@ -1270,7 +1270,7 @@ private:
         // prefix increment. Undefined behavior if we are at end()!
         Iter& operator++() noexcept {
             mInfo++;
-            mKeyVals++;
+            ++mKeyVals;
             fastForward();
             return *this;
         }
@@ -1376,7 +1376,7 @@ private:
     void
     shiftUp(size_t startIdx,
             size_t const insertion_idx) noexcept(std::is_nothrow_move_assignable_v<Node>) {
-        auto idx = startIdx;
+        size_t idx = startIdx;
         ::new (static_cast<void*>(mKeyVals + idx)) Node(std::move(mKeyVals[idx - 1]));
         while (--idx != insertion_idx) {
             mKeyVals[idx] = std::move(mKeyVals[idx - 1]);
@@ -1465,8 +1465,8 @@ private:
         }
 
         // key not found, so we are now exactly where we want to insert it.
-        auto const insertion_idx = idx;
-        auto const insertion_info = static_cast<uint8_t>(info);
+        size_t const insertion_idx = idx;
+        uint8_t const insertion_info = static_cast<uint8_t>(info);
         if (ROBIN_HOOD_UNLIKELY(insertion_info + mInfoInc > 0xFF)) {
             mMaxNumElementsAllowed = 0;
         }
@@ -1690,7 +1690,7 @@ public:
 
         Destroyer<Self, IsFlat && std::is_trivially_destructible<Node>::value>{}.nodes(*this);
 
-        auto const numElementsWithBuffer = calcNumElementsWithBuffer(mMask + 1);
+        size_t const numElementsWithBuffer = calcNumElementsWithBuffer(mMask + 1);
         // clear everything, then set the sentinel again
         constexpr uint8_t z = 0;
         std::fill_n(mInfo, calcNumBytesInfo(numElementsWithBuffer), z);
@@ -1747,6 +1747,7 @@ public:
 
         case InsertionState::overflow_error:
             throwOverflowError();
+        default: ;
         }
 
         return mKeyVals[idxAndState.first].getSecond();
@@ -1774,6 +1775,7 @@ public:
 
         case InsertionState::overflow_error:
             throwOverflowError();
+        default: ;
         }
 
         return mKeyVals[idxAndState.first].getSecond();
@@ -1815,6 +1817,7 @@ public:
             n.destroy(*this);
             throwOverflowError();
             break;
+        default: ;
         }
 
         return std::make_pair(iterator(mKeyVals + idxAndState.first, mInfo + idxAndState.first),

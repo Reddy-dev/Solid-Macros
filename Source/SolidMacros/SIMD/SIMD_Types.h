@@ -1,5 +1,6 @@
 ﻿// Solstice Games © 2024. All Rights Reserved.
 
+// ReSharper disable CppInconsistentNaming
 #ifndef SOLID_MACROS_SIMD_SIMD_TYPES_H
 #define SOLID_MACROS_SIMD_SIMD_TYPES_H
 

@@ -10,7 +10,6 @@
 
 namespace Solid::Meta
 {
-    
     template <typename...>
     struct TTypeGroup
     {

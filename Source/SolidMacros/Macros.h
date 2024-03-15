@@ -18,7 +18,7 @@ FORCEINLINE constexpr auto substring_as_array(std::string_view str, std::index_s
 }
 
 template <typename T>
-FORCEINLINE constexpr auto type_name_array() -> std::array<char, 5>
+FORCEINLINE constexpr auto type_name_array()
 {
 	#if defined(__clang__)
 	constexpr auto prefix   = std::string_view{"[T = "};
@@ -286,7 +286,7 @@ constexpr auto type_name() -> std::string_view
 #endif // UNLIKELY
 
 #ifndef SOLID_INLINE
-#define SOLID_INLINE INLINE
+#define SOLID_INLINE FORCEINLINE
 #endif // SOLID_INLINE
 
 #ifndef NO_DISCARD

@@ -11,42 +11,42 @@ namespace Solid
 	template <typename Method>
 	struct TFunctionInfo;
 
-	template <typename ReturnType, typename ...Ts>
-	struct TFunctionInfo<ReturnType(Ts...)>
+	template <typename TReturn, typename ...Ts>
+	struct TFunctionInfo<TReturn(Ts...)>
 	{
-		using FunctionType = ReturnType(Ts...);
-		using ReturnType = ReturnType;
+		using FunctionType = TReturn(Ts...);
+		using ReturnType = TReturn;
 		using ParameterTypes = std::tuple<Ts...>;
 		static CONSTEXPR uint32 ParameterCount = sizeof...(Ts);
 	}; // struct TFunctionInfo
 
-	template <typename ReturnType, typename ...Ts>
-	struct TFunctionInfo<ReturnType(*)(Ts...)> : TFunctionInfo<ReturnType(Ts...)>
+	template <typename TReturn, typename ...Ts>
+	struct TFunctionInfo<TReturn(*)(Ts...)> : TFunctionInfo<TReturn(Ts...)>
 	{
 	}; // struct TFunctionInfo
 	
-	template <typename ReturnType, typename ClassType, typename ...Ts>
-	struct TFunctionInfo<ReturnType(ClassType::*)(Ts...)> : TFunctionInfo<ReturnType(Ts...)>
+	template <typename TReturn, typename TClass, typename ...Ts>
+	struct TFunctionInfo<TReturn(TClass::*)(Ts...)> : TFunctionInfo<TReturn(Ts...)>
 	{
-		using ClassType = ClassType;
+		using ClassType = TClass;
 	}; // struct TFunctionInfo
 
-	template <typename ReturnType, typename ClassType, typename ...Ts>
-	struct TFunctionInfo<ReturnType(ClassType::*)(Ts...) const> : TFunctionInfo<ReturnType(Ts...)>
+	template <typename TReturn, typename TClass, typename ...Ts>
+	struct TFunctionInfo<TReturn(TClass::*)(Ts...) const> : TFunctionInfo<TReturn(Ts...)>
 	{
-		using ClassType = ClassType;
+		using ClassType = TClass;
 	}; // struct TFunctionInfo
 
-	template <typename ReturnType, typename ClassType, typename ...Ts>
-	struct TFunctionInfo<ReturnType(ClassType::*)(Ts...) volatile> : TFunctionInfo<ReturnType(Ts...)>
+	template <typename TReturn, typename TClass, typename ...Ts>
+	struct TFunctionInfo<TReturn(TClass::*)(Ts...) volatile> : TFunctionInfo<TReturn(Ts...)>
 	{
-		using ClassType = ClassType;
+		using ClassType = TClass;
 	}; // struct TFunctionInfo
 
-	template <typename ReturnType, typename ClassType, typename ...Ts>
-	struct TFunctionInfo<ReturnType(ClassType::*)(Ts...) const volatile> : TFunctionInfo<ReturnType(Ts...)>
+	template <typename TReturn, typename TClass, typename ...Ts>
+	struct TFunctionInfo<TReturn(TClass::*)(Ts...) const volatile> : TFunctionInfo<TReturn(Ts...)>
 	{
-		using ClassType = ClassType;
+		using ClassType = TClass;
 	}; // struct TFunctionInfo
 
 	template <typename T>
@@ -121,27 +121,58 @@ namespace Solid
 	{
 	}; // struct TFunctionTraits
 
+	template <typename ReturnType, typename ClassType, typename ...Ts>
+	struct TFunctionTraits<ReturnType(ClassType::*)(Ts...) const>
+	{
+	}; // struct TFunctionTraits
+
+	template <typename ReturnType, typename ClassType, typename ...Ts>
+	struct TFunctionTraits<ReturnType(ClassType::*)(Ts...) volatile>
+	{
+	}; // struct TFunctionTraits
+
+	template <typename ReturnType, typename ClassType, typename ...Ts>
+	struct TFunctionTraits<ReturnType(ClassType::*)(Ts...) const volatile>
+	{
+	}; // struct TFunctionTraits
+	
+	template <typename ReturnType, typename ...Ts>
+	struct TFunctionTraits<ReturnType(*)(Ts...)>
+	{
+		using Ptr = ReturnType(*)(Ts...);
+	}; // struct TFunctionTraits
+
 	template <typename FunctionType>
 	FORCEINLINE CONSTEXPR NO_DISCARD VoidFunctionPtr LambdaToVoidPtr(FunctionType&& InFunction)
 	{
 		static FunctionType Lambda_Copy = InFunction;
 
-		return [] FORCEINLINE_ATTRIBUTE -> void
+		return []()
 		{
 			Lambda_Copy();
 		};
 	}
 
+	template < typename Method >
+	struct TMethodInfo;
+
+	template < typename Method, class C >
+	struct TMethodInfo<Method C::*>
+	  : TFunctionInfo<Method>
+	{};
+
 #if CPP_VERSION >= CPP_VERSION_20
 	
 	template <typename FunctionType>
-	FORCEINLINE CONSTEXPR NO_DISCARD typename TFunctionTraits<decltype(&FunctionType::operator())>::Ptr LambdaToPtr(FunctionType&& InFunction)
+	FORCEINLINE CONSTEXPR NO_DISCARD auto LambdaToPtr(FunctionType&& InFunction)
+		-> typename TFunctionTraits<decltype(&FunctionType::operator())>::Ptr
 	{
-		static FunctionType Lambda_Copy = InFunction;
+		static FunctionType Lambda_Copy = std::forward<FunctionType>(InFunction);
 
-		return []<typename ...Args>(Args ...InArgs) FORCEINLINE_ATTRIBUTE -> decltype(auto)
+		// Corrected lambda syntax with template parameters
+		return []<typename ...Args>(auto&&... InArgs) -> decltype(auto)
 		{
-			return Lambda_Copy(InArgs...);
+			return Lambda_Copy(std::forward<decltype(InArgs)>(InArgs)...);
 		};
 	}
 

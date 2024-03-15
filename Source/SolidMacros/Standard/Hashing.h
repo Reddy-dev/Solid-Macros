@@ -17,12 +17,13 @@ namespace Solid
 		const __m128i Control = _mm_load_si128(reinterpret_cast<const __m128i*>(Data));
 		return _mm_movemask_epi8(_mm_cmpeq_epi8(M, Control));
 	}
-	
+
+	#if 0
 	static FORCEINLINE NO_DISCARD uint64 GetTypeHashUniversal(const void* Ptr, uint32 Size)
 	{
 		using SIMDType = __m256i;
 		
-		static CONSTEXPR uint64 SIMD_SIZE = sizeof(SIMDType);
+		CONSTEXPR uint64 SIMD_SIZE = sizeof(SIMDType);
 		
 		uint64 Hash = 2166136261ULL;
 
@@ -57,10 +58,13 @@ namespace Solid
 
 		return Hash;
 	}
+	#endif
 
 	static FORCEINLINE NO_DISCARD uint64 GetHash64(const void* const Data) NOEXCEPT
 	{
 		uint64 Hash = 0xcbf29ce484222325ULL;
+
+		FString String = FString::Printf(TEXT("%p"), Data);
 
 		uint64 Index = 0;
 
@@ -94,10 +98,11 @@ namespace Solid
 	class std::hash<TYPE> \
 	{ \
 	public: \
-		FORCEINLINE std::size_t operator()(const TYPE& Value) const NOEXCEPT \
+		SOLID_INLINE std::size_t operator()(const TYPE& Value) const NOEXCEPT \
 		{ \
 			return GetTypeHash(Value); \
 		} \
+		\
 	}; // class std::hash<TYPE>
 
 #define DEFINE_STD_HASH_CUSTOM_FUNC(TYPE, FUNC) \
@@ -105,10 +110,11 @@ namespace Solid
 	class std::hash<TYPE> \
 	{ \
 	public: \
-		FORCEINLINE std::size_t operator()(const TYPE& Value) const NOEXCEPT \
+		SOLID_INLINE std::size_t operator()(const TYPE& Value) const NOEXCEPT \
 		{ \
 			return FUNC(Value); \
 		} \
+		\
 	}; // class std::hash<T
 
 DEFINE_STD_HASH(FName)
