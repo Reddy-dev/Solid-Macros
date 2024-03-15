@@ -8,9 +8,9 @@
 #define DECLARE_SOLID_NAME(TName, Literal) \
     struct F##TName final \
     { \
-        FORCEINLINE CONSTEXPR NO_DISCARD static FName Name() \
+        FORCEINLINE constexpr NO_DISCARD static FName Name() \
         { \
-            static CONSTEXPR FName StaticName = FName(Literal); \
+            static constexpr FName StaticName = FName(Literal); \
             return StaticName; \
         } \
     }; // struct F##TName

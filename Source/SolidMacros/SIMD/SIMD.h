@@ -19,26 +19,26 @@ struct TSolidSIMDWrapper
 
     ValueType Value;
 public:
-    FORCEINLINE CONSTEXPR TSolidSIMDWrapper() = default;
-    FORCEINLINE CONSTEXPR TSolidSIMDWrapper(const ValueType& InValue) : Value(InValue)
+    FORCEINLINE constexpr TSolidSIMDWrapper() = default;
+    FORCEINLINE constexpr TSolidSIMDWrapper(const ValueType& InValue) : Value(InValue)
     {
     }
 
     FORCEINLINE NO_DISCARD static TSolidSIMDWrapper LoadAligned(const void* Ptr)
     {
-        if CONSTEXPR (std::is_same_v<ValueType, FSimd128I>)
+        if constexpr (std::is_same_v<ValueType, FSimd128I>)
         {
             return TSolidSIMDWrapper(_mm_load_si128(static_cast<const FSimd128I*>(Ptr)));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256I>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256I>)
         {
             return TSolidSIMDWrapper(_mm256_load_si256(static_cast<const FSimd256I*>(Ptr)));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd128>)
+        else if constexpr (std::is_same_v<ValueType, FSimd128>)
         {
             return TSolidSIMDWrapper(_mm_load_ps(static_cast<const float*>(Ptr)));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256>)
         {
             return TSolidSIMDWrapper(_mm256_load_ps(static_cast<const float*>(Ptr)));
         }
@@ -46,19 +46,19 @@ public:
 
     FORCEINLINE NO_DISCARD static TSolidSIMDWrapper LoadUnaligned(const void* Ptr)
     {
-        if CONSTEXPR (std::is_same_v<ValueType, FSimd128I>)
+        if constexpr (std::is_same_v<ValueType, FSimd128I>)
         {
             return TSolidSIMDWrapper(_mm_loadu_si128(static_cast<const FSimd128I*>(Ptr)));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256I>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256I>)
         {
             return TSolidSIMDWrapper(_mm256_loadu_si256(static_cast<const FSimd256I*>(Ptr)));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd128>)
+        else if constexpr (std::is_same_v<ValueType, FSimd128>)
         {
             return TSolidSIMDWrapper(_mm_loadu_ps(static_cast<const float*>(Ptr)));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256>)
         {
             return TSolidSIMDWrapper(_mm256_loadu_ps(static_cast<const float*>(Ptr)));
         }
@@ -66,19 +66,19 @@ public:
 
     FORCEINLINE NO_DISCARD static TSolidSIMDWrapper SetZero()
     {
-        if CONSTEXPR (std::is_same_v<ValueType, FSimd128I>)
+        if constexpr (std::is_same_v<ValueType, FSimd128I>)
         {
             return TSolidSIMDWrapper(_mm_setzero_si128());
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256I>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256I>)
         {
             return TSolidSIMDWrapper(_mm256_setzero_si256());
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd128>)
+        else if constexpr (std::is_same_v<ValueType, FSimd128>)
         {
             return TSolidSIMDWrapper(_mm_setzero_ps());
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256>)
         {
             return TSolidSIMDWrapper(_mm256_setzero_ps());
         }
@@ -86,19 +86,19 @@ public:
 
     FORCEINLINE NO_DISCARD static TSolidSIMDWrapper SetOne()
     {
-        if CONSTEXPR (std::is_same_v<ValueType, FSimd128I>)
+        if constexpr (std::is_same_v<ValueType, FSimd128I>)
         {
             return TSolidSIMDWrapper(_mm_set1_epi32(1));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256I>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256I>)
         {
             return TSolidSIMDWrapper(_mm256_set1_epi32(1));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd128>)
+        else if constexpr (std::is_same_v<ValueType, FSimd128>)
         {
             return TSolidSIMDWrapper(_mm_set1_ps(1));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256>)
         {
             return TSolidSIMDWrapper(_mm256_set1_ps(1));
         }
@@ -106,19 +106,19 @@ public:
 
     FORCEINLINE void StoreAligned(void* Ptr) const
     {
-        if CONSTEXPR (std::is_same_v<ValueType, FSimd128I>)
+        if constexpr (std::is_same_v<ValueType, FSimd128I>)
         {
             _mm_store_si128(static_cast<FSimd128I*>(Ptr), Value);
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256I>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256I>)
         {
             _mm256_store_si256(static_cast<FSimd256I*>(Ptr), Value);
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd128>)
+        else if constexpr (std::is_same_v<ValueType, FSimd128>)
         {
             _mm_store_ps(static_cast<float*>(Ptr), Value);
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256>)
         {
             _mm256_store_ps(static_cast<float*>(Ptr), Value);
         }
@@ -126,19 +126,19 @@ public:
 
     FORCEINLINE void StoreUnaligned(void* Ptr) const
     {
-        if CONSTEXPR (std::is_same_v<ValueType, FSimd128I>)
+        if constexpr (std::is_same_v<ValueType, FSimd128I>)
         {
             _mm_storeu_si128(static_cast<FSimd128I*>(Ptr), Value);
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256I>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256I>)
         {
             _mm256_storeu_si256(static_cast<FSimd256I*>(Ptr), Value);
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd128>)
+        else if constexpr (std::is_same_v<ValueType, FSimd128>)
         {
             _mm_storeu_ps(static_cast<float*>(Ptr), Value);
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256>)
         {
             _mm256_storeu_ps(static_cast<float*>(Ptr), Value);
         }
@@ -146,19 +146,19 @@ public:
 
     FORCEINLINE NO_DISCARD TSolidSIMDWrapper operator+(const TSolidSIMDWrapper& Other) const
     {
-        if CONSTEXPR (std::is_same_v<ValueType, FSimd128I>)
+        if constexpr (std::is_same_v<ValueType, FSimd128I>)
         {
             return TSolidSIMDWrapper(_mm_add_epi32(Value, Other.Value));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256I>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256I>)
         {
             return TSolidSIMDWrapper(_mm256_add_epi32(Value, Other.Value));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd128>)
+        else if constexpr (std::is_same_v<ValueType, FSimd128>)
         {
             return TSolidSIMDWrapper(_mm_add_ps(Value, Other.Value));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256>)
         {
             return TSolidSIMDWrapper(_mm256_add_ps(Value, Other.Value));
         }
@@ -166,19 +166,19 @@ public:
 
     FORCEINLINE NO_DISCARD TSolidSIMDWrapper operator-(const TSolidSIMDWrapper& Other) const
     {
-        if CONSTEXPR (std::is_same_v<ValueType, FSimd128I>)
+        if constexpr (std::is_same_v<ValueType, FSimd128I>)
         {
             return TSolidSIMDWrapper(_mm_sub_epi32(Value, Other.Value));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256I>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256I>)
         {
             return TSolidSIMDWrapper(_mm256_sub_epi32(Value, Other.Value));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd128>)
+        else if constexpr (std::is_same_v<ValueType, FSimd128>)
         {
             return TSolidSIMDWrapper(_mm_sub_ps(Value, Other.Value));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256>)
         {
             return TSolidSIMDWrapper(_mm256_sub_ps(Value, Other.Value));
         }
@@ -186,19 +186,19 @@ public:
 
     FORCEINLINE NO_DISCARD TSolidSIMDWrapper operator*(const TSolidSIMDWrapper& Other) const
     {
-        if CONSTEXPR (std::is_same_v<ValueType, FSimd128I>)
+        if constexpr (std::is_same_v<ValueType, FSimd128I>)
         {
             return TSolidSIMDWrapper(_mm_mul_epi32(Value, Other.Value));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256I>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256I>)
         {
             return TSolidSIMDWrapper(_mm256_mul_epi32(Value, Other.Value));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd128>)
+        else if constexpr (std::is_same_v<ValueType, FSimd128>)
         {
             return TSolidSIMDWrapper(_mm_mul_ps(Value, Other.Value));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256>)
         {
             return TSolidSIMDWrapper(_mm256_mul_ps(Value, Other.Value));
         }
@@ -206,19 +206,19 @@ public:
 
     FORCEINLINE NO_DISCARD TSolidSIMDWrapper operator/(const TSolidSIMDWrapper& Other) const
     {
-        if CONSTEXPR (std::is_same_v<ValueType, FSimd128I>)
+        if constexpr (std::is_same_v<ValueType, FSimd128I>)
         {
             return TSolidSIMDWrapper(_mm_div_epi32(Value, Other.Value));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256I>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256I>)
         {
             return TSolidSIMDWrapper(_mm256_div_epi32(Value, Other.Value));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd128>)
+        else if constexpr (std::is_same_v<ValueType, FSimd128>)
         {
             return TSolidSIMDWrapper(_mm_div_ps(Value, Other.Value));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256>)
         {
             return TSolidSIMDWrapper(_mm256_div_ps(Value, Other.Value));
         }
@@ -226,11 +226,11 @@ public:
 
     FORCEINLINE NO_DISCARD TSolidSIMDWrapper operator&(const TSolidSIMDWrapper& Other) const
     {
-        if CONSTEXPR (std::is_same_v<ValueType, FSimd128I>)
+        if constexpr (std::is_same_v<ValueType, FSimd128I>)
         {
             return TSolidSIMDWrapper(_mm_and_si128(Value, Other.Value));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256I>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256I>)
         {
             return TSolidSIMDWrapper(_mm256_and_si256(Value, Other.Value));
         }
@@ -238,11 +238,11 @@ public:
 
     FORCEINLINE NO_DISCARD TSolidSIMDWrapper operator|(const TSolidSIMDWrapper& Other) const
     {
-        if CONSTEXPR (std::is_same_v<ValueType, FSimd128I>)
+        if constexpr (std::is_same_v<ValueType, FSimd128I>)
         {
             return TSolidSIMDWrapper(_mm_or_si128(Value, Other.Value));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256I>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256I>)
         {
             return TSolidSIMDWrapper(_mm256_or_si256(Value, Other.Value));
         }
@@ -250,11 +250,11 @@ public:
 
     FORCEINLINE NO_DISCARD TSolidSIMDWrapper operator^(const TSolidSIMDWrapper& Other) const
     {
-        if CONSTEXPR (std::is_same_v<ValueType, FSimd128I>)
+        if constexpr (std::is_same_v<ValueType, FSimd128I>)
         {
             return TSolidSIMDWrapper(_mm_xor_si128(Value, Other.Value));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256I>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256I>)
         {
             return TSolidSIMDWrapper(_mm256_xor_si256(Value, Other.Value));
         }
@@ -262,11 +262,11 @@ public:
 
     FORCEINLINE NO_DISCARD TSolidSIMDWrapper operator~() const
     {
-        if CONSTEXPR (std::is_same_v<ValueType, FSimd128I>)
+        if constexpr (std::is_same_v<ValueType, FSimd128I>)
         {
             return TSolidSIMDWrapper(_mm_xor_si128(Value, _mm_set1_epi32(-1)));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256I>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256I>)
         {
             return TSolidSIMDWrapper(_mm256_xor_si256(Value, _mm256_set1_epi32(-1)));
         }
@@ -274,19 +274,19 @@ public:
 
     FORCEINLINE NO_DISCARD TSolidSIMDWrapper operator-() const
     {
-        if CONSTEXPR (std::is_same_v<ValueType, FSimd128I>)
+        if constexpr (std::is_same_v<ValueType, FSimd128I>)
         {
             return TSolidSIMDWrapper(_mm_sub_epi32(_mm_set1_epi32(0), Value));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256I>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256I>)
         {
             return TSolidSIMDWrapper(_mm256_sub_epi32(_mm256_set1_epi32(0), Value));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd128>)
+        else if constexpr (std::is_same_v<ValueType, FSimd128>)
         {
             return TSolidSIMDWrapper(_mm_sub_ps(_mm_set1_ps(0), Value));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256>)
         {
             return TSolidSIMDWrapper(_mm256_sub_ps(_mm256_set1_ps(0), Value));
         }
@@ -294,19 +294,19 @@ public:
 
     FORCEINLINE NO_DISCARD TSolidSIMDWrapper operator==(const TSolidSIMDWrapper& Other) const
     {
-        if CONSTEXPR (std::is_same_v<ValueType, FSimd128I>)
+        if constexpr (std::is_same_v<ValueType, FSimd128I>)
         {
             return TSolidSIMDWrapper(_mm_cmpeq_epi32(Value, Other.Value));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256I>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256I>)
         {
             return TSolidSIMDWrapper(_mm256_cmpeq_epi32(Value, Other.Value));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd128>)
+        else if constexpr (std::is_same_v<ValueType, FSimd128>)
         {
             return TSolidSIMDWrapper(_mm_cmpeq_ps(Value, Other.Value));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256>)
         {
             return TSolidSIMDWrapper(_mm256_cmp_ps(Value, Other.Value, _CMP_EQ_OQ));
         }
@@ -319,19 +319,19 @@ public:
 
     FORCEINLINE NO_DISCARD TSolidSIMDWrapper operator<(const TSolidSIMDWrapper& Other) const
     {
-        if CONSTEXPR (std::is_same_v<ValueType, FSimd128I>)
+        if constexpr (std::is_same_v<ValueType, FSimd128I>)
         {
             return TSolidSIMDWrapper(_mm_cmplt_epi32(Value, Other.Value));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256I>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256I>)
         {
             return TSolidSIMDWrapper(_mm256_cmplt_epi32(Value, Other.Value));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd128>)
+        else if constexpr (std::is_same_v<ValueType, FSimd128>)
         {
             return TSolidSIMDWrapper(_mm_cmplt_ps(Value, Other.Value));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256>)
         {
             return TSolidSIMDWrapper(_mm256_cmp_ps(Value, Other.Value, _CMP_LT_OQ));
         }
@@ -428,11 +428,11 @@ public:
 
     FORCEINLINE NO_DISCARD TSolidSIMDWrapper operator<<(const TSolidSIMDWrapper& Other) const
     {
-        if CONSTEXPR (std::is_same_v<ValueType, FSimd128I>)
+        if constexpr (std::is_same_v<ValueType, FSimd128I>)
         {
             return TSolidSIMDWrapper(_mm_sll_epi32(Value, Other.Value));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256I>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256I>)
         {
             return TSolidSIMDWrapper(_mm256_sll_epi32(Value, Other.Value));
         }
@@ -440,11 +440,11 @@ public:
 
     FORCEINLINE NO_DISCARD TSolidSIMDWrapper operator>>(const TSolidSIMDWrapper& Other) const
     {
-        if CONSTEXPR (std::is_same_v<ValueType, FSimd128I>)
+        if constexpr (std::is_same_v<ValueType, FSimd128I>)
         {
             return TSolidSIMDWrapper(_mm_srl_epi32(Value, Other.Value));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256I>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256I>)
         {
             return TSolidSIMDWrapper(_mm256_srl_epi32(Value, Other.Value));
         }
@@ -482,11 +482,11 @@ public:
 
     FORCEINLINE NO_DISCARD TSolidSIMDWrapper operator[](const int32 Index) const
     {
-        if CONSTEXPR (std::is_same_v<ValueType, FSimd128I>)
+        if constexpr (std::is_same_v<ValueType, FSimd128I>)
         {
             return TSolidSIMDWrapper(_mm_shuffle_epi32(Value, Index));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256I>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256I>)
         {
             return TSolidSIMDWrapper(_mm256_shuffle_epi32(Value, Index));
         }
@@ -494,11 +494,11 @@ public:
 
     FORCEINLINE NO_DISCARD TSolidSIMDWrapper operator[](const TSolidSIMDWrapper& Index) const
     {
-        if CONSTEXPR (std::is_same_v<ValueType, FSimd128I>)
+        if constexpr (std::is_same_v<ValueType, FSimd128I>)
         {
             return TSolidSIMDWrapper(_mm_shuffle_epi32(Value, Index.Value));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256I>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256I>)
         {
             return TSolidSIMDWrapper(_mm256_shuffle_epi32(Value, Index.Value));
         }
@@ -536,19 +536,19 @@ public:
 
     FORCEINLINE NO_DISCARD static TSolidSIMDWrapper Min(const TSolidSIMDWrapper& A, const TSolidSIMDWrapper& B)
     {
-        if CONSTEXPR (std::is_same_v<ValueType, FSimd128I>)
+        if constexpr (std::is_same_v<ValueType, FSimd128I>)
         {
             return TSolidSIMDWrapper(_mm_min_epi32(A.Value, B.Value));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256I>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256I>)
         {
             return TSolidSIMDWrapper(_mm256_min_epi32(A.Value, B.Value));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd128>)
+        else if constexpr (std::is_same_v<ValueType, FSimd128>)
         {
             return TSolidSIMDWrapper(_mm_min_ps(A.Value, B.Value));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256>)
         {
             return TSolidSIMDWrapper(_mm256_min_ps(A.Value, B.Value));
         }
@@ -556,19 +556,19 @@ public:
 
     FORCEINLINE NO_DISCARD static TSolidSIMDWrapper Max(const TSolidSIMDWrapper& A, const TSolidSIMDWrapper& B)
     {
-        if CONSTEXPR (std::is_same_v<ValueType, FSimd128I>)
+        if constexpr (std::is_same_v<ValueType, FSimd128I>)
         {
             return TSolidSIMDWrapper(_mm_max_epi32(A.Value, B.Value));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256I>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256I>)
         {
             return TSolidSIMDWrapper(_mm256_max_epi32(A.Value, B.Value));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd128>)
+        else if constexpr (std::is_same_v<ValueType, FSimd128>)
         {
             return TSolidSIMDWrapper(_mm_max_ps(A.Value, B.Value));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256>)
         {
             return TSolidSIMDWrapper(_mm256_max_ps(A.Value, B.Value));
         }
@@ -576,19 +576,19 @@ public:
 
     FORCEINLINE NO_DISCARD static TSolidSIMDWrapper Abs(const TSolidSIMDWrapper& A)
     {
-        if CONSTEXPR (std::is_same_v<ValueType, FSimd128I>)
+        if constexpr (std::is_same_v<ValueType, FSimd128I>)
         {
             return TSolidSIMDWrapper(_mm_abs_epi32(A.Value));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256I>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256I>)
         {
             return TSolidSIMDWrapper(_mm256_abs_epi32(A.Value));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd128>)
+        else if constexpr (std::is_same_v<ValueType, FSimd128>)
         {
             return TSolidSIMDWrapper(_mm_abs_ps(A.Value));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256>)
         {
             return TSolidSIMDWrapper(_mm256_abs_ps(A.Value));
         }
@@ -596,11 +596,11 @@ public:
 
     FORCEINLINE NO_DISCARD static TSolidSIMDWrapper Sqrt(const TSolidSIMDWrapper& A)
     {
-        if CONSTEXPR (std::is_same_v<ValueType, FSimd128>)
+        if constexpr (std::is_same_v<ValueType, FSimd128>)
         {
             return TSolidSIMDWrapper(_mm_sqrt_ps(A.Value));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256>)
         {
             return TSolidSIMDWrapper(_mm256_sqrt_ps(A.Value));
         }
@@ -608,11 +608,11 @@ public:
 
     FORCEINLINE NO_DISCARD static TSolidSIMDWrapper Reciprocal(const TSolidSIMDWrapper& A)
     {
-        if CONSTEXPR (std::is_same_v<ValueType, FSimd128>)
+        if constexpr (std::is_same_v<ValueType, FSimd128>)
         {
             return TSolidSIMDWrapper(_mm_rcp_ps(A.Value));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256>)
         {
             return TSolidSIMDWrapper(_mm256_rcp_ps(A.Value));
         }
@@ -620,11 +620,11 @@ public:
 
     FORCEINLINE NO_DISCARD static TSolidSIMDWrapper ReciprocalSqrt(const TSolidSIMDWrapper& A)
     {
-        if CONSTEXPR (std::is_same_v<ValueType, FSimd128>)
+        if constexpr (std::is_same_v<ValueType, FSimd128>)
         {
             return TSolidSIMDWrapper(_mm_rsqrt_ps(A.Value));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256>)
         {
             return TSolidSIMDWrapper(_mm256_rsqrt_ps(A.Value));
         }
@@ -632,11 +632,11 @@ public:
 
     FORCEINLINE NO_DISCARD static TSolidSIMDWrapper Floor(const TSolidSIMDWrapper& A)
     {
-        if CONSTEXPR (std::is_same_v<ValueType, FSimd128>)
+        if constexpr (std::is_same_v<ValueType, FSimd128>)
         {
             return TSolidSIMDWrapper(_mm_floor_ps(A.Value));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256>)
         {
             return TSolidSIMDWrapper(_mm256_floor_ps(A.Value));
         }
@@ -644,11 +644,11 @@ public:
 
     FORCEINLINE NO_DISCARD static TSolidSIMDWrapper Ceil(const TSolidSIMDWrapper& A)
     {
-        if CONSTEXPR (std::is_same_v<ValueType, FSimd128>)
+        if constexpr (std::is_same_v<ValueType, FSimd128>)
         {
             return TSolidSIMDWrapper(_mm_ceil_ps(A.Value));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256>)
         {
             return TSolidSIMDWrapper(_mm256_ceil_ps(A.Value));
         }
@@ -656,11 +656,11 @@ public:
 
     FORCEINLINE NO_DISCARD static TSolidSIMDWrapper Truncate(const TSolidSIMDWrapper& A)
     {
-        if CONSTEXPR (std::is_same_v<ValueType, FSimd128>)
+        if constexpr (std::is_same_v<ValueType, FSimd128>)
         {
             return TSolidSIMDWrapper(_mm_round_ps(A.Value, _MM_FROUND_TRUNC));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256>)
         {
             return TSolidSIMDWrapper(_mm256_round_ps(A.Value, _MM_FROUND_TRUNC));
         }
@@ -668,11 +668,11 @@ public:
 
     FORCEINLINE NO_DISCARD static TSolidSIMDWrapper Round(const TSolidSIMDWrapper& A)
     {
-        if CONSTEXPR (std::is_same_v<ValueType, FSimd128>)
+        if constexpr (std::is_same_v<ValueType, FSimd128>)
         {
             return TSolidSIMDWrapper(_mm_round_ps(A.Value, _MM_FROUND_CUR_DIRECTION));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256>)
         {
             return TSolidSIMDWrapper(_mm256_round_ps(A.Value, _MM_FROUND_CUR_DIRECTION));
         }
@@ -680,19 +680,19 @@ public:
 
     FORCEINLINE NO_DISCARD static TSolidSIMDWrapper RoundToNearestInteger(const TSolidSIMDWrapper& A)
     {
-        if CONSTEXPR (std::is_same_v<ValueType, FSimd128I>)
+        if constexpr (std::is_same_v<ValueType, FSimd128I>)
         {
             return TSolidSIMDWrapper(_mm_cvtps_epi32(A.Value));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256I>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256I>)
         {
             return TSolidSIMDWrapper(_mm256_cvtps_epi32(A.Value));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd128>)
+        else if constexpr (std::is_same_v<ValueType, FSimd128>)
         {
             return TSolidSIMDWrapper(_mm_round_ps(A.Value, _MM_FROUND_NINT));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256>)
         {
             return TSolidSIMDWrapper(_mm256_round_ps(A.Value, _MM_FROUND_NINT));
         }
@@ -700,19 +700,19 @@ public:
 
     FORCEINLINE NO_DISCARD static TSolidSIMDWrapper RoundToZero(const TSolidSIMDWrapper& A)
     {
-        if CONSTEXPR (std::is_same_v<ValueType, FSimd128I>)
+        if constexpr (std::is_same_v<ValueType, FSimd128I>)
         {
             return TSolidSIMDWrapper(_mm_cvttps_epi32(A.Value));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256I>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256I>)
         {
             return TSolidSIMDWrapper(_mm256_cvttps_epi32(A.Value));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd128>)
+        else if constexpr (std::is_same_v<ValueType, FSimd128>)
         {
             return TSolidSIMDWrapper(_mm_round_ps(A.Value, _MM_FROUND_TRUNC));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256>)
         {
             return TSolidSIMDWrapper(_mm256_round_ps(A.Value, _MM_FROUND_TRUNC));
         }
@@ -720,11 +720,11 @@ public:
 
     FORCEINLINE NO_DISCARD static TSolidSIMDWrapper RoundToNegativeInfinity(const TSolidSIMDWrapper& A)
     {
-        if CONSTEXPR (std::is_same_v<ValueType, FSimd128>)
+        if constexpr (std::is_same_v<ValueType, FSimd128>)
         {
             return TSolidSIMDWrapper(_mm_round_ps(A.Value, _MM_FROUND_FLOOR));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256>)
         {
             return TSolidSIMDWrapper(_mm256_round_ps(A.Value, _MM_FROUND_FLOOR));
         }
@@ -732,11 +732,11 @@ public:
 
     FORCEINLINE NO_DISCARD static TSolidSIMDWrapper RoundToPositiveInfinity(const TSolidSIMDWrapper& A)
     {
-        if CONSTEXPR (std::is_same_v<ValueType, FSimd128>)
+        if constexpr (std::is_same_v<ValueType, FSimd128>)
         {
             return TSolidSIMDWrapper(_mm_round_ps(A.Value, _MM_FROUND_CEIL));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256>)
         {
             return TSolidSIMDWrapper(_mm256_round_ps(A.Value, _MM_FROUND_CEIL));
         }
@@ -744,19 +744,19 @@ public:
 
     FORCEINLINE NO_DISCARD static TSolidSIMDWrapper Select(const TSolidSIMDWrapper& Mask, const TSolidSIMDWrapper& A, const TSolidSIMDWrapper& B)
     {
-        if CONSTEXPR (std::is_same_v<ValueType, FSimd128I>)
+        if constexpr (std::is_same_v<ValueType, FSimd128I>)
         {
             return TSolidSIMDWrapper(_mm_blendv_epi8(B.Value, A.Value, Mask.Value));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256I>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256I>)
         {
             return TSolidSIMDWrapper(_mm256_blendv_epi8(B.Value, A.Value, Mask.Value));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd128>)
+        else if constexpr (std::is_same_v<ValueType, FSimd128>)
         {
             return TSolidSIMDWrapper(_mm_blendv_ps(B.Value, A.Value, Mask.Value));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256>)
         {
             return TSolidSIMDWrapper(_mm256_blendv_ps(B.Value, A.Value, Mask.Value));
         }
@@ -776,19 +776,19 @@ public:
 
     FORCEINLINE NO_DISCARD static TSolidSIMDWrapper HorizontalAdd(const TSolidSIMDWrapper& A, const TSolidSIMDWrapper& B)
     {
-        if CONSTEXPR (std::is_same_v<ValueType, FSimd128I>)
+        if constexpr (std::is_same_v<ValueType, FSimd128I>)
         {
               return TSolidSIMDWrapper(_mm_hadd_epi32(A.Value, B.Value));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256I>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256I>)
         {
            return TSolidSIMDWrapper(_mm256_hadd_epi32(A.Value, B.Value));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd128>)
+        else if constexpr (std::is_same_v<ValueType, FSimd128>)
         {
               return TSolidSIMDWrapper(_mm_hadd_ps(A.Value, B.Value));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256>)
         {
            return TSolidSIMDWrapper(_mm256_hadd_ps(A.Value, B.Value));
         }
@@ -796,19 +796,19 @@ public:
 
     FORCEINLINE NO_DISCARD static TSolidSIMDWrapper HorizontalSubtract(const TSolidSIMDWrapper& A, const TSolidSIMDWrapper& B)
     {
-        if CONSTEXPR (std::is_same_v<ValueType, FSimd128I>)
+        if constexpr (std::is_same_v<ValueType, FSimd128I>)
         {
               return TSolidSIMDWrapper(_mm_hsub_epi32(A.Value, B.Value));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256I>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256I>)
         {
            return TSolidSIMDWrapper(_mm256_hsub_epi32(A.Value, B.Value));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd128>)
+        else if constexpr (std::is_same_v<ValueType, FSimd128>)
         {
               return TSolidSIMDWrapper(_mm_hsub_ps(A.Value, B.Value));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256>)
         {
            return TSolidSIMDWrapper(_mm256_hsub_ps(A.Value, B.Value));
         }
@@ -826,11 +826,11 @@ public:
 
     FORCEINLINE NO_DISCARD static TSolidSIMDWrapper UnpackLow(const TSolidSIMDWrapper& A, const TSolidSIMDWrapper& B)
     {
-        if CONSTEXPR (std::is_same_v<ValueType, FSimd128I>)
+        if constexpr (std::is_same_v<ValueType, FSimd128I>)
         {
             return TSolidSIMDWrapper(_mm_unpacklo_epi32(A.Value, B.Value));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256I>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256I>)
         {
             return TSolidSIMDWrapper(_mm256_unpacklo_epi32(A.Value, B.Value));
         }
@@ -838,11 +838,11 @@ public:
 
     FORCEINLINE NO_DISCARD static TSolidSIMDWrapper UnpackHigh(const TSolidSIMDWrapper& A, const TSolidSIMDWrapper& B)
     {
-        if CONSTEXPR (std::is_same_v<ValueType, FSimd128I>)
+        if constexpr (std::is_same_v<ValueType, FSimd128I>)
         {
             return TSolidSIMDWrapper(_mm_unpackhi_epi32(A.Value, B.Value));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256I>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256I>)
         {
             return TSolidSIMDWrapper(_mm256_unpackhi_epi32(A.Value, B.Value));
         }
@@ -850,11 +850,11 @@ public:
 
     FORCEINLINE NO_DISCARD static TSolidSIMDWrapper Shuffle(const TSolidSIMDWrapper& A, const TSolidSIMDWrapper& B, const int32 Control)
     {
-        if CONSTEXPR (std::is_same_v<ValueType, FSimd128I>)
+        if constexpr (std::is_same_v<ValueType, FSimd128I>)
         {
             return TSolidSIMDWrapper(_mm_shuffle_epi32(_mm_unpacklo_epi32(A.Value, B.Value), Control));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256I>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256I>)
         {
             return TSolidSIMDWrapper(_mm256_shuffle_epi32(_mm256_unpacklo_epi32(A.Value, B.Value), Control));
         }
@@ -862,11 +862,11 @@ public:
 
     FORCEINLINE NO_DISCARD static TSolidSIMDWrapper Permute(const TSolidSIMDWrapper& A, const int32 Control)
     {
-        if CONSTEXPR (std::is_same_v<ValueType, FSimd128I>)
+        if constexpr (std::is_same_v<ValueType, FSimd128I>)
         {
             return TSolidSIMDWrapper(_mm_shuffle_epi32(A.Value, Control));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256I>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256I>)
         {
             return TSolidSIMDWrapper(_mm256_shuffle_epi32(A.Value, Control));
         }
@@ -874,11 +874,11 @@ public:
 
     FORCEINLINE NO_DISCARD static TSolidSIMDWrapper Permute(const TSolidSIMDWrapper& A, const TSolidSIMDWrapper& Control)
     {
-        if CONSTEXPR (std::is_same_v<ValueType, FSimd128I>)
+        if constexpr (std::is_same_v<ValueType, FSimd128I>)
         {
             return TSolidSIMDWrapper(_mm_shuffle_epi32(A.Value, Control.Value));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256I>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256I>)
         {
             return TSolidSIMDWrapper(_mm256_shuffle_epi32(A.Value, Control.Value));
         }
@@ -887,11 +887,11 @@ public:
     FORCEINLINE NO_DISCARD static TSolidSIMDWrapper Permute(const TSolidSIMDWrapper& A, const TSolidSIMDWrapper& B,
         const int32 Control)
     {
-        if CONSTEXPR (std::is_same_v<ValueType, FSimd128I>)
+        if constexpr (std::is_same_v<ValueType, FSimd128I>)
         {
             return TSolidSIMDWrapper(_mm_shuffle_epi32(_mm_unpacklo_epi32(A.Value, B.Value), Control));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256I>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256I>)
         {
             return TSolidSIMDWrapper(_mm256_shuffle_epi32(_mm256_unpacklo_epi32(A.Value, B.Value), Control));
         }
@@ -900,11 +900,11 @@ public:
     FORCEINLINE NO_DISCARD static TSolidSIMDWrapper Permute(const TSolidSIMDWrapper& A, const TSolidSIMDWrapper& B,
      const TSolidSIMDWrapper& Control)
     {
-        if CONSTEXPR (std::is_same_v<ValueType, FSimd128I>)
+        if constexpr (std::is_same_v<ValueType, FSimd128I>)
         {
             return TSolidSIMDWrapper(_mm_shuffle_epi32(_mm_unpacklo_epi32(A.Value, B.Value), Control.Value));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256I>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256I>)
         {
             return TSolidSIMDWrapper(_mm256_shuffle_epi32(_mm256_unpacklo_epi32(A.Value, B.Value), Control.Value));
         }
@@ -922,19 +922,19 @@ public:
     template <typename InValueType>
     FORCEINLINE NO_DISCARD static TSolidSIMDWrapper<InValueType> Convert(const TSolidSIMDWrapper<InValueType>& A)
     {
-        if CONSTEXPR (std::is_same_v<ValueType, FSimd128I>)
+        if constexpr (std::is_same_v<ValueType, FSimd128I>)
         {
             return TSolidSIMDWrapper<InValueType>(_mm_cvtepi32_ps(A.Value));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256I>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256I>)
         {
             return TSolidSIMDWrapper<InValueType>(_mm256_cvtepi32_ps(A.Value));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd128>)
+        else if constexpr (std::is_same_v<ValueType, FSimd128>)
         {
             return TSolidSIMDWrapper<InValueType>(_mm_cvtps_epi32(A.Value));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256>)
         {
             return TSolidSIMDWrapper<InValueType>(_mm256_cvtps_epi32(A.Value));
         }
@@ -1006,11 +1006,11 @@ public:
     
     FORCEINLINE NO_DISCARD static TSolidSIMDWrapper SetAll(const int32 Value)
     {
-        if CONSTEXPR (std::is_same_v<ValueType, FSimd128I>)
+        if constexpr (std::is_same_v<ValueType, FSimd128I>)
         {
             return TSolidSIMDWrapper(_mm_set1_epi32(Value));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256I>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256I>)
         {
             return TSolidSIMDWrapper(_mm256_set1_epi32(Value));
         }
@@ -1018,11 +1018,11 @@ public:
 
     FORCEINLINE NO_DISCARD static TSolidSIMDWrapper SetAll(const float Value)
     {
-        if CONSTEXPR (std::is_same_v<ValueType, FSimd128>)
+        if constexpr (std::is_same_v<ValueType, FSimd128>)
         {
             return TSolidSIMDWrapper(_mm_set1_ps(Value));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256>)
         {
             return TSolidSIMDWrapper(_mm256_set1_ps(Value));
         }
@@ -1030,11 +1030,11 @@ public:
 
     FORCEINLINE NO_DISCARD static TSolidSIMDWrapper Set(const float X, const float Y, const float Z, const float W)
     {
-        if CONSTEXPR (std::is_same_v<ValueType, FSimd128>)
+        if constexpr (std::is_same_v<ValueType, FSimd128>)
         {
             return TSolidSIMDWrapper(_mm_set_ps(W, Z, Y, X));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256>)
         {
             return TSolidSIMDWrapper(_mm256_set_ps(W, Z, Y, X, W, Z, Y, X));
         }
@@ -1042,11 +1042,11 @@ public:
 
     FORCEINLINE NO_DISCARD static TSolidSIMDWrapper MaskedLoad(const float* Ptr, const TSolidSIMDWrapper& Mask)
     {
-        if CONSTEXPR (std::is_same_v<ValueType, FSimd128>)
+        if constexpr (std::is_same_v<ValueType, FSimd128>)
         {
             return TSolidSIMDWrapper(_mm_maskload_ps(Ptr, Mask.Value));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256>)
         {
             return TSolidSIMDWrapper(_mm256_maskload_ps(Ptr, Mask.Value));
         }
@@ -1054,11 +1054,11 @@ public:
 
     FORCEINLINE void MaskedStore(float* Ptr, const TSolidSIMDWrapper& Mask) const
     {
-        if CONSTEXPR (std::is_same_v<ValueType, FSimd128>)
+        if constexpr (std::is_same_v<ValueType, FSimd128>)
         {
             _mm_maskstore_ps(Ptr, Mask.Value, Value);
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256>)
         {
             _mm256_maskstore_ps(Ptr, Mask.Value, Value);
         }
@@ -1066,11 +1066,11 @@ public:
 
     FORCEINLINE NO_DISCARD static TSolidSIMDWrapper MaskedLoad(const int32* Ptr, const TSolidSIMDWrapper& Mask)
     {
-        if CONSTEXPR (std::is_same_v<ValueType, FSimd128I>)
+        if constexpr (std::is_same_v<ValueType, FSimd128I>)
         {
             return TSolidSIMDWrapper(_mm_maskload_epi32(Ptr, Mask.Value));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256I>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256I>)
         {
             return TSolidSIMDWrapper(_mm256_maskload_epi32(Ptr, Mask.Value));
         }
@@ -1078,11 +1078,11 @@ public:
 
     FORCEINLINE void MaskedStore(int32* Ptr, const TSolidSIMDWrapper& Mask) const
     {
-        if CONSTEXPR (std::is_same_v<ValueType, FSimd128I>)
+        if constexpr (std::is_same_v<ValueType, FSimd128I>)
         {
             _mm_maskstore_epi32(Ptr, Mask.Value, Value);
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256I>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256I>)
         {
             _mm256_maskstore_epi32(Ptr, Mask.Value, Value);
         }
@@ -1090,11 +1090,11 @@ public:
 
     FORCEINLINE NO_DISCARD static TSolidSIMDWrapper Load(const float* Ptr)
     {
-        if CONSTEXPR (std::is_same_v<ValueType, FSimd128>)
+        if constexpr (std::is_same_v<ValueType, FSimd128>)
         {
             return TSolidSIMDWrapper(_mm_load_ps(Ptr));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256>)
         {
             return TSolidSIMDWrapper(_mm256_load_ps(Ptr));
         }
@@ -1102,11 +1102,11 @@ public:
 
     FORCEINLINE void Store(float* Ptr) const
     {
-        if CONSTEXPR (std::is_same_v<ValueType, FSimd128>)
+        if constexpr (std::is_same_v<ValueType, FSimd128>)
         {
             _mm_store_ps(Ptr, Value);
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256>)
         {
             _mm256_store_ps(Ptr, Value);
         }
@@ -1114,11 +1114,11 @@ public:
 
     FORCEINLINE NO_DISCARD static TSolidSIMDWrapper Load(const int32* Ptr)
     {
-        if CONSTEXPR (std::is_same_v<ValueType, FSimd128I>)
+        if constexpr (std::is_same_v<ValueType, FSimd128I>)
         {
             return TSolidSIMDWrapper(_mm_load_si128(reinterpret_cast<const FSimd128I*>(Ptr)));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256I>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256I>)
         {
             return TSolidSIMDWrapper(_mm256_load_si256(reinterpret_cast<const FSimd256I*>(Ptr)));
         }
@@ -1126,11 +1126,11 @@ public:
 
     FORCEINLINE void Store(int32* Ptr) const
     {
-        if CONSTEXPR (std::is_same_v<ValueType, FSimd128I>)
+        if constexpr (std::is_same_v<ValueType, FSimd128I>)
         {
             _mm_store_si128(reinterpret_cast<FSimd128I*>(Ptr), Value);
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256I>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256I>)
         {
             _mm256_store_si256(reinterpret_cast<FSimd256I*>(Ptr), Value);
         }
@@ -1464,11 +1464,11 @@ public:
 
     FORCEINLINE NO_DISCARD static TSolidSIMDWrapper PopCount(const TSolidSIMDWrapper& A)
     {
-        if CONSTEXPR (std::is_same_v<ValueType, FSimd128I>)
+        if constexpr (std::is_same_v<ValueType, FSimd128I>)
         {
             return TSolidSIMDWrapper(_mm_popcnt_epi32(A.Value));
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256I>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256I>)
         {
             return TSolidSIMDWrapper(_mm256_popcnt_epi32(A.Value));
         }
@@ -1476,11 +1476,11 @@ public:
 
     FORCEINLINE NO_DISCARD static int32 CountLeadingZeros(const TSolidSIMDWrapper& A)
     {
-        if CONSTEXPR (std::is_same_v<ValueType, FSimd128I>)
+        if constexpr (std::is_same_v<ValueType, FSimd128I>)
         {
             return _mm_clz_epi32(A.Value);
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256I>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256I>)
         {
             return _mm256_clz_epi32(A.Value);
         }
@@ -1488,11 +1488,11 @@ public:
 
     FORCEINLINE NO_DISCARD static int32 CountTrailingZeros(const TSolidSIMDWrapper& A)
     {
-        if CONSTEXPR (std::is_same_v<ValueType, FSimd128I>)
+        if constexpr (std::is_same_v<ValueType, FSimd128I>)
         {
             return _mm_ctz_epi32(A.Value);
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256I>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256I>)
         {
             return _mm256_ctz_epi32(A.Value);
         }
@@ -1500,11 +1500,11 @@ public:
 
     FORCEINLINE NO_DISCARD static int32 CountLeadingSignBits(const TSolidSIMDWrapper& A)
     {
-        if CONSTEXPR (std::is_same_v<ValueType, FSimd128I>)
+        if constexpr (std::is_same_v<ValueType, FSimd128I>)
         {
             return _mm_cmsb_epi32(A.Value);
         }
-        else if CONSTEXPR (std::is_same_v<ValueType, FSimd256I>)
+        else if constexpr (std::is_same_v<ValueType, FSimd256I>)
         {
             return _mm256_cmsb_epi32(A.Value);
         }

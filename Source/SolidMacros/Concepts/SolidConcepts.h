@@ -10,7 +10,7 @@
 namespace Solid
 {
 	template <typename T>
-	FORCEINLINE CONSTEXPR NO_DISCARD bool IsStaticStruct()
+	FORCEINLINE constexpr NO_DISCARD bool IsStaticStruct()
 	{
 		return TModels_V<CStaticStructProvider, T>;
 	}
@@ -22,7 +22,7 @@ namespace Solid
 	}; // concept TStaticStructConcept
 
 	template <typename T>
-	FORCEINLINE CONSTEXPR NO_DISCARD bool IsStaticClass()
+	FORCEINLINE constexpr NO_DISCARD bool IsStaticClass()
 	{
 		return TModels_V<CStaticClassProvider, T>;
 	}

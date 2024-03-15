@@ -30,7 +30,7 @@ namespace Solid
 	}; // struct TIsSameFlatly
 
 	template <typename T1, typename T2>
-	CONSTEXPR bool TIsSameFlatly_v = TIsSameFlatly<T1, T2>::value;
+	constexpr bool TIsSameFlatly_v = TIsSameFlatly<T1, T2>::value;
 
 	template <typename Base, typename Derived>
 	struct TIsBaseOfFlatly
@@ -39,7 +39,7 @@ namespace Solid
 	}; // struct TIsBaseOfFlatly
 
 	template <typename Base, typename Derived>
-	CONSTEXPR bool TIsBaseOfFlatly_v = TIsBaseOfFlatly<Base, Derived>::value;
+	constexpr bool TIsBaseOfFlatly_v = TIsBaseOfFlatly<Base, Derived>::value;
 
 	template <typename ...Ts>
 	struct TIndexWithin;
@@ -81,7 +81,7 @@ namespace Solid
 	}; // struct TIndexWithinFlatly
 
 	template <typename ...Ts>
-	CONSTEXPR int32 TIndexWithinFlatly_v = TIndexWithinFlatly<Ts...>::value;
+	constexpr int32 TIndexWithinFlatly_v = TIndexWithinFlatly<Ts...>::value;
 
 	template <typename T, typename ...List>
 	struct TIsContained;
@@ -107,7 +107,7 @@ namespace Solid
 	}; // struct TIsContained<T>
 
 	template <typename T, typename ...List>
-	CONSTEXPR bool TIsContained_v = TIsContained<T, List...>::value;
+	constexpr bool TIsContained_v = TIsContained<T, List...>::value;
 
 	template <typename T, typename ...List>
 	struct TIsBaseContained;
@@ -133,7 +133,7 @@ namespace Solid
 	}; // struct TIsBaseContained<T>
 
 	template <typename T, typename ...List>
-	CONSTEXPR bool TIsBaseContained_v = TIsBaseContained<T, List...>::value;
+	constexpr bool TIsBaseContained_v = TIsBaseContained<T, List...>::value;
 
 	template <typename T, typename ...List>
 	struct TIsContainedFlatly;
@@ -159,7 +159,7 @@ namespace Solid
 	}; // struct TIsContainedFlatly<T>
 
 	template <typename T, typename ...List>
-	CONSTEXPR bool TIsContainedFlatly_v = TIsContainedFlatly<T, List...>::value;
+	constexpr bool TIsContainedFlatly_v = TIsContainedFlatly<T, List...>::value;
 
 	template <typename T, typename ...List>
 	struct TIsBaseContainedFlatly;

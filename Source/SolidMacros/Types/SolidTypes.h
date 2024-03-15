@@ -5,6 +5,8 @@
 #ifndef SOLID_TYPES_H
 #define SOLID_TYPES_H
 
+#include <string_view>
+
 #include "CoreMinimal.h"
 #include "SolidMacros/Macros.h"
 
@@ -27,7 +29,7 @@ namespace Solid::Meta
     struct FTypeInfo final
     {
     private:
-        FORCEINLINE CONSTEXPR static uint64 FindFirstOf(const char* Data, const uint64 Length,
+        FORCEINLINE constexpr static uint64 FindFirstOf(const char* Data, const uint64 Length,
             const char Search, const uint64 SearchStartPosition = 0)
         {
             for (uint64 Index = SearchStartPosition; Index < Length; ++Index)
@@ -41,7 +43,7 @@ namespace Solid::Meta
             return static_cast<uint64>(-1);
         }
 
-        FORCEINLINE CONSTEXPR static uint64 FindLastOf(const char* Data, const uint64 Length,
+        FORCEINLINE constexpr static uint64 FindLastOf(const char* Data, const uint64 Length,
             const char Search, const uint64 SearchStartPosition = static_cast<uint64>(-1))
         {
             for (uint64 Index = Length - 1; Index >= SearchStartPosition; --Index)
@@ -57,7 +59,7 @@ namespace Solid::Meta
 
     public:
         template <typename T>
-        FORCEINLINE CONSTEXPR NO_DISCARD uint32 Id()
+        FORCEINLINE constexpr NO_DISCARD uint32 Id()
         {
             return TTypeGroup<T>::template Id<T>;
         }
@@ -105,8 +107,8 @@ namespace Solid::Meta
      * C++'s PRE-PROCESSOR SUCKS
      **/
 
-    static CONSTEXPR uint32 STRUCT_TO_TUPLE_MAX_TYPES_BITS = 4;
-    static CONSTEXPR uint32 STRUCT_TO_TUPLE_MAX_TYPES = (1 << STRUCT_TO_TUPLE_MAX_TYPES_BITS) - 1;
+    static constexpr uint32 STRUCT_TO_TUPLE_MAX_TYPES_BITS = 4;
+    static constexpr uint32 STRUCT_TO_TUPLE_MAX_TYPES = (1 << STRUCT_TO_TUPLE_MAX_TYPES_BITS) - 1;
 
     #define SOLID_CONCAT(a, b) SOLID_CONCAT_IMPL(a, b)
     #define SOLID_CONCAT_IMPL(a, b) a##b
@@ -165,13 +167,13 @@ namespace Solid::Meta
         auto&& [SOLID_REPEAT(p, Num)] = std::forward<T>(InStruct); \
 
     #define STRUCT_TO_TUPLE_CASE(Num) \
-        if CONSTEXPR (IS_BRACES_CONSTRUCTIBLE_N(Type, Num)) { \
+        if constexpr (IS_BRACES_CONSTRUCTIBLE_N(Type, Num)) { \
             auto&& [SOLID_REPEAT(p, Num)] = std::forward<T>(InStruct); \
             return std::make_tuple(SOLID_REPEAT(p, Num)); \
         }
 
     #define FOR_EACH_MEMBER_CASE(Num) \
-        if CONSTEXPR (IS_BRACES_CONSTRUCTIBLE_N(Type, Num)) \
+        if constexpr (IS_BRACES_CONSTRUCTIBLE_N(Type, Num)) \
         { \
             STRUCT_MEMBERS_CASE(Num) \
             return InFunction(SOLID_REPEAT(p, Num)); \
@@ -182,7 +184,7 @@ namespace Solid::Meta
     {
         using Type = std::decay_t<std::remove_pointer_t<T>>;
 
-        if CONSTEXPR (std::is_empty_v<Type>)
+        if constexpr (std::is_empty_v<Type>)
         {
             return std::make_tuple();
         }
@@ -203,7 +205,7 @@ namespace Solid::Meta
         STRUCT_TO_TUPLE_CASE(2)
         STRUCT_TO_TUPLE_CASE(1)
         
-        CONSTEXPR std::string_view TypeName = nameof(Type);
+        constexpr std::string_view TypeName = nameof(Type);
         checkf(false, TEXT("Unsupported Number of Members in Struct: %s"), TypeName.data());
     }
 
@@ -212,73 +214,73 @@ namespace Solid::Meta
     {
         using Type = std::decay_t<std::remove_pointer_t<T>>;
 
-        if CONSTEXPR (std::is_empty_v<Type>)
+        if constexpr (std::is_empty_v<Type>)
         {
             return 0;
         }
         
-        if CONSTEXPR (IS_BRACES_CONSTRUCTIBLE_N(Type, 15))
+        if constexpr (IS_BRACES_CONSTRUCTIBLE_N(Type, 15))
         {
             return 15;
         }
-        if CONSTEXPR (IS_BRACES_CONSTRUCTIBLE_N(Type, 14))
+        if constexpr (IS_BRACES_CONSTRUCTIBLE_N(Type, 14))
         {
             return 14;
         }
-        if CONSTEXPR (IS_BRACES_CONSTRUCTIBLE_N(Type, 13))
+        if constexpr (IS_BRACES_CONSTRUCTIBLE_N(Type, 13))
         {
             return 13;
         }
-        if CONSTEXPR (IS_BRACES_CONSTRUCTIBLE_N(Type, 12))
+        if constexpr (IS_BRACES_CONSTRUCTIBLE_N(Type, 12))
         {
             return 12;
         }
-        if CONSTEXPR (IS_BRACES_CONSTRUCTIBLE_N(Type, 11))
+        if constexpr (IS_BRACES_CONSTRUCTIBLE_N(Type, 11))
         {
             return 11;
         }
-        if CONSTEXPR (IS_BRACES_CONSTRUCTIBLE_N(Type, 10))
+        if constexpr (IS_BRACES_CONSTRUCTIBLE_N(Type, 10))
         {
             return 10;
         }
-        if CONSTEXPR (IS_BRACES_CONSTRUCTIBLE_N(Type, 9))
+        if constexpr (IS_BRACES_CONSTRUCTIBLE_N(Type, 9))
         {
             return 9;
         }
-        if CONSTEXPR (IS_BRACES_CONSTRUCTIBLE_N(Type, 8))
+        if constexpr (IS_BRACES_CONSTRUCTIBLE_N(Type, 8))
         {
             return 8;
         }
-        if CONSTEXPR (IS_BRACES_CONSTRUCTIBLE_N(Type, 7))
+        if constexpr (IS_BRACES_CONSTRUCTIBLE_N(Type, 7))
         {
             return 7;
         }
-        if CONSTEXPR (IS_BRACES_CONSTRUCTIBLE_N(Type, 6))
+        if constexpr (IS_BRACES_CONSTRUCTIBLE_N(Type, 6))
         {
             return 6;
         }
-        if CONSTEXPR (IS_BRACES_CONSTRUCTIBLE_N(Type, 5))
+        if constexpr (IS_BRACES_CONSTRUCTIBLE_N(Type, 5))
         {
             return 5;
         }
-        if CONSTEXPR (IS_BRACES_CONSTRUCTIBLE_N(Type, 4))
+        if constexpr (IS_BRACES_CONSTRUCTIBLE_N(Type, 4))
         {
             return 4;
         }
-        if CONSTEXPR (IS_BRACES_CONSTRUCTIBLE_N(Type, 3))
+        if constexpr (IS_BRACES_CONSTRUCTIBLE_N(Type, 3))
         {
             return 3;
         }
-        if CONSTEXPR (IS_BRACES_CONSTRUCTIBLE_N(Type, 2))
+        if constexpr (IS_BRACES_CONSTRUCTIBLE_N(Type, 2))
         {
             return 2;
         }
-        if CONSTEXPR (IS_BRACES_CONSTRUCTIBLE_N(Type, 1))
+        if constexpr (IS_BRACES_CONSTRUCTIBLE_N(Type, 1))
         {
             return 1;
         }
 
-        CONSTEXPR std::string_view TypeName = nameof(Type);
+        constexpr std::string_view TypeName = nameof(Type);
         checkf(false, TEXT("Unsupported Number of Members in Struct: %s"), TypeName.data());
     }
 
@@ -287,7 +289,7 @@ namespace Solid::Meta
     {
         using Type = std::decay_t<std::remove_pointer_t<T>>;
 
-        if CONSTEXPR (std::is_empty_v<Type>)
+        if constexpr (std::is_empty_v<Type>)
         {
             InFunction();
         }
@@ -308,7 +310,7 @@ namespace Solid::Meta
         FOR_EACH_MEMBER_CASE(2)
         FOR_EACH_MEMBER_CASE(1)
 
-        CONSTEXPR std::string_view TypeName = nameof(Type);
+        constexpr std::string_view TypeName = nameof(Type);
         checkf(false, TEXT("Unsupported Number of Members in Struct: %s"), TypeName.data());
     }
     

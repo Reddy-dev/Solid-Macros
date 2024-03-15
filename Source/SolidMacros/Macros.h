@@ -155,10 +155,6 @@ constexpr auto type_name() -> std::string_view
 #define IS_LINUX PLATFORM_LINUX
 #endif // IS_LINUX
 
-#ifndef CONSTEXPR
-#define CONSTEXPR constexpr
-#endif // CONSTEXPR
-
 #ifndef DECLSPEC
 #define DECLSPEC __declspec
 #endif // DECLSPEC
@@ -373,12 +369,8 @@ constexpr auto type_name() -> std::string_view
 #define NO_EXCEPT NOEXCEPT
 #endif // NO_EXCEPT
 
-#ifndef CONSTEXPR
-#define CONSTEXPR constexpr
-#endif // CONSTEXPR
-
 #ifndef CONSTEXPR_IF
-#define CONSTEXPR_IF(x) if CONSTEXPR (x)
+#define CONSTEXPR_IF(x) if constexpr (x)
 #endif // CONSTEXPR_IF
 
 #ifndef CONSTEVAL
@@ -561,7 +553,7 @@ namespace UE::Core::Private
 
 #ifndef DEFINE_CUSTOM_LITERAL
 #define DEFINE_CUSTOM_LITERAL(Name, Type, Literal) \
-	CONSTEXPR Type operator"" Name(unsigned long long int Value) \
+	constexpr Type operator"" Name(unsigned long long int Value) \
 	{ \
 		return static_cast<Type>(Value); \
 	}
@@ -576,11 +568,11 @@ namespace UE::Core::Private
 #endif // NOT_EXISTS
 
 #ifndef IF_EXISTS
-#define IF_EXISTS(x) if CONSTEXPR EXISTS(x)
+#define IF_EXISTS(x) if constexpr EXISTS(x)
 #endif // IF_EXISTS
 
 #ifndef IF_NOT_EXISTS
-#define IF_NOT_EXISTS(x) if CONSTEXPR NOT_EXISTS(x)
+#define IF_NOT_EXISTS(x) if constexpr NOT_EXISTS(x)
 #endif // IF_NOT_EXISTS
 
 #ifndef UNDERLYING_TYPE
