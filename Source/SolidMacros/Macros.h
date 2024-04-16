@@ -282,7 +282,17 @@ constexpr auto type_name() -> std::string_view
 #endif // UNLIKELY
 
 #ifndef SOLID_INLINE
+
+#if !UE_BUILD_SHIPPING
+
+#define SOLID_INLINE INLINE
+
+#else // WITH_EDITOR || !UE_BUILD_SHIPPING
+
 #define SOLID_INLINE FORCEINLINE
+
+#endif // WITH_EDITOR || !UE_BUILD_SHIPPING
+
 #endif // SOLID_INLINE
 
 #ifndef NO_DISCARD
@@ -417,15 +427,15 @@ constexpr auto type_name() -> std::string_view
 
 #ifndef ASSUME
 
-#if CPP_VERSION >= CPP_VERSION_23
+#if HAS_CPP_ATTRIBUTE(assume)
 
 #define ASSUME(x) [[assume(x)]]
 
-#else // CPP_VERSION <= CPP_VERSION_23
+#else // HAS_CPP_ATTRIBUTE(assume)
 
 #define ASSUME(x) UE_ASSUME(x)
 
-#endif // CPP_VERSION <= CPP_VERSION_23
+#endif // HAS_CPP_ATTRIBUTE(assume)
 
 #endif // ASSUME
 
@@ -544,7 +554,7 @@ namespace UE::Core::Private
 #endif // REQUIRES
 
 #ifndef UNREACHABLE
-#define UNREACHABLE ASSUME(false)
+#define UNREACHABLE ASSUME(false); checkNoEntry();
 #endif // UNREACHABLE
 
 #ifndef BINARY_LITERAL
@@ -599,3 +609,60 @@ namespace UE::Core::Private
 #ifndef MSVC_WARNING_DISABLE
 #define MSVC_WARNING_DISABLE(x) __pragma(warning(disable : x))
 #endif // MSVC_WARNING_DISABLE
+
+namespace Solid::detail
+{
+	template<uint32 NumRuns, typename TestT>
+void SolidBenchmark(const TCHAR* TestName, TestT&& TestBody)
+	{
+		UE_LOG(LogTemp, Log, TEXT("\n-------------------------------\n%s"), TestName);
+		double MinTime = TNumericLimits<double>::Max();
+		double TotalTime = 0;
+	
+		for (uint32 RunNo = 0; RunNo != NumRuns; ++RunNo)
+		{
+			double Time = FPlatformTime::Seconds();
+			TestBody();
+			Time = FPlatformTime::Seconds() - Time;
+
+			const double Ms = (Time * 1000);
+
+			UE_LOG(LogTemp, Log, TEXT("#%d: %f secs (%f ms)"), RunNo, Time, Ms);
+
+			TotalTime += Time;
+		
+			if (MinTime > Time)
+			{
+				MinTime = Time;
+			}
+		}
+
+		const double AverageTimeMs = (TotalTime / NumRuns) * 1000;
+		const double MinTimeMs = MinTime * 1000;
+	
+		UE_LOG(LogTemp, Log, TEXT("min: %f secs (%d ms), avg: %f secs (%f ms)\n-------------------------------\n"),
+			MinTime, static_cast<uint32>(MinTimeMs), TotalTime / NumRuns, AverageTimeMs);
+
+		#if NO_LOGGING
+		printf("%s\nmin: %f secs, avg: %f secs\n-------------------------------\n\n", TCHAR_TO_ANSI(TestName), MinTime, TotalTime / NumRuns);
+		#endif
+	}
+} // namespace Solid::detail
+
+#define SOLID_BENCHMARK(NumRuns, ...) { TRACE_CPUPROFILER_EVENT_SCOPE(TEXT(#__VA_ARGS__)); Solid::detail::SolidBenchmark<NumRuns>(TEXT(#__VA_ARGS__), __VA_ARGS__); }
+
+#ifndef solid_check
+
+#if !UE_BUILD_SHIPPING || USE_CHECKS_IN_SHIPPING
+
+#define solid_check(x) check(x)
+#define solid_checkf(x, ...) checkf(x, __VA_ARGS__)
+
+#else // UE_BUILD_SHIPPING || USE_CHECKS_IN_SHIPPING
+
+#define solid_check(x) ASSUME(x)
+#define solid_checkf(x, ...) ASSUME(x)
+
+#endif // UE_BUILD_SHIPPING || USE_CHECKS_IN_SHIPPING
+
+#endif // solid_check
