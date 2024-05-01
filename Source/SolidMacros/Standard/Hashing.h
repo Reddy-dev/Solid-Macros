@@ -58,7 +58,7 @@ namespace Solid
 
 		return Hash;
 	}
-	#endif
+	#endif // 0
 
 	static FORCEINLINE NO_DISCARD uint64 GetHash64(const void* const Data) NOEXCEPT
 	{
@@ -115,7 +115,7 @@ namespace Solid
 			return FUNC(Value); \
 		} \
 		\
-	}; // class std::hash<T
+	}; // class std::hash<TYPE>
 
 DEFINE_STD_HASH(FName)
 
