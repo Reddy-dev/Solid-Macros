@@ -404,7 +404,8 @@ public:
 
     FORCEINLINE static FString StringFormat(const char* Format, const FStringFormatOrderedArguments& Args)
     {
-        return FString::Format( UTF8_TO_TCHAR(Format), Args);
+        //UTF8_TO_TCHAR(Format), Args);
+        return FString::Format( StringCast<TCHAR>(Format).Get(), Args);
     }
 
 

@@ -9,7 +9,7 @@
 #include <concepts>
 
 #include "CoreMinimal.h"
-#include "Macros.h"
+#include "SolidMacros/Macros.h"
 #include "SIMD_Types.h"
 
 template <TSIMDTypeConcept T>
