@@ -222,7 +222,7 @@ constexpr auto type_name() -> std::string_view
 #endif // CPP_VERSION_17
 
 #ifndef CPP_VERSION_20
-#define CPP_VERSION_20 STRUCTCPP
+#define CPP_VERSION_20 202002L
 #endif // CPP_VERSION_20
 
 #ifndef CPP_VERSION_23
