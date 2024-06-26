@@ -4,7 +4,7 @@
 #define SOLID_MACROS_FUNCTION_TRAITS_H
 
 #include "CoreMinimal.h"
-#include "Macros.h"
+#include "SolidMacros/Macros.h"
 
 namespace Solid
 {

@@ -843,23 +843,25 @@ namespace UnlogMacroHelpers
 #if UNLOG_ENABLED
 
 #define UN_LOG( InMacroArgs, VerbosityName, Message, ... ) \
-    UnlogMacroHelpers::Run< false, UnlogMacroHelpers::TMacroOptions< UnlogMacroHelpers::TMacroArgs< InMacroArgs >, Unlog > >( ELogVerbosity::VerbosityName, TEXT( Message ), ##__VA_ARGS__);
+    UnlogMacroHelpers::Run< false, UnlogMacroHelpers::TMacroOptions< UnlogMacroHelpers::TMacroArgs< InMacroArgs >, Unlog > > \
+    ( ELogVerbosity::VerbosityName, FUNCTION_TEXT(Message), ##__VA_ARGS__ );
 
 #define UN_LOGF( InMacroArgs, VerbosityName, Message, ... ) \
-    UnlogMacroHelpers::Run< true, UnlogMacroHelpers::TMacroOptions< UnlogMacroHelpers::TMacroArgs< InMacroArgs >, Unlog > >( ELogVerbosity::VerbosityName, TEXT( Message ), ##__VA_ARGS__);
+    UnlogMacroHelpers::Run< true, UnlogMacroHelpers::TMacroOptions< UnlogMacroHelpers::TMacroArgs< InMacroArgs >, Unlog > > \
+        ( ELogVerbosity::VerbosityName, FUNCTION_TEXT(Message), ##__VA_ARGS__ );
 
 #define UN_CLOG( Condition, InMacroArgs, VerbosityName, Message, ... ) \
     { \
         if( Condition ) \
         {\
-            UnlogMacroHelpers::Run< false, UnlogMacroHelpers::TMacroOptions< UnlogMacroHelpers::TMacroArgs< InMacroArgs >, Unlog > >( ELogVerbosity::VerbosityName, TEXT( Message ), ##__VA_ARGS__); \
+            UN_LOG( InMacroArgs, VerbosityName, Message, ##__VA_ARGS__); \
         }\
     }
 #define UN_CLOGF( Condition, InMacroArgs, VerbosityName, Message, ... ) \
     {\
         if( Condition ) \
         {\
-            UnlogMacroHelpers::Run< true, UnlogMacroHelpers::TMacroOptions< UnlogMacroHelpers::TMacroArgs< InMacroArgs >, Unlog > >( ELogVerbosity::VerbosityName, TEXT( Message ), ##__VA_ARGS__); \
+            UN_LOGF( InMacroArgs, VerbosityName, Message, ##__VA_ARGS__); \
         }\
     }
 

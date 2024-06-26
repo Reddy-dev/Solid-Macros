@@ -395,6 +395,7 @@ constexpr auto type_name() -> std::string_view
 #define NAME_OF(x) nameof(x)
 #endif // NAME_OF
 
+// Generic Output: "FunctionName"
 #ifndef FUNCTION_NAME
 
 #if defined(__GNUC__) || defined(__clang__)
@@ -405,6 +406,7 @@ constexpr auto type_name() -> std::string_view
 
 #endif // FUNCTION_NAME
 
+// Generic Output: "void __cdecl FunctionName(int, float)"
 #ifndef FUNCTION_SIGNATURE
 #define FUNCTION_SIGNATURE __FUNCSIG__
 #endif // FUNCTION_SIGNATURE
@@ -594,7 +596,7 @@ namespace UE::Core::Private
 /**
  * @brief Takes the @String and Adds "FUNCTION_Name: ", to the beginning of the string.
  */
-#define FUNCTION_TEXT(String) FUNCTION_NAME ": " String
+#define FUNCTION_TEXT(String) FUNCTION_NAME ": " TEXT(String)
 
 #endif // FUNCTION_TEXT
 
@@ -613,7 +615,7 @@ namespace UE::Core::Private
 namespace Solid::detail
 {
 	template<uint32 NumRuns, typename TestT>
-void SolidBenchmark(const TCHAR* TestName, TestT&& TestBody)
+	void SolidBenchmark(const TCHAR* TestName, TestT&& TestBody)
 	{
 		UE_LOG(LogTemp, Log, TEXT("\n-------------------------------\n%s"), TestName);
 		double MinTime = TNumericLimits<double>::Max();
@@ -644,7 +646,7 @@ void SolidBenchmark(const TCHAR* TestName, TestT&& TestBody)
 			MinTime, static_cast<uint32>(MinTimeMs), TotalTime / NumRuns, AverageTimeMs);
 
 		#if NO_LOGGING
-		printf("%s\nmin: %f secs, avg: %f secs\n-------------------------------\n\n", TCHAR_TO_ANSI(TestName), MinTime, TotalTime / NumRuns);
+		printf("%s\nmin: %f secs, avg: %f secs\n-------------------------------\n\n", StringCast<ANSICHAR>(*TestName).Get(), MinTime, TotalTime / NumRuns);
 		#endif
 	}
 } // namespace Solid::detail
