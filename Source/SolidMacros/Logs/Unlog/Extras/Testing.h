@@ -1,7 +1,8 @@
 // Copyright 2022 Guganana. All Rights Reserved.
 #pragma once
 
-#include "../UnlogImplementation.h"
+#include "SolidMacros/Macros.h"
+#include "Unlog/Unlog.h"
 // ------------------------------------------------------------------------------------
 // Testing
 // ------------------------------------------------------------------------------------
@@ -11,7 +12,7 @@ struct UnlogTesting
     // Simple test to ensure everything compiles correctly; outputs are not tested
     static void CompileTest()
     {
-        DECLARE_UNLOG_TYPE(Unlog);
+        DECLARE_UNLOG_TYPE(UnlogTest);
         UNLOG_CATEGORY(TestCategory)
 
         // Specific category
@@ -42,7 +43,7 @@ struct UnlogTesting
         UN_LOG(, Log, "{0}: {1}", ExampleString, ExampleInt);
 
         // Format - printf
-        Unlog::Logf(TEXT("%s: %d"), *ExampleString, ExampleInt);
+        UnlogTest::Logf(TEXT("%s: %d"), *ExampleString, ExampleInt);
         UNLOGF(Log)("%s: %d", *ExampleString, ExampleInt);
         UN_LOGF(, Log, "%s: %d", *ExampleString, ExampleInt);
 
@@ -54,9 +55,9 @@ struct UnlogTesting
 
         // Contional logging
         constexpr bool Value = false;
-        Unlog::Warn(Value, "Y");
+        UnlogTest::Warn(Value, "Y");
         //Unlog::Warn([]{return false;}, "Y");
-        Unlog::Warnf(Value, TEXT("Y"));
+        UnlogTest::Warnf(Value, TEXT("Y"));
         //Unlog::Warnf([] {return false; }, TEXT("Y"));
         UNCLOG(Value, CustomUnlog, Error)("X");
         UN_CLOG(Value, , Warning, "Y");
@@ -69,5 +70,7 @@ struct UnlogTesting
             UNLOG_CATEGORY_SCOPED(TestScopedCategory);
             UNLOG(Log)("Test Scoped Category");
         }
+        
     }
-};
+    
+}; // struct UnlogTesting

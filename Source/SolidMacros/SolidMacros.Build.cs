@@ -34,7 +34,8 @@ public class SolidMacros : ModuleRules
 		PrivateDependencyModuleNames.AddRange(
 			new string[]
 			{
-				"PropertyPath"
+				"PropertyPath",
+				"Engine"
 			}
 			);
 		

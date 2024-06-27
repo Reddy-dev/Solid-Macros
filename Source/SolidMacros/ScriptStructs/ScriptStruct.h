@@ -47,7 +47,6 @@
 #define DEFINE_USTRUCT(ModuleName, Type, Flags, ParentType) \
 	static_assert(!IsStaticStruct<Type>(), "Type: " #Type " is already a static struct!"); \
 	IMPLEMENT_STRUCT_OPS(Type, "/Script/" ModuleName) \
-	IMPLEMENT_SCRIPT_STRUCT(Type, Flags, ParentType) \
 	INLINE static UScriptStruct* Type##Struct = Initialize##Type##Struct(); \
 	IMPLEMENT_STATIC_STRUCT(Type)
 

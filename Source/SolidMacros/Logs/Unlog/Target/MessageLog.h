@@ -5,7 +5,7 @@
 #include <Developer/MessageLog/Public/IMessageLogListing.h>
 #include <Modules/ModuleManager.h>
 
-#include "Unlog/UnlogImplementation.h"
+#include "Unlog/Unlog.h"
 
 namespace Target
 {
@@ -48,5 +48,7 @@ namespace Target
                 MessageLogModule.OpenMessageLog(Category.GetName());
             }
         }
-    };
-}
+        
+    }; // struct MessageLog
+    
+} // namespace Target

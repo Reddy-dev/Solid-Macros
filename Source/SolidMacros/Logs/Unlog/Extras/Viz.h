@@ -1,9 +1,8 @@
 // Copyright 2022 Guganana. All Rights Reserved.
 #pragma once
 
-#include <DrawDebugHelpers.h>
-
-#include "Unlog/UnlogImplementation.h"
+#include "DrawDebugHelpers.h"
+#include "Unlog/Unlog.h"
 
 // ------------------------------------------------------------------------------------
 // Debug Visualization ( Early prototype )
