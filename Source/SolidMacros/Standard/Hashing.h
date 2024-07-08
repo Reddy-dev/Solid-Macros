@@ -118,5 +118,6 @@ namespace Solid
 	}; // class std::hash<TYPE>
 
 DEFINE_STD_HASH(FName)
+DEFINE_STD_HASH(FString);
 
 #endif // SOLID_MACROS_STANDARD_HASHING_H
