@@ -18,6 +18,11 @@
 			"Name": "SolidMacros",
 			"Type": "Runtime",
 			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "SolidMacrosEditor",
+			"Type": "Editor",
+			"LoadingPhase": "Default"
 		}
 	]
 }

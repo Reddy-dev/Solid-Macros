@@ -647,8 +647,9 @@ namespace Solid::detail
 
 		#if NO_LOGGING
 		printf("%s\nmin: %f secs, avg: %f secs\n-------------------------------\n\n", StringCast<ANSICHAR>(*TestName).Get(), MinTime, TotalTime / NumRuns);
-		#endif
+		#endif // NO_LOGGING
 	}
+	
 } // namespace Solid::detail
 
 #define SOLID_BENCHMARK(NumRuns, ...) { TRACE_CPUPROFILER_EVENT_SCOPE(TEXT(#__VA_ARGS__)); Solid::detail::SolidBenchmark<NumRuns>(TEXT(#__VA_ARGS__), __VA_ARGS__); }
