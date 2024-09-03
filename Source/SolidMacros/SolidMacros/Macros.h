@@ -652,7 +652,13 @@ namespace Solid::detail
 	
 } // namespace Solid::detail
 
-#define SOLID_BENCHMARK(NumRuns, ...) { TRACE_CPUPROFILER_EVENT_SCOPE(TEXT(#__VA_ARGS__)); Solid::detail::SolidBenchmark<NumRuns>(TEXT(#__VA_ARGS__), __VA_ARGS__); }
+#ifndef SOLID_BENCHMARK
+#define SOLID_BENCHMARK(NumRuns, ...) \
+	{ \
+		TRACE_CPUPROFILER_EVENT_SCOPE(TEXT(#__VA_ARGS__)); \
+		Solid::detail::SolidBenchmark<NumRuns>(TEXT(#__VA_ARGS__), __VA_ARGS__); \
+	}
+#endif // SOLID_BENCHMARK
 
 #ifndef solid_check
 
