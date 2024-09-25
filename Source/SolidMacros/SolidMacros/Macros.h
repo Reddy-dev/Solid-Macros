@@ -36,8 +36,8 @@ FORCEINLINE constexpr auto type_name_array()
 	# error Unsupported compiler
 	#endif // defined(_MSC_VER)
 
-	constexpr uint_fast64_t start = function.find(prefix) + prefix.size();
-	constexpr uint_fast32_t end = function.rfind(suffix);
+	constexpr size_t start = function.find(prefix) + prefix.size();
+	constexpr size_t end = function.rfind(suffix);
 
 	static_assert(start < end);
 
