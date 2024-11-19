@@ -23,7 +23,7 @@ namespace Viz
 
     FORCEINLINE void DrawLabel(UWorld* World, const FVector& Position, const FString& Label, const FString& Value)
     {
-        FName CategoryName = LogGeneral::Static().GetName();
+        const FName CategoryName = LogGeneral::Static().GetName();
 
         const FString& Message = FString::Format(
             TEXT("| Category: {0}\n")

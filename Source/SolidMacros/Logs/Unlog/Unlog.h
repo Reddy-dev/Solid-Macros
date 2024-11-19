@@ -182,7 +182,7 @@ public:
     template< typename TTarget>
     TSharedRef<TTarget> AddTarget()
     {
-        auto Target = TSharedRef<UnlogRuntimeTargetBase>(MakeShareable(new TTarget()));
+        const auto Target = TSharedRef<UnlogRuntimeTargetBase>(MakeShareable(new TTarget()));
         Targets.Add(Target);
         return StaticCastSharedRef<TTarget>(Target);
     }

@@ -2154,7 +2154,7 @@ public:
 
     ROBIN_HOOD(NODISCARD)
     size_t calcNumElementsWithBuffer(size_t numElements) const noexcept {
-        auto maxNumElementsAllowed = calcMaxNumElementsAllowed(numElements);
+        const auto maxNumElementsAllowed = calcMaxNumElementsAllowed(numElements);
         return numElements + (std::min)(maxNumElementsAllowed, (static_cast<size_t>(0xFF)));
     }
 
