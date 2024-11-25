@@ -11,53 +11,57 @@
 
 #include "CoreMinimal.h"
 
-template <std::size_t ...Idxs>
+namespace Solid
+{
+	template <std::size_t ...Idxs>
 FORCEINLINE constexpr auto substring_as_array(std::string_view str, std::index_sequence<Idxs...>)
-{
-	return std::array{str[Idxs]..., '\n'};
-}
+	{
+		return std::array{str[Idxs]..., '\n'};
+	}
 
-template <typename T>
-FORCEINLINE constexpr auto type_name_array()
-{
-	#if defined(__clang__)
-	constexpr auto prefix   = std::string_view{"[T = "};
-	constexpr auto suffix   = std::string_view{"]"};
-	constexpr auto function = std::string_view{__PRETTY_FUNCTION__};
-	#elif defined(__GNUC__) // defined(__clang__)
-	constexpr auto prefix   = std::string_view{"with T = "};
-	constexpr auto suffix   = std::string_view{"]"};
-	constexpr auto function = std::string_view{__PRETTY_FUNCTION__};
-	#elif defined(_MSC_VER) // defined(__GNUC__)
-	constexpr auto prefix   = std::string_view{"type_name_array<"};
-	constexpr auto suffix   = std::string_view{">(void)"};
-	constexpr auto function = std::string_view{__FUNCSIG__};
-	#else // defined(_MSC_VER)
-	# error Unsupported compiler
-	#endif // defined(_MSC_VER)
+	template <typename T>
+	FORCEINLINE constexpr auto type_name_array()
+	{
+		#if defined(__clang__)
+		constexpr auto prefix   = std::string_view{"[T = "};
+		constexpr auto suffix   = std::string_view{"]"};
+		constexpr auto function = std::string_view{__PRETTY_FUNCTION__};
+		#elif defined(__GNUC__) // defined(__clang__)
+		constexpr auto prefix   = std::string_view{"with T = "};
+		constexpr auto suffix   = std::string_view{"]"};
+		constexpr auto function = std::string_view{__PRETTY_FUNCTION__};
+		#elif defined(_MSC_VER) // defined(__GNUC__)
+		constexpr auto prefix   = std::string_view{"type_name_array<"};
+		constexpr auto suffix   = std::string_view{">(void)"};
+		constexpr auto function = std::string_view{__FUNCSIG__};
+		#else // defined(_MSC_VER)
+		# error Unsupported compiler
+		#endif // defined(_MSC_VER)
 
-	constexpr size_t start = function.find(prefix) + prefix.size();
-	constexpr size_t end = function.rfind(suffix);
+		constexpr size_t start = function.find(prefix) + prefix.size();
+		constexpr size_t end = function.rfind(suffix);
 
-	static_assert(start < end);
+		static_assert(start < end);
 
-	constexpr std::string_view name = function.substr(start, (end - start));
-	return substring_as_array(name, std::make_index_sequence<name.size()>{});
-}
+		constexpr std::string_view name = function.substr(start, (end - start));
+		return substring_as_array(name, std::make_index_sequence<name.size()>{});
+	}
 
-template <typename T>
-struct type_name_holder
-{
-	static inline constexpr auto value = type_name_array<T>();
-}; // struct type_name_holder
+	template <typename T>
+	struct type_name_holder
+	{
+		static inline constexpr auto value = type_name_array<T>();
+	}; // struct type_name_holder
 
-template <typename T>
-// ReSharper disable once CppUE4CodingStandardNamingViolationWarning
-constexpr auto type_name() -> std::string_view
-{
-	constexpr auto& value = type_name_holder<T>::value;
-	return std::string_view{value.data(), value.size()};
-}
+	template <typename T>
+	// ReSharper disable once CppUE4CodingStandardNamingViolationWarning
+	constexpr auto type_name() -> std::string_view
+	{
+		constexpr auto& value = type_name_holder<T>::value;
+		return std::string_view{value.data(), value.size()};
+	}
+	
+} // namespace Solid
 
 #endif // SOLID_MACROS_H
 
@@ -388,7 +392,7 @@ constexpr auto type_name() -> std::string_view
 #endif // CONSTEVAL
 
 #ifndef nameof
-#define nameof(x) type_name<x>()
+#define nameof(x) Solid::type_name<x>()
 #endif // nameof
 
 #ifndef NAME_OF
