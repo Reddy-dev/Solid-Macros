@@ -177,13 +177,13 @@ FORCEINLINE constexpr auto substring_as_array(std::string_view str, std::index_s
 
 #define FORCEINLINE_ATTRIBUTE [[msvc::forceinline]]
 
-#elif IS_CLANG || IS_GNU
-
-#define FORCEINLINE_ATTRIBUTE __attribute__((always_inline))
-
-#else // IS_MSVC
+#elif IS_GNU
 
 #define FORCEINLINE_ATTRIBUTE [[gnu::always_inline]]
+
+#else // IS_GNU
+
+#define FORCEINLINE_ATTRIBUTE
 
 #endif // IS_MSVC
 
