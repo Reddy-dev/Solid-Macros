@@ -93,29 +93,29 @@ namespace Solid
 	
 } // namespace Solid
 
-#define DEFINE_STD_HASH(TYPE) \
+#define DEFINE_STD_HASH(x) \
 	template <> \
-	class std::hash<TYPE> \
+	class std::hash<x> \
 	{ \
 	public: \
-		SOLID_INLINE std::size_t operator()(const TYPE& Value) const NOEXCEPT \
+		SOLID_INLINE std::size_t operator()(const x& Value) const NOEXCEPT \
 		{ \
 			return GetTypeHash(Value); \
 		} \
 		\
-	}; // class std::hash<TYPE>
+	}; // class std::hash<x>
 
-#define DEFINE_STD_HASH_CUSTOM_FUNC(TYPE, FUNC) \
+#define DEFINE_STD_HASH_CUSTOM_FUNC(x, FUNC) \
 	template <> \
-	class std::hash<TYPE> \
+	class std::hash<x> \
 	{ \
 	public: \
-		SOLID_INLINE std::size_t operator()(const TYPE& Value) const NOEXCEPT \
+		SOLID_INLINE std::size_t operator()(const x& Value) const NOEXCEPT \
 		{ \
 			return FUNC(Value); \
 		} \
 		\
-	}; // class std::hash<TYPE>
+	}; // class std::hash<x>
 
 DEFINE_STD_HASH(FName)
 DEFINE_STD_HASH(FString);
