@@ -10,6 +10,7 @@
 #include <utility>
 
 #include "CoreMinimal.h"
+#include "InterchangeResult.h"
 
 namespace Solid
 {
@@ -633,7 +634,7 @@ namespace Solid::detail
 
 			const double Ms = (Time * 1000);
 
-			UE_LOG(LogTemp, Log, TEXT("#%d: %f secs (%f ms)"), RunNo, Time, Ms);
+			UE_LOG(LogTemp, Warning, TEXT("#%d: %f secs (%f ms)"), RunNo, Time, Ms);
 
 			TotalTime += Time;
 		
@@ -646,8 +647,12 @@ namespace Solid::detail
 		const double AverageTimeMs = (TotalTime / NumRuns) * 1000;
 		const double MinTimeMs = MinTime * 1000;
 	
-		UE_LOG(LogTemp, Log, TEXT("min: %f secs (%d ms), avg: %f secs (%f ms)\n-------------------------------\n"),
+		UE_LOG(LogTemp, Warning,
+			TEXT("min: %f secs (%d ms), avg: %f secs (%f ms)\n-------------------------------\n"),
 			MinTime, static_cast<uint32>(MinTimeMs), TotalTime / NumRuns, AverageTimeMs);
+		UE_LOG(LogTemp, Warning,
+			TEXT("Microseconds: min: %f, avg: %f\n-------------------------------\n"),
+			MinTime * 1000000, (TotalTime / NumRuns) * 1000000);
 
 		#if NO_LOGGING
 		printf("%s\nmin: %f secs, avg: %f secs\n-------------------------------\n\n", StringCast<ANSICHAR>(*TestName).Get(), MinTime, TotalTime / NumRuns);
@@ -658,10 +663,8 @@ namespace Solid::detail
 
 #ifndef SOLID_BENCHMARK
 #define SOLID_BENCHMARK(NumRuns, ...) \
-	{ \
-		TRACE_CPUPROFILER_EVENT_SCOPE(TEXT(#__VA_ARGS__)); \
-		Solid::detail::SolidBenchmark<NumRuns>(TEXT(#__VA_ARGS__), __VA_ARGS__); \
-	}
+	TRACE_CPUPROFILER_EVENT_SCOPE(TEXT(#__VA_ARGS__)); \
+	Solid::detail::SolidBenchmark<NumRuns>(TEXT(#__VA_ARGS__), [&]()
 #endif // SOLID_BENCHMARK
 
 #ifndef solid_check
