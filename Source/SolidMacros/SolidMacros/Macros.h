@@ -14,8 +14,22 @@
 
 namespace Solid
 {
+	constexpr std::string_view strip_prefix(std::string_view name)
+	{
+		constexpr std::array<const char*, 2> prefixes = {"struct ", "class "};
+		for (const auto* prefix : prefixes)
+		{
+			std::string_view prefix_sv(prefix);
+			if (name.starts_with(prefix_sv))
+			{
+				return name.substr(prefix_sv.size());
+			}
+		}
+		return name;
+	}
+
 	template <std::size_t ...Idxs>
-FORCEINLINE constexpr auto substring_as_array(std::string_view str, std::index_sequence<Idxs...>)
+	FORCEINLINE constexpr auto substring_as_array(std::string_view str, std::index_sequence<Idxs...>)
 	{
 		return std::array{str[Idxs]..., '\n'};
 	}
@@ -42,10 +56,11 @@ FORCEINLINE constexpr auto substring_as_array(std::string_view str, std::index_s
 		constexpr size_t start = function.find(prefix) + prefix.size();
 		constexpr size_t end = function.rfind(suffix);
 
-		static_assert(start < end);
+		static_assert(start < end, "Failed to parse type name.");
 
 		constexpr std::string_view name = function.substr(start, (end - start));
-		return substring_as_array(name, std::make_index_sequence<name.size()>{});
+		constexpr std::string_view stripped_name = strip_prefix(name);
+		return substring_as_array(stripped_name, std::make_index_sequence<stripped_name.size()>{});
 	}
 
 	template <typename T>
