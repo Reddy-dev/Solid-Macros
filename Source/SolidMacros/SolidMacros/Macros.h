@@ -686,8 +686,30 @@ namespace Solid::detail
 
 #if !UE_BUILD_SHIPPING || USE_CHECKS_IN_SHIPPING
 
-#define solid_check(x) check(x)
-#define solid_checkf(x, ...) checkf(x, __VA_ARGS__)
+#define solid_check(expr) \
+	{ \
+		if UNLIKELY_IF(!(expr)) \
+		{ \
+			if (FDebug::CheckVerifyFailedImpl2(#expr, __FILE__, __LINE__, nullptr)) \
+			{ \
+				PLATFORM_BREAK(); \
+			} \
+			CA_ASSUME(false); \
+		} \
+	}
+
+#define solid_checkf(expr, format, ...) \
+	{ \
+		if UNLIKELY_IF(!(expr)) \
+		{ \
+			UE_VALIDATE_FORMAT_STRING(format, ##__VA_ARGS__); \
+			if (FDebug::CheckVerifyFailedImpl2(#expr, __FILE__, __LINE__, format, ##__VA_ARGS__)) \
+			{ \
+				PLATFORM_BREAK(); \
+			} \
+			CA_ASSUME(false); \
+		} \
+	}
 
 #else // UE_BUILD_SHIPPING || USE_CHECKS_IN_SHIPPING
 
