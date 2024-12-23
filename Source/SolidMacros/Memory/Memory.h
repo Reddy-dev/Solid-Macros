@@ -19,39 +19,18 @@ namespace Solid::Memory
 		return 0;
 	}
 	
-	/**
-	 * Returns the address of the object at the given offset from the given pointer.
-	 * 
-	 * @tparam U The type of the offset.
-	 * @tparam T The type of the pointer.
-	 * @param Ptr The pointer to the object.
-	 * @param Offset The offset from the pointer.
-	 * @return The address of the object at the given offset from the given pointer.
-	 */
 	template <typename U, typename T>
 	FORCEINLINE constexpr NO_DISCARD void* OffsetOf(const T* Ptr, const U Offset)
 	{
 		return reinterpret_cast<T*>(reinterpret_cast<uint8*>(Ptr) + Offset);
 	}
 	
-	/**
-	 * Compile-time variant of the prefetching.
-	 * 
-	 * @tparam Offset The offset to apply to the address.
-	 * @param Address The address to prefetch.
-	 */
 	template <int32 Offset>
 	FORCEINLINE constexpr static void Prefetch(const void* Address)
 	{
 		FPlatformMisc::Prefetch(reinterpret_cast<const void*>(reinterpret_cast<UPTRINT>(Address) + Offset));
 	}
-
-	/**
-	 * Compile-time variant of the prefetching of a span of memory.
-	 * 
-	 * @tparam Size The number of bytes to prefetch.
-	 * @param Address The address to prefetch.
-	 */
+	
 	template <int32 Size>
 	FORCEINLINE constexpr static void PrefetchBlock(const void* Address)
 	{
@@ -91,12 +70,6 @@ namespace Solid::Memory
 	{
 		static_assert(sizeof(DestinationType) == sizeof(SourceType),
 			"BitCast requires the types to have the same size.");
-		
-		static_assert(std::is_trivially_copyable_v<DestinationType>,
-			"BitCast requires the destination type to be trivially copyable.");
-		
-		static_assert(std::is_trivially_copyable_v<SourceType>,
-			"BitCast requires the source type to be trivially copyable.");
 		
 		DestinationType Destination;
 		FMemory::Memmove(static_cast<void*>(&Destination), static_cast<const void*>(&Source), sizeof(DestinationType));
