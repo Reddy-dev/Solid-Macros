@@ -451,7 +451,7 @@ public:
     void UnlogPrivateImpl(const FMT& Format, ELogVerbosity::Type Verbosity, ArgTypes... Args)
     {
         const auto& Category = PickCategory< typename StaticConfiguration::CategoryPicker>();
-        FName CategoryName = Category.GetName();
+        [[maybe_unused]] FName CategoryName = Category.GetName();
 
         if (Verbosity <= Category.GetVerbosity() && Verbosity != ELogVerbosity::NoLogging)
         {
@@ -719,6 +719,7 @@ struct TUnlog
     UNLOG_DECLARE_CATEGORY_LOG_FUNCTION(CategoryPicker, TargetOptions, Display, Display)
     UNLOG_DECLARE_CATEGORY_LOG_FUNCTION(CategoryPicker, TargetOptions, Verbose, Verbose)
     UNLOG_DECLARE_CATEGORY_LOG_FUNCTION(CategoryPicker, TargetOptions, VeryVerbose, VeryVerbose)
+    UNLOG_DECLARE_CATEGORY_LOG_FUNCTION(CategoryPicker, TargetOptions, Fatal, Fatal)
 };
 
 // ------------------------------------------------------------------------------------
