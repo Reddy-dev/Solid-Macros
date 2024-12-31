@@ -896,5 +896,4 @@ namespace UnlogMacroHelpers
 
 #endif // UNLOG_ENABLED
 
-#define DECLARE_UNLOG_TYPE(TypeName, ...) using TypeName = TUnlog< __VA_ARGS__ >
-DECLARE_UNLOG_TYPE(Unlog);
+using Unlog = TUnlog<>;

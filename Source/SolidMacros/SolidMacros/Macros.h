@@ -176,7 +176,17 @@ namespace Solid
 #endif // IS_LINUX
 
 #ifndef DECLSPEC
-#define DECLSPEC __declspec
+
+	#if IS_MSVC
+
+	#define DECLSPEC __declspec
+
+	#else // IS_MSVC
+
+	#define DECLSPEC
+
+	#endif // IS_MSVC
+
 #endif // DECLSPEC
 
 #ifndef NAKED
