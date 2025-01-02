@@ -586,7 +586,7 @@ namespace UE::Core::Private
 #endif // REQUIRES
 
 #ifndef UNREACHABLE
-#define UNREACHABLE ASSUME(false); checkNoEntry();
+#define UNREACHABLE check(!"Unreachable"); ASSUME(false);
 #endif // UNREACHABLE
 
 #ifndef BINARY_LITERAL
