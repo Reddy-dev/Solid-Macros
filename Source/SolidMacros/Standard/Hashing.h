@@ -23,7 +23,7 @@ namespace Solid
 	{
 		using SIMDType = __m256i;
 		
-		CONSTEXPR uint64 SIMD_SIZE = sizeof(SIMDType);
+		constexpr uint64 SIMD_SIZE = sizeof(SIMDType);
 		
 		uint64 Hash = 2166136261ULL;
 

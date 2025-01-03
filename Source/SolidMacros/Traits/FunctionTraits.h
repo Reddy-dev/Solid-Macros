@@ -17,7 +17,7 @@ namespace Solid
 		using FunctionType = TReturn(Ts...);
 		using ReturnType = TReturn;
 		using ParameterTypes = std::tuple<Ts...>;
-		static CONSTEXPR uint32 ParameterCount = sizeof...(Ts);
+		static constexpr uint32 ParameterCount = sizeof...(Ts);
 	}; // struct TFunctionInfo
 
 	template <typename TReturn, typename ...Ts>
@@ -143,7 +143,7 @@ namespace Solid
 	}; // struct TFunctionTraits
 
 	template <typename FunctionType>
-	FORCEINLINE CONSTEXPR NO_DISCARD VoidFunctionPtr LambdaToVoidPtr(FunctionType&& InFunction)
+	FORCEINLINE constexpr NO_DISCARD VoidFunctionPtr LambdaToVoidPtr(FunctionType&& InFunction)
 	{
 		static FunctionType Lambda_Copy = InFunction;
 
@@ -164,7 +164,7 @@ namespace Solid
 #if CPP_VERSION >= CPP_VERSION_20
 	
 	template <typename FunctionType>
-	FORCEINLINE CONSTEXPR NO_DISCARD auto LambdaToPtr(FunctionType&& InFunction)
+	FORCEINLINE constexpr NO_DISCARD auto LambdaToPtr(FunctionType&& InFunction)
 		-> typename TFunctionTraits<decltype(&FunctionType::operator())>::Ptr
 	{
 		static FunctionType Lambda_Copy = std::forward<FunctionType>(InFunction);

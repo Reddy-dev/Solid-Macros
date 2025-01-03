@@ -46,7 +46,7 @@ namespace Solid
 
     template <typename ContainerType, typename FunctionType>
     requires (THasSizeMethod<ContainerType>::value || THasNumMethod<ContainerType>::value)
-    FORCEINLINE CONSTEXPR void For(const ContainerType& Container, FunctionType Function)
+    FORCEINLINE constexpr void For(const ContainerType& Container, FunctionType Function)
     {
         auto Size = THasSizeMethod<ContainerType>::value ? Container.size() : Container.Num();
         
@@ -57,44 +57,44 @@ namespace Solid
     }
 
     template <typename FunctionType, std::size_t ...Indices>
-    FORCEINLINE CONSTEXPR void ForEachImpl(FunctionType Function, std::index_sequence<Indices...>)
+    FORCEINLINE constexpr void ForEachImpl(FunctionType Function, std::index_sequence<Indices...>)
     {
         (Function(std::integral_constant<std::size_t, Indices>{}), ...);
     }
 
     template <std::size_t Num, typename FunctionType>
-    FORCEINLINE CONSTEXPR void ForEach(FunctionType Function)
+    FORCEINLINE constexpr void ForEach(FunctionType Function)
     {
         ForEachImpl(Function, std::make_index_sequence<Num>{});
     }
 
     template <typename Tuple, typename FunctionType, std::size_t... Indices>
-    FORCEINLINE CONSTEXPR void ForEachTupleImpl(FunctionType Function, std::index_sequence<Indices...>)
+    FORCEINLINE constexpr void ForEachTupleImpl(FunctionType Function, std::index_sequence<Indices...>)
     {
         (Function(std::get<Indices>(std::forward<Tuple>(Tuple{}))), ...);
     }
 
     template <typename Tuple, typename FunctionType, std::size_t... Indices>
-    FORCEINLINE CONSTEXPR void ForEachTupleImpl(Tuple&& InTuple, FunctionType Function, std::index_sequence<Indices...>)
+    FORCEINLINE constexpr void ForEachTupleImpl(Tuple&& InTuple, FunctionType Function, std::index_sequence<Indices...>)
     {
         (Function(std::get<Indices>(std::forward<Tuple>(InTuple))), ...);
     }
 
     template <uint32 Start, uint32 End, typename Tuple, typename FunctionType, std::size_t... Indices>
-    FORCEINLINE CONSTEXPR void ForEachTupleImpl(FunctionType Function, std::index_sequence<Indices...>)
+    FORCEINLINE constexpr void ForEachTupleImpl(FunctionType Function, std::index_sequence<Indices...>)
     {
         (Function(std::integral_constant<uint32, Start + Indices>{}), ...);
     }
 
     template <typename Tuple, typename FunctionType>
-    FORCEINLINE CONSTEXPR void ForEachTuple(Tuple&& InTuple, FunctionType Function)
+    FORCEINLINE constexpr void ForEachTuple(Tuple&& InTuple, FunctionType Function)
     {
         ForEachTupleImpl<decltype(InTuple), FunctionType>(std::forward<Tuple>(InTuple),
             Function, std::make_index_sequence<std::tuple_size_v<std::remove_reference_t<Tuple>>>{});
     }
 
     template <uint32 Start, uint32 End, typename Tuple, typename FunctionType>
-    FORCEINLINE CONSTEXPR void ForEachTuple(FunctionType Function)
+    FORCEINLINE constexpr void ForEachTuple(FunctionType Function)
     {
         ForEachTupleImpl<Start, End, Tuple, FunctionType>(
             Function, std::make_index_sequence<std::tuple_size_v<std::remove_reference_t<Tuple>>>{});

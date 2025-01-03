@@ -179,11 +179,11 @@ namespace Solid
 
 	#if IS_MSVC
 
-	#define DECLSPEC __declspec
+	#define DECLSPEC(Expr) __declspec(Expr)
 
 	#else // IS_MSVC
 
-	#define DECLSPEC
+	#define DECLSPEC(Expr)
 
 	#endif // IS_MSVC
 
@@ -343,9 +343,13 @@ namespace Solid
 
 #define NO_VTABLE [[no_vtable]]
 
-#else // HAS_CPP_ATTRIBUTE(no_vtable)
+#elif IS_MSVC
 
 #define NO_VTABLE DECLSPEC(novtable)
+
+#else // IS_MSVC
+
+#define NO_VTABLE
 
 #endif // HAS_CPP_ATTRIBUTE(no_vtable)
 
@@ -357,7 +361,11 @@ namespace Solid
 
 #define NO_THROW [[nothrow]]
 
-#else // HAS_CPP_ATTRIBUTE(nothrow)
+#elif IS_MSVC
+
+#define NO_THROW __declspec(nothrow)
+
+#else // IS_MSVC
 
 #define NO_THROW
 
@@ -366,7 +374,15 @@ namespace Solid
 #endif // NO_THROW
 
 #ifndef NO_ALIAS
+
+#if HAS_CPP_ATTRIBUTE(noalias)
 #define NO_ALIAS [[noalias]]
+#elif IS_MSVC
+#define NO_ALIAS __declspec(noalias)
+#else // IS_MSVC
+#define NO_ALIAS
+#endif // IS_MSVC
+
 #endif // NO_ALIAS
 
 #ifndef MAYBE_UNUSED
@@ -408,10 +424,6 @@ namespace Solid
 #ifndef NO_EXCEPT
 #define NO_EXCEPT NOEXCEPT
 #endif // NO_EXCEPT
-
-#ifndef CONSTEXPR_IF
-#define CONSTEXPR_IF(x) if constexpr (x)
-#endif // CONSTEXPR_IF
 
 #ifndef CONSTEVAL
 #define CONSTEVAL consteval
@@ -721,10 +733,15 @@ namespace Solid::detail
 		} \
 	}
 
+#define solid_ensure(expr) ensure(expr)
+#define solid_ensuref(expr, format, ...) ensuref(expr, format, ##__VA_ARGS__)
+
 #else // UE_BUILD_SHIPPING || USE_CHECKS_IN_SHIPPING
 
-#define solid_check(x) ASSUME(x)
-#define solid_checkf(x, ...) ASSUME(x)
+#define solid_check(expr) ASSUME(expr)
+#define solid_checkf(expr, format, ...) ASSUME(expr)
+#define solid_ensure(expr)
+#define solid_ensuref(expr, format, ...)
 
 #endif // UE_BUILD_SHIPPING || USE_CHECKS_IN_SHIPPING
 
