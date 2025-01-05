@@ -5,6 +5,7 @@
 #ifndef SOLID_MACROS_H
 #define SOLID_MACROS_H
 
+#include <algorithm>
 #include <array>
 #include <utility>
 
@@ -672,11 +673,8 @@ namespace Solid::detail
 			UE_LOG(LogTemp, Warning, TEXT("#%d: %f secs (%f ms)"), RunNo, Time, Ms);
 
 			TotalTime += Time;
-		
-			if (MinTime > Time)
-			{
-				MinTime = Time;
-			}
+
+			MinTime = std::min(MinTime, Time);
 		}
 
 		const double AverageTimeMs = (TotalTime / NumRuns) * 1000;
