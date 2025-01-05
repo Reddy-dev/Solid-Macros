@@ -688,10 +688,6 @@ namespace Solid::detail
 		UE_LOG(LogTemp, Warning,
 			TEXT("Microseconds: min: %f, avg: %f\n-------------------------------\n"),
 			MinTime * 1000000, (TotalTime / NumRuns) * 1000000);
-
-		#if NO_LOGGING
-		printf("%s\nmin: %f secs, avg: %f secs\n-------------------------------\n\n", StringCast<ANSICHAR>(*TestName).Get(), MinTime, TotalTime / NumRuns);
-		#endif // NO_LOGGING
 	}
 	
 } // namespace Solid::detail
