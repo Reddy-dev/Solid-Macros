@@ -5,7 +5,6 @@
 #ifndef SOLID_MACROS_H
 #define SOLID_MACROS_H
 
-#include <string>
 #include <array>
 #include <utility>
 

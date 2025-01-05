@@ -5,7 +5,6 @@
 
 #include "CoreMinimal.h"
 #include "SolidMacros/Macros.h"
-#include "PropertyTypeCompatibility.h"
 
 namespace Solid
 {
@@ -38,12 +37,6 @@ namespace Solid
 	{
 		requires std::is_class_v<T>;
 	}; // concept TClassConcept
-
-	template <typename T>
-	concept TConcreteReflectionCompConcept = requires
-	{
-		requires IsConcreteTypeCompatibleWithReflectedType<T>();
-	}; // concept TConcreteReflectionCompConcept
 
 	template <typename T>
 	concept TIsOptionalConcept = requires
