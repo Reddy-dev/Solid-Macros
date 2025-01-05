@@ -5,7 +5,6 @@
 #define SOLID_FOR_H
 
 #include "CoreMinimal.h"
-#include "Traits/FunctionTraits.h"
 
 namespace Solid
 {
