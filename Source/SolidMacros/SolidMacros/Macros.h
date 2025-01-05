@@ -10,7 +10,6 @@
 #include <utility>
 
 #include "CoreMinimal.h"
-#include "InterchangeResult.h"
 
 namespace Solid
 {
