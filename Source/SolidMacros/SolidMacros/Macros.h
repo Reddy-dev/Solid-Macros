@@ -737,4 +737,18 @@ namespace Solid::detail
 
 #endif // UE_BUILD_SHIPPING || USE_CHECKS_IN_SHIPPING
 
+#ifndef SOLID_RESTRICT
+	#if defined(__cplusplus)
+		#if defined(__GNUC__) || defined(__clang__)
+			#define SOLID_RESTRICT __restrict__
+		#elif defined(_MSC_VER) // defined(__GNUC__) || defined(__clang__)
+			#define SOLID_RESTRICT __restrict
+		#else // defined(_MSC_VER)
+			#define SOLID_RESTRICT
+		#endif // defined(_MSC_VER)
+	#else // defined(__cplusplus)
+		#define SOLID_RESTRICT restrict
+	#endif // defined(__cplusplus)
+#endif // SOLID_RESTRICT
+
 #endif // solid_check
