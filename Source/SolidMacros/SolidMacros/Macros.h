@@ -202,11 +202,11 @@ namespace Solid
 
 #define FORCEINLINE_ATTRIBUTE [[msvc::forceinline]]
 
-#elif IS_GNU
+#elif IS_GNU || IS_CLANG
 
-#define FORCEINLINE_ATTRIBUTE [[gnu::always_inline]]
+#define FORCEINLINE_ATTRIBUTE __attribute__((always_inline))
 
-#else // IS_GNU
+#else // IS_GNU || IS_CLANG
 
 #define FORCEINLINE_ATTRIBUTE
 
