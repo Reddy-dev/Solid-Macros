@@ -702,7 +702,7 @@ namespace Solid::detail
 
 #define solid_check(expr) \
 	{ \
-		if UNLIKELY_IF(!(expr)) \
+		if UNLIKELY_IF(!(expr)) UE_DEBUG_SECTION \
 		{ \
 			if (FDebug::CheckVerifyFailedImpl2(#expr, __FILE__, __LINE__, nullptr)) \
 			{ \
@@ -714,7 +714,7 @@ namespace Solid::detail
 
 #define solid_checkf(expr, format, ...) \
 	{ \
-		if UNLIKELY_IF(!(expr)) \
+		if UNLIKELY_IF(!(expr)) UE_DEBUG_SECTION \
 		{ \
 			UE_VALIDATE_FORMAT_STRING(format, ##__VA_ARGS__); \
 			if (FDebug::CheckVerifyFailedImpl2(#expr, __FILE__, __LINE__, format, ##__VA_ARGS__)) \
