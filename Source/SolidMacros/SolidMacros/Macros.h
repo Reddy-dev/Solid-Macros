@@ -597,7 +597,13 @@ namespace UE::Core::Private
 #endif // REQUIRES
 
 #ifndef UNREACHABLE
+
+#if defined(__GNUC__) || defined(__clang__)
+#define UNREACHABLE check(!"Unreachable"); __builtin_unreachable();
+#else // defined(__GNUC__) || defined(__clang__)
 #define UNREACHABLE check(!"Unreachable"); ASSUME(false);
+#endif // defined(__GNUC__) || defined(__clang__)
+
 #endif // UNREACHABLE
 
 #ifndef BINARY_LITERAL
