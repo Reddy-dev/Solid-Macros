@@ -4,6 +4,7 @@
 #define SOLID_CONCEPTS_H
 
 #include "CoreMinimal.h"
+#include "Concepts/BaseStructureProvider.h"
 #include "SolidMacros/Macros.h"
 
 namespace Solid
@@ -11,7 +12,7 @@ namespace Solid
 	template <typename T>
 	FORCEINLINE constexpr NO_DISCARD bool IsStaticStruct()
 	{
-		return TModels_V<CStaticStructProvider, T>;
+		return TModels_V<CBaseStructureProvider, T> || TModels_V<CStaticStructProvider, T>;
 	}
 	
 	template <typename T>
