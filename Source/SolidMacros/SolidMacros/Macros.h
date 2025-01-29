@@ -7,6 +7,7 @@
 
 #include <algorithm>
 #include <array>
+#include <string_view>
 #include <utility>
 
 #include "CoreMinimal.h"
@@ -708,9 +709,9 @@ namespace Solid::detail
 
 #define solid_check(expr) \
 	{ \
-		if UNLIKELY_IF(!(expr)) \
+		if UNLIKELY_IF(!(expr))) \
 		{ \
-			if (FDebug::CheckVerifyFailedImpl2(#expr, __FILE__, __LINE__, nullptr)) \
+			if (FDebug::CheckVerifyFailedImpl2(#expr, __FILE__, __LINE__, TEXT(""))) \
 			{ \
 				PLATFORM_BREAK(); \
 			} \
