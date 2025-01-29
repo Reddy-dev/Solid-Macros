@@ -120,4 +120,14 @@ namespace Solid
 DEFINE_STD_HASH(FName)
 DEFINE_STD_HASH(FString);
 
+template <typename T>
+class std::hash<TObjectKey<T>>
+{
+public:
+	SOLID_INLINE std::size_t operator()(const TObjectKey<T>& Value) const NOEXCEPT
+	{
+		return GetTypeHash(Value);
+	}
+}; // class std::hash<TObjectKey<T>>
+
 #endif // SOLID_MACROS_STANDARD_HASHING_H
