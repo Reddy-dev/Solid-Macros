@@ -709,7 +709,7 @@ namespace Solid::detail
 
 #define solid_check(expr) \
 	{ \
-		if UNLIKELY_IF(!(expr))) \
+		if UNLIKELY_IF(!(expr)) \
 		{ \
 			if (FDebug::CheckVerifyFailedImpl2(#expr, __FILE__, __LINE__, TEXT(""))) \
 			{ \
