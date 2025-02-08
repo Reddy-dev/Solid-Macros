@@ -16,10 +16,10 @@ namespace Solid::Meta
     struct TTypeGroup
     {
     private:
-        INLINE static uint32 NextId = 0;
+        static inline uint32 NextId = 0;
     public:
         template <typename ...Type>
-        INLINE static const uint32 Id = NextId++;
+        static inline const uint32 Id = NextId++;
         
     }; // struct TTypeGroup
 
@@ -87,6 +87,7 @@ namespace Solid::Meta
 
         template <typename T, typename... TArgs>
         using is_braces_constructible_t = decltype(detail::is_braces_constructible<T, TArgs...>(0));
+        
     } // namespace detail
 
     template <typename StructType, uint64 ...Indices, typename Tuple>

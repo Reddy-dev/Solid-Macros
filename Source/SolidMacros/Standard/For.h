@@ -47,7 +47,7 @@ namespace Solid
     requires (THasSizeMethod<ContainerType>::value || THasNumMethod<ContainerType>::value)
     FORCEINLINE constexpr void For(const ContainerType& Container, FunctionType Function)
     {
-        auto Size = THasSizeMethod<ContainerType>::value ? Container.size() : Container.Num();
+        constexpr auto Size = THasSizeMethod<ContainerType>::value ? Container.size() : Container.Num();
         
         for (decltype(Size) Index = 0; Index < Size; ++Index)
         {
