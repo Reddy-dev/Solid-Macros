@@ -34,6 +34,18 @@ namespace Solid
 	}; // concept TStaticClassConcept
 
 	template <typename T>
+	FORCEINLINE constexpr NO_DISCARD bool IsStaticEnum()
+	{
+		return TIsUEnumClass<T>::Value;
+	}
+
+	template <typename T>
+	concept TStaticEnumConcept = requires
+	{
+		requires IsStaticEnum<T>();
+	}; // concept TStaticEnumConcept
+
+	template <typename T>
 	concept TClassConcept = requires
 	{
 		requires std::is_class_v<T>;
