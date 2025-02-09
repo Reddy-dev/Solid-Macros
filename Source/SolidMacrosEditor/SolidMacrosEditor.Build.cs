@@ -10,6 +10,7 @@ public class SolidMacrosEditor : ModuleRules
             new string[]
             {
                 "Core",
+                "SolidMacros",
             }
         );
 
@@ -20,7 +21,12 @@ public class SolidMacrosEditor : ModuleRules
                 "Engine",
                 "Slate",
                 "SlateCore",
-                "Kismet"
+                "Kismet",
+                "PropertyEditor",
+                "UnrealEd",
+                "ToolWidgets",
+                "InputCore",
+                
             }
         );
     }
