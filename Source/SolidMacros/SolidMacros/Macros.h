@@ -16,7 +16,7 @@ namespace Solid
 {
 	constexpr std::string_view strip_prefix(std::string_view name)
 	{
-		constexpr std::array<const char*, 2> prefixes = {"struct ", "class "};
+		constexpr std::array<const char*, 3> prefixes = {"struct ", "class ", "enum "};
 		for (const auto* prefix : prefixes)
 		{
 			std::string_view prefix_sv(prefix);
@@ -724,29 +724,10 @@ namespace Solid::detail
 #if !UE_BUILD_SHIPPING || USE_CHECKS_IN_SHIPPING
 
 #define solid_check(expr) \
-	{ \
-		if UNLIKELY_IF(!(expr)) \
-		{ \
-			if (FDebug::CheckVerifyFailedImpl2(#expr, __FILE__, __LINE__, TEXT(""))) \
-			{ \
-				PLATFORM_BREAK(); \
-			} \
-			CA_ASSUME(false); \
-		} \
-	}
+	check(expr)
 
 #define solid_checkf(expr, format, ...) \
-	{ \
-		if UNLIKELY_IF(!(expr)) \
-		{ \
-			UE_VALIDATE_FORMAT_STRING(format, ##__VA_ARGS__); \
-			if (FDebug::CheckVerifyFailedImpl2(#expr, __FILE__, __LINE__, format, ##__VA_ARGS__)) \
-			{ \
-				PLATFORM_BREAK(); \
-			} \
-			CA_ASSUME(false); \
-		} \
-	}
+	checkf(expr, format, ##__VA_ARGS__)
 
 #define solid_ensure(expr) ensure(expr)
 #define solid_ensuref(expr, format, ...) ensuref(expr, format, ##__VA_ARGS__)

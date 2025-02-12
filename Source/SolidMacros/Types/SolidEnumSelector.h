@@ -11,6 +11,13 @@ struct SOLIDMACROS_API FSolidEnumSelector
 	GENERATED_BODY()
 
 public:
+	FSolidEnumSelector() = default;
+
+	FORCEINLINE FSolidEnumSelector(UEnum* InClass, int64 InValue)
+		: Class(InClass), Value(InValue)
+	{
+	}
+	
 	UPROPERTY(DisplayName="Enum Class")
 	TObjectPtr<UEnum> Class;
 
