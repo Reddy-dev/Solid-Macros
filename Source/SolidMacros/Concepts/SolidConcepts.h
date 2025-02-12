@@ -12,7 +12,7 @@ namespace Solid
 	template <typename T>
 	FORCEINLINE constexpr NO_DISCARD bool IsStaticStruct()
 	{
-		return TModels_V<CBaseStructureProvider, T> || TModels_V<CStaticStructProvider, T>;
+		return  TModels_V<CStaticStructProvider, T>;
 	}
 	
 	template <typename T>
@@ -20,6 +20,30 @@ namespace Solid
 	{
 		requires IsStaticStruct<T>();
 	}; // concept TStaticStructConcept
+
+	template <typename T>
+	FORCEINLINE constexpr NO_DISCARD bool IsBaseStructure()
+	{
+		return TModels_V<CBaseStructureProvider, T>;
+	}
+
+	template <typename T>
+	concept TBaseStructureConcept = requires
+	{
+		requires IsBaseStructure<T>();
+	}; // concept TBaseStructureConcept
+
+	template <typename T>
+	FORCEINLINE constexpr NO_DISCARD bool IsScriptStruct()
+	{
+		return IsBaseStructure<T>() || IsStaticStruct<T>();
+	}
+
+	template <typename T>
+	concept TScriptStructConcept = requires
+	{
+		requires IsScriptStruct<T>();
+	}; // concept TScriptStructConcept
 
 	template <typename T>
 	FORCEINLINE constexpr NO_DISCARD bool IsStaticClass()
