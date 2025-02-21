@@ -575,7 +575,7 @@ namespace Solid
 #define JETBRAINS_PASS_BY_VALUE [[jetbrains::pass_by_value]]
 #endif // JETBRAINS_PASS_BY_VALUE
 
-#ifndef REQUIRES
+/*#ifndef REQUIRES
 
 #if CPP_VERSION >= CPP_VERSION_20
 
@@ -595,7 +595,7 @@ namespace UE::Core::Private
 
 #endif // CPP_VERSION >= CPP_VERSION_20
 
-#endif // REQUIRES
+#endif // REQUIRES*/
 
 #ifndef UNREACHABLE
 
