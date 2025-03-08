@@ -575,28 +575,6 @@ namespace Solid
 #define JETBRAINS_PASS_BY_VALUE [[jetbrains::pass_by_value]]
 #endif // JETBRAINS_PASS_BY_VALUE
 
-/*#ifndef REQUIRES
-
-#if CPP_VERSION >= CPP_VERSION_20
-
-namespace UE::Core::Private
-{
-	// Only needed for the UE_REQUIRES macro to work, to allow for a trailing > token after the macro
-	template <bool Value>
-	concept TBoolIdentityConcept = Value;
-} // namespace UE::Core::Private
-
-#define REQUIRES(...) \
-	requires ((__VA_ARGS__) && UE::Core::Private::TBoolIdentityConcept<true>)
-
-#else // CPP_VERSION >= CPP_VERSION_20
-
-#define REQUIRES(...) ,std::enable_if_t<(__VA_ARGS__), bool> = true
-
-#endif // CPP_VERSION >= CPP_VERSION_20
-
-#endif // REQUIRES*/
-
 #ifndef UNREACHABLE
 
 #if defined(__GNUC__) || defined(__clang__)
