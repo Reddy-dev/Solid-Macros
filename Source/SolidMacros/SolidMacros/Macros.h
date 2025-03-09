@@ -50,7 +50,7 @@ namespace Solid
 		constexpr auto suffix   = std::string_view{">(void)"};
 		constexpr auto function = std::string_view{__FUNCSIG__};
 		#else // defined(_MSC_VER)
-		# error Unsupported compiler
+		#error Unsupported compiler
 		#endif // defined(_MSC_VER)
 
 		constexpr size_t start = function.find(prefix) + prefix.size();
