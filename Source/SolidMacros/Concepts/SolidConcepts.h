@@ -10,7 +10,7 @@
 namespace Solid
 {
 	template <typename T>
-	FORCEINLINE constexpr NO_DISCARD bool IsStaticStruct()
+	NO_DISCARD FORCEINLINE constexpr bool IsStaticStruct()
 	{
 		return  TModels_V<CStaticStructProvider, T>;
 	}
@@ -22,7 +22,7 @@ namespace Solid
 	}; // concept TStaticStructConcept
 
 	template <typename T>
-	FORCEINLINE constexpr NO_DISCARD bool IsBaseStructure()
+	NO_DISCARD FORCEINLINE constexpr bool IsBaseStructure()
 	{
 		return TModels_V<CBaseStructureProvider, T>;
 	}
@@ -34,7 +34,7 @@ namespace Solid
 	}; // concept TBaseStructureConcept
 
 	template <typename T>
-	FORCEINLINE constexpr NO_DISCARD bool IsScriptStruct()
+	NO_DISCARD FORCEINLINE constexpr bool IsScriptStruct()
 	{
 		return IsBaseStructure<T>() || IsStaticStruct<T>();
 	}
@@ -46,7 +46,7 @@ namespace Solid
 	}; // concept TScriptStructConcept
 
 	template <typename T>
-	FORCEINLINE constexpr NO_DISCARD bool IsStaticClass()
+	NO_DISCARD FORCEINLINE constexpr bool IsStaticClass()
 	{
 		return TModels_V<CStaticClassProvider, T>;
 	}
@@ -58,7 +58,7 @@ namespace Solid
 	}; // concept TStaticClassConcept
 
 	template <typename T>
-	FORCEINLINE constexpr NO_DISCARD bool IsStaticEnum()
+	NO_DISCARD FORCEINLINE constexpr bool IsStaticEnum()
 	{
 		return TIsUEnumClass<T>::Value;
 	}

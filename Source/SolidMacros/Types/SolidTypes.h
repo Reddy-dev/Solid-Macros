@@ -29,7 +29,7 @@ namespace Solid::Meta
     struct FTypeInfo final
     {
     private:
-        FORCEINLINE constexpr static NO_DISCARD uint64 FindFirstOf(const char* Data, const uint64 Length,
+        NO_DISCARD FORCEINLINE constexpr static uint64 FindFirstOf(const char* Data, const uint64 Length,
             const char Search, const uint64 SearchStartPosition = 0)
         {
             for (uint64 Index = SearchStartPosition; Index < Length; ++Index)
@@ -43,7 +43,7 @@ namespace Solid::Meta
             return static_cast<uint64>(-1);
         }
 
-        FORCEINLINE constexpr static NO_DISCARD uint64 FindLastOf(const char* Data, const uint64 Length,
+        NO_DISCARD FORCEINLINE constexpr static uint64 FindLastOf(const char* Data, const uint64 Length,
             const char Search, const uint64 SearchStartPosition = static_cast<uint64>(-1))
         {
             for (uint64 Index = Length - 1; Index >= SearchStartPosition; --Index)
@@ -59,7 +59,7 @@ namespace Solid::Meta
 
     public:
         template <typename T>
-        FORCEINLINE constexpr NO_DISCARD uint32 Id()
+        NO_DISCARD FORCEINLINE constexpr uint32 Id()
         {
             return TTypeGroup<T>::template Id<T>;
         }
@@ -91,13 +91,13 @@ namespace Solid::Meta
     } // namespace detail
 
     template <typename StructType, uint64 ...Indices, typename Tuple>
-    FORCEINLINE NO_DISCARD StructType TupleToStruct(const Tuple& InTuple, std::index_sequence<Indices...>)
+    NO_DISCARD FORCEINLINE StructType TupleToStruct(const Tuple& InTuple, std::index_sequence<Indices...>)
     {
         return { std::get<Indices>(std::forward<Tuple>(InTuple))... };
     }
 
     template <typename StructType, typename Tuple>
-    FORCEINLINE NO_DISCARD StructType TupleToStruct(const Tuple& InTuple)
+    NO_DISCARD FORCEINLINE StructType TupleToStruct(const Tuple& InTuple)
     {
         using TupleType = std::remove_reference_t<Tuple>;
         return TupleToStruct<StructType>(std::make_index_sequence<std::tuple_size_v<TupleType>>(),

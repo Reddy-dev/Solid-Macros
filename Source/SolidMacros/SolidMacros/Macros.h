@@ -7,6 +7,8 @@
 
 #include <algorithm>
 #include <array>
+#include <codecvt>
+#include <locale>
 #include <string_view>
 #include <utility>
 
@@ -113,9 +115,9 @@ namespace Solid
 
 #endif // ENSURES
 
-#ifndef ATTRIBUTE
-#define ATTRIBUTE __attribute__
-#endif // ATTRIBUTE
+#ifndef CLANG_ATTRIBUTE
+#define CLANG_ATTRIBUTE __attribute__
+#endif // CLANG_ATTRIBUTE
 
 #ifndef IS_CLANG
 
@@ -415,7 +417,7 @@ namespace Solid
 	#if HAS_CPP_ATTRIBUTE(no_sanitize)
 	#define NO_SANITIZE(x) [[no_sanitize(x)]]
 	#elif IS_GNU || IS_CLANG
-	#define NO_SANITIZE(x) ATTRIBUTE((no_sanitize(x)))
+	#define NO_SANITIZE(x) CLANG_ATTRIBUTE((no_sanitize(x)))
 	#else // IS_GNU || IS_CLANG
 	#define NO_SANITIZE(x)
 	#endif // HAS_CPP_ATTRIBUTE(no_sanitize)
@@ -441,9 +443,11 @@ namespace Solid
 #ifndef FUNCTION_NAME
 
 #if defined(__GNUC__) || defined(__clang__)
-#define FUNCTION_NAME __PRETTY_FUNCTION__
-#else // defined(__GNUC__) || defined(__clang__)
+#define FUNCTION_NAME __func__
+#elif IS_MSVC
 #define FUNCTION_NAME __FUNCTION__
+#else // defined(__GNUC__) || defined(__clang__)
+#error Unsupported compiler
 #endif // defined(__GNUC__) || defined(__clang__)
 
 #endif // FUNCTION_NAME
@@ -619,10 +623,14 @@ namespace Solid
 
 #ifndef FUNCTION_TEXT
 
-/**
- * @brief Takes the @String and Adds "FUNCTION_Name: ", to the beginning of the string.
- */
-#define FUNCTION_TEXT(String) FUNCTION_NAME ": " TEXT(String)
+#if defined(_MSC_VER)
+// On MSVC __FUNCTION__ is a compile‐time literal so we can do literal concatenation.
+#define FUNCTION_TEXT(Message) TEXT(__FUNCTION__) TEXT(": ") TEXT(Message)
+#else
+// On other compilers (like Clang/GCC), __func__ is not a preprocessor literal.
+// In this case, use the non-Printf (ordered arguments) version of the log macro.
+#define FUNCTION_TEXT(Message) (FString(ANSI_TO_TCHAR(__func__)) + TEXT(": ") + FString(TEXT(Message)))
+#endif
 
 #endif // FUNCTION_TEXT
 
@@ -640,7 +648,7 @@ namespace Solid
 
 #ifndef HOT_CODE_PATH
 	#if IS_CLANG
-	#define HOT_CODE_PATH ATTRIBUTE((hot))
+	#define HOT_CODE_PATH CLANG_ATTRIBUTE((hot))
 	#else // IS_CLANG
 	#define HOT_CODE_PATH
 	#endif // IS_CLANG
@@ -648,7 +656,7 @@ namespace Solid
 
 #ifndef COLD_CODE_PATH
 	#if IS_CLANG
-	#define COLD_CODE_PATH ATTRIBUTE((cold))
+	#define COLD_CODE_PATH CLANG_ATTRIBUTE((cold))
 	#else // IS_CLANG
 	#define COLD_CODE_PATH
 	#endif // IS_CLANG
