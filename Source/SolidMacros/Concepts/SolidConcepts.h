@@ -20,7 +20,7 @@ namespace Solid
 	{
 		requires IsStaticStruct<T>();
 	}; // concept TStaticStructConcept
-
+	
 	template <typename T>
 	NO_DISCARD FORCEINLINE constexpr bool IsBaseStructure()
 	{
@@ -32,6 +32,13 @@ namespace Solid
 	{
 		requires IsBaseStructure<T>();
 	}; // concept TBaseStructureConcept
+	
+	template <typename T>
+	concept TVariantStructConcept = requires
+	{
+		requires TBaseStructureConcept<T>;
+		requires TIsUECoreVariant<T>::Value;
+	}; // concept TVariantStructConcept
 
 	template <typename T>
 	NO_DISCARD FORCEINLINE constexpr bool IsScriptStruct()
