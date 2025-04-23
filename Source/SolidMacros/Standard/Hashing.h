@@ -3,7 +3,6 @@
 #ifndef SOLID_MACROS_STANDARD_HASHING_H
 #define SOLID_MACROS_STANDARD_HASHING_H
 
-#include <immintrin.h>
 #include <vector>
 
 #include "CoreMinimal.h"
