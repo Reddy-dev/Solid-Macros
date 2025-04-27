@@ -537,21 +537,7 @@ namespace Solid
 #define COUNTER __COUNTER__
 #endif // COUNTER
 
-#ifndef INTELLISENSE
-#define INTELLISENSE defined(__INTELLISENSE__)
-#endif // INTELLISENSE
-
-#ifndef JETBRAINS_IDE
-#define JETBRAINS_IDE defined(__JETBRAINS_IDE__)
-#endif // JETBRAINS_IDE
-
-#if JETBRAINS_IDE
-
-#ifndef FORMAT
-#define FORMAT [[jetbrains::format]]
-#endif // FORMAT
-
-#elif defined(__GNUC__) // JETBRAINS_IDE
+#if defined(__GNUC__) // JETBRAINS_IDE
 
 #ifndef FORMAT
 #define FORMAT [[gnu::format]]
