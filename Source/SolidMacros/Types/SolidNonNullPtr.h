@@ -166,13 +166,13 @@ public:
 	 */
 	FORCEINLINE operator ObjectType*() const
 	{
-		ensureMsgf(Object, TEXT("Tried to access null pointer!"));
+		solid_checkf(Object, TEXT("Tried to access null pointer!"));
 		return Object;
 	}
 
 	FORCEINLINE operator FUnrealNonNullPtr() const
 	{
-		ensureMsgf(Object, TEXT("Tried to access null pointer!"));
+		solid_checkf(Object, TEXT("Tried to access null pointer!"));
 		return FUnrealNonNullPtr(Object);
 	}
 	
@@ -181,7 +181,7 @@ public:
 	 */
 	FORCEINLINE operator gsl::not_null<ObjectType*>() const
 	{
-		ensureMsgf(Object, TEXT("Tried to access null pointer!"));
+		solid_checkf(Object, TEXT("Tried to access null pointer!"));
 		return gsl::make_not_null<ObjectType*>(Object);
 	}
 
@@ -190,7 +190,7 @@ public:
 	 */
 	FORCEINLINE ObjectType* Get() const
 	{
-		ensureMsgf(Object, TEXT("Tried to access null pointer!"));
+		solid_checkf(Object, TEXT("Tried to access null pointer!"));
 		return Object;
 	}
 
@@ -199,7 +199,7 @@ public:
 	 */
 	FORCEINLINE ObjectType& operator*() const
 	{
-		ensureMsgf(Object, TEXT("Tried to access null pointer!"));
+		solid_checkf(Object, TEXT("Tried to access null pointer!"));
 		return *Object;
 	}
 
@@ -208,7 +208,7 @@ public:
 	 */
 	FORCEINLINE ObjectType* operator->() const
 	{
-		ensureMsgf(Object, TEXT("Tried to access null pointer!"));
+		solid_checkf(Object, TEXT("Tried to access null pointer!"));
 		return Object;
 	}
 
@@ -282,7 +282,7 @@ public:
 	FORCEINLINE TSolidNonNullPtr(TObjectPtr<ObjectType> InObject)
 		: Object(InObject)
 	{
-		ensureAlwaysMsgf(InObject, TEXT("Tried to initialize TSolidNonNullPtr with a null pointer!"));
+		solid_checkf(InObject, TEXT("Tried to initialize TSolidNonNullPtr with a null pointer!"));
 	}
 
 	/**
@@ -335,7 +335,7 @@ public:
 	 */
 	FORCEINLINE operator ObjectType*() const
 	{
-		ensureMsgf(Object, TEXT("Tried to access null pointer!"));
+		solid_checkf(Object, TEXT("Tried to access null pointer!"));
 		return Object;
 	}
 
@@ -344,7 +344,7 @@ public:
 	 */
 	FORCEINLINE ObjectType* Get() const
 	{
-		ensureMsgf(Object, TEXT("Tried to access null pointer!"));
+		solid_checkf(Object, TEXT("Tried to access null pointer!"));
 		return Object;
 	}
 
@@ -353,7 +353,7 @@ public:
 	 */
 	FORCEINLINE ObjectType& operator*() const
 	{
-		ensureMsgf(Object, TEXT("Tried to access null pointer!"));
+		solid_checkf(Object, TEXT("Tried to access null pointer!"));
 		return *Object;
 	}
 
@@ -362,19 +362,19 @@ public:
 	 */
 	FORCEINLINE ObjectType* operator->() const
 	{
-		ensureMsgf(Object, TEXT("Tried to access null pointer!"));
+		solid_checkf(Object, TEXT("Tried to access null pointer!"));
 		return Object;
 	}
 
 	FORCEINLINE const TObjectPtr<ObjectType>& GetRef() const
 	{
-		ensureMsgf(Object, TEXT("Tried to access null pointer!"));		
+		solid_checkf(Object, TEXT("Tried to access null pointer!"));		
 		return Object;
 	}
 	
 	FORCEINLINE TObjectPtr<ObjectType>& GetRef() 
 	{
-		ensureMsgf(Object, TEXT("Tried to access null pointer!"));		
+		solid_checkf(Object, TEXT("Tried to access null pointer!"));		
 		return Object;
 	}
 
