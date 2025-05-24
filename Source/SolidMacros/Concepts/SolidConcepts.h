@@ -64,6 +64,18 @@ namespace Solid
 		requires IsStaticClass<T>();
 	}; // concept TStaticClassConcept
 
+	template <typename TBase, typename TDerived>
+	NO_DISCARD FORCEINLINE constexpr bool InheritsFrom()
+	{
+		return std::is_base_of<TBase, TDerived>::value;
+	}
+
+	template <typename TBase, typename TDerived>
+	concept TInheritsFromConcept = requires
+	{
+		requires InheritsFrom<TBase, TDerived>();
+	}; // concept TInheritsFromConcept
+
 	template <typename T>
 	NO_DISCARD FORCEINLINE constexpr bool IsStaticEnum()
 	{
