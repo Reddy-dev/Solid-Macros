@@ -16,7 +16,8 @@ namespace Solid::FSolidEnumSelectorDetailsConstants
 	inline static const FText SetEnumSelectorValueTransaction = LOCTEXT("EditEnumSelectorValue", "Edit Enum Selector Value");
 } // namespace Solid::FSolidEnumSelectorDetailsConstants
 
-void FSolidEnumSelectorDetails::CustomizeHeader(const TSharedRef<IPropertyHandle> InPropertyHandle, FDetailWidgetRow& HeaderRow, IPropertyTypeCustomizationUtils& CustomizationUtils)
+void FSolidEnumSelectorDetails::CustomizeHeader(const TSharedRef<IPropertyHandle> InPropertyHandle,
+	FDetailWidgetRow& HeaderRow, IPropertyTypeCustomizationUtils& CustomizationUtils)
 {
 	PropertyHandle = InPropertyHandle;
 	check(PropertyHandle.IsValid());
