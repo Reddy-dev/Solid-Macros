@@ -46,6 +46,20 @@ public:
 		solid_checkf(InObject, TEXT("Tried to initialize TSolidNonNullPtr with a null pointer!"));
 	}
 
+	FORCEINLINE TSolidNonNullPtr(const TObjectPtr<ObjectType> InObject)
+		: Object(InObject.Get())
+	{
+		solid_checkf(IsValid(InObject),
+			TEXT("Tried to initialize TSolidNonNullPtr with an invalid pointer!"));
+	}
+
+	FORCEINLINE TSolidNonNullPtr(const TWeakObjectPtr<ObjectType> InObject)
+		: Object(InObject.Get())
+	{
+		solid_checkf(InObject.IsValid(),
+			TEXT("Tried to initialize TSolidNonNullPtr with an invalid pointer!"));
+	}
+
 	/**
 	 * Converts from gsl::not_null
 	 */
@@ -66,6 +80,7 @@ public:
 		: Object(Other.Get())
 	{
 	}
+	
 	/**
 	 * Assignment operator taking a nullptr - not allowed.
 	 */
@@ -83,6 +98,22 @@ public:
 	{
 		solid_checkf(InObject, TEXT("Tried to assign a null pointer to a TSolidNonNullPtr!"));
 		Object = InObject;
+		return *this;
+	}
+
+	FORCEINLINE TSolidNonNullPtr& operator=(const TObjectPtr<ObjectType> InObject)
+	{
+		solid_checkf(IsValid(InObject),
+			TEXT("Tried to assign an invalid pointer to a TSolidNonNullPtr!"));
+		Object = InObject.Get();
+		return *this;
+	}
+
+	FORCEINLINE TSolidNonNullPtr& operator=(const TWeakObjectPtr<ObjectType> InObject)
+	{
+		solid_checkf(InObject.IsValid(),
+			TEXT("Tried to assign an invalid pointer to a TSolidNonNullPtr!"));
+		Object = InObject.Get();
 		return *this;
 	}
 
@@ -134,6 +165,7 @@ public:
 	{
 		return Object == Other;
 	}
+	
 	template <
 		typename OtherObjectType
 		UE_REQUIRES(UE_REQUIRES_EXPR(std::declval<OtherObjectType*>() == std::declval<ObjectType*>()))
@@ -142,6 +174,7 @@ public:
 	{
 		return Lhs == Rhs.Object;
 	}
+	
 #if !PLATFORM_COMPILER_HAS_GENERATED_COMPARISON_OPERATORS
 	template <
 		typename OtherObjectType
@@ -168,6 +201,20 @@ public:
 	{
 		solid_checkf(Object, TEXT("Tried to access null pointer!"));
 		return Object;
+	}
+
+	FORCEINLINE operator TObjectPtr<ObjectType>() const
+	{
+		solid_checkf(IsValid(Object),
+			TEXT("Tried to access invalid pointer!"));
+		return TObjectPtr<ObjectType>(Object);
+	}
+
+	FORCEINLINE operator TWeakObjectPtr<ObjectType>() const
+	{
+		solid_checkf(IsValid(Object),
+			TEXT("Tried to access invalid pointer!"));
+		return TWeakObjectPtr<ObjectType>(Object);
 	}
 
 	FORCEINLINE operator FUnrealNonNullPtr() const
@@ -217,7 +264,7 @@ public:
 	 * should always be valid but might be in the EDefaultConstructNonNullPtr state 
 	 * during initialization.
 	 */
-	FORCEINLINE bool IsInitialized() const
+	NO_DISCARD FORCEINLINE bool IsInitialized() const
 	{
 		return Object != nullptr;
 	}
@@ -256,143 +303,6 @@ inline ObjectType* GetRawPointerOrNull(const TOptional<TSolidNonNullPtr<ObjectTy
 {
 	return Optional.IsSet() ? Optional->Get() : nullptr;
 }
-
-template<typename ObjectType>
-class TSolidNonNullPtr<TObjectPtr<ObjectType>>
-{
-public:
-	
-	FORCEINLINE TSolidNonNullPtr(EDefaultConstructNonNullPtr)
-		: Object(nullptr)
-	{	
-	}	
-
-	/**
-	 * nullptr constructor - not allowed.
-	 */
-	FORCEINLINE TSolidNonNullPtr(TYPE_OF_NULLPTR)
-	{
-		// Essentially static_assert(false), but this way prevents GCC/Clang from crying wolf by merely inspecting the function body
-		static_assert(sizeof(ObjectType) == 0, "Tried to initialize TSolidNonNullPtr with a null pointer!");
-	}
-
-	/**
-	 * Constructs a non-null pointer from the provided pointer. Must not be nullptr.
-	 */
-	FORCEINLINE TSolidNonNullPtr(TObjectPtr<ObjectType> InObject)
-		: Object(InObject)
-	{
-		solid_checkf(InObject, TEXT("Tried to initialize TSolidNonNullPtr with a null pointer!"));
-	}
-
-	/**
-	 * Constructs a non-null pointer from another non-null pointer
-	 */
-	template <
-		typename OtherObjectType
-		UE_REQUIRES(std::is_convertible_v<OtherObjectType*, ObjectType*>)
-	>
-	FORCEINLINE TSolidNonNullPtr(const TSolidNonNullPtr<OtherObjectType>& Other)
-		: Object(Other.Object)
-	{
-	}
-
-	/**
-	 * Assignment operator taking a nullptr - not allowed.
-	 */
-	FORCEINLINE TSolidNonNullPtr& operator=(TYPE_OF_NULLPTR)
-	{
-		// Essentially static_assert(false), but this way prevents GCC/Clang from crying wolf by merely inspecting the function body
-		static_assert(sizeof(ObjectType) == 0, "Tried to assign a null pointer to a TSolidNonNullPtr!");
-		return *this;
-	}
-
-	/**
-	 * Assignment operator taking a pointer
-	 */
-	FORCEINLINE TSolidNonNullPtr& operator=(ObjectType* InObject)
-	{
-		solid_checkf(InObject, TEXT("Tried to assign a null pointer to a TSolidNonNullPtr!"));
-		Object = InObject;
-		return *this;
-	}
-
-	/**
-	 * Assignment operator taking another TSolidNonNullPtr
-	 */
-	template <
-		typename OtherObjectType
-		UE_REQUIRES(std::is_convertible_v<OtherObjectType*, ObjectType*>)
-	>
-	FORCEINLINE TSolidNonNullPtr& operator=(const TSolidNonNullPtr<OtherObjectType>& Other)
-	{
-		Object = Other.Object;
-		return *this;
-	}
-
-	/**
-	 * Returns the internal pointer
-	 */
-	FORCEINLINE operator ObjectType*() const
-	{
-		solid_checkf(Object, TEXT("Tried to access null pointer!"));
-		return Object;
-	}
-
-	/**
-	 * Returns the internal pointer
-	 */
-	FORCEINLINE ObjectType* Get() const
-	{
-		solid_checkf(Object, TEXT("Tried to access null pointer!"));
-		return Object;
-	}
-
-	/**
-	 * Dereference operator returns a reference to the object this pointer points to
-	 */
-	FORCEINLINE ObjectType& operator*() const
-	{
-		solid_checkf(Object, TEXT("Tried to access null pointer!"));
-		return *Object;
-	}
-
-	/**
-	 * Arrow operator returns a pointer to this pointer's object
-	 */
-	FORCEINLINE ObjectType* operator->() const
-	{
-		solid_checkf(Object, TEXT("Tried to access null pointer!"));
-		return Object;
-	}
-
-	FORCEINLINE const TObjectPtr<ObjectType>& GetRef() const
-	{
-		solid_checkf(Object, TEXT("Tried to access null pointer!"));		
-		return Object;
-	}
-	
-	FORCEINLINE TObjectPtr<ObjectType>& GetRef() 
-	{
-		solid_checkf(Object, TEXT("Tried to access null pointer!"));		
-		return Object;
-	}
-
-	FORCEINLINE bool IsInitialized() const
-	{
-		return Object != nullptr;
-	}
-
-	/**
-	 * Use IsInitialized if needed
-	 */
-	explicit operator bool() const = delete;
-
-private:
-
-	/** The object we're holding a reference to. */
-	TObjectPtr<ObjectType> Object;
-};
 
 #if UE_ENABLE_INCLUDE_ORDER_DEPRECATED_IN_5_4
 #include "Templates/EnableIf.h"
