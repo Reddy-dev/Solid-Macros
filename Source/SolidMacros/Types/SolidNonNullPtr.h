@@ -18,6 +18,17 @@ template <typename ObjectType>
 class TSolidNonNullPtr
 {
 	using FUnrealNonNullPtr = TNonNullPtr<ObjectType>;
+
+	#ifndef PLATFORM_COMPILER_IWYU
+	// TObjectPtr should only be used on types T that are EITHER:
+	// - incomplete (ie: forward declared and we have not seen their definition yet)
+	// - complete and derived from UObject
+	// This means that the following are invalid and must fail to compile:
+	// - TObjectPtr<int>
+	// - TObjectPtr<IInterface>
+	static_assert(std::disjunction<std::bool_constant<sizeof(ObjectPtr_Private::ResolveTypeIsComplete<ObjectType>(1)) != 2>,
+		std::is_base_of<UObject, ObjectType>>::value, "TObjectPtr<T> can only be used with types derived from UObject");
+	#endif
 public:
 
 	/**
@@ -43,7 +54,8 @@ public:
 	FORCEINLINE TSolidNonNullPtr(ObjectType* InObject)
 		: Object(InObject)
 	{
-		solid_checkf(InObject, TEXT("Tried to initialize TSolidNonNullPtr with a null pointer!"));
+		solid_checkf(IsValid(InObject),
+			TEXT("Tried to initialize TSolidNonNullPtr with a null pointer!"));
 	}
 
 	FORCEINLINE TSolidNonNullPtr(const TObjectPtr<ObjectType> InObject)
@@ -94,7 +106,8 @@ public:
 	 */
 	FORCEINLINE TSolidNonNullPtr& operator=(ObjectType* InObject)
 	{
-		solid_checkf(InObject, TEXT("Tried to assign a null pointer to a TSolidNonNullPtr!"));
+		solid_checkf(IsValid(InObject),
+			TEXT("Tried to assign a null pointer to a TSolidNonNullPtr!"));
 		Object = InObject;
 		return *this;
 	}
@@ -186,7 +199,7 @@ public:
 	 */
 	FORCEINLINE operator ObjectType*() const
 	{
-		solid_checkf(Object, TEXT("Tried to access null pointer!"));
+		solid_checkf(IsValid((UObject*)Object), TEXT("Tried to access null pointer!"));
 		return Object;
 	}
 
@@ -206,7 +219,7 @@ public:
 
 	FORCEINLINE operator FUnrealNonNullPtr() const
 	{
-		solid_checkf(Object, TEXT("Tried to access null pointer!"));
+		solid_checkf(IsValid(Object), TEXT("Tried to access null pointer!"));
 		return FUnrealNonNullPtr(Object);
 	}
 	
@@ -215,7 +228,7 @@ public:
 	 */
 	FORCEINLINE operator gsl::not_null<ObjectType*>() const
 	{
-		solid_checkf(Object, TEXT("Tried to access null pointer!"));
+		solid_checkf(IsValid(Object), TEXT("Tried to access null pointer!"));
 		return gsl::make_not_null<ObjectType*>(Object);
 	}
 
@@ -224,7 +237,7 @@ public:
 	 */
 	NO_DISCARD FORCEINLINE ObjectType* Get() const
 	{
-		solid_checkf(Object, TEXT("Tried to access null pointer!"));
+		solid_checkf(IsValid(Object), TEXT("Tried to access null pointer!"));
 		return Object;
 	}
 
@@ -233,7 +246,7 @@ public:
 	 */
 	FORCEINLINE ObjectType& operator*() const
 	{
-		solid_checkf(Object, TEXT("Tried to access null pointer!"));
+		solid_checkf(IsValid(Object), TEXT("Tried to access null pointer!"));
 		return *Object;
 	}
 
@@ -242,7 +255,7 @@ public:
 	 */
 	FORCEINLINE ObjectType* operator->() const
 	{
-		solid_checkf(Object, TEXT("Tried to access null pointer!"));
+		solid_checkf(IsValid(Object), TEXT("Tried to access null pointer!"));
 		return Object;
 	}
 
