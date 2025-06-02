@@ -5,6 +5,10 @@
 #include "CoreMinimal.h"
 #include "SolidEnumSelector.generated.h"
 
+
+/**
+ * Taken from @FEnumSelector in the PCG Module.
+ */
 USTRUCT(BlueprintType)
 struct SOLIDMACROS_API FSolidEnumSelector
 {

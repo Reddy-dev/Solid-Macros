@@ -5,15 +5,17 @@
 #include "DetailWidgetRow.h"
 #include "ScopedTransaction.h"
 #include "SSearchableComboBox.h"
-#include "SolidMacros/Types/SolidEnumSelector.h"
+#include "Types/SolidEnumSelector.h"
 #include "UObject/UObjectIterator.h"
 
 #define LOCTEXT_NAMESPACE "EnumSelectorDetails"
 
 namespace Solid::FSolidEnumSelectorDetailsConstants
 {
-	inline static const FText SetSelectorClassTransaction = LOCTEXT("EditEnumSelectorClass", "Edit Enum Selector Class");
-	inline static const FText SetEnumSelectorValueTransaction = LOCTEXT("EditEnumSelectorValue", "Edit Enum Selector Value");
+	inline static const FText SetSelectorClassTransaction = LOCTEXT("EditEnumSelectorClass",
+		"Edit Enum Selector Class");
+	inline static const FText SetEnumSelectorValueTransaction = LOCTEXT("EditEnumSelectorValue",
+		"Edit Enum Selector Value");
 } // namespace Solid::FSolidEnumSelectorDetailsConstants
 
 void FSolidEnumSelectorDetails::CustomizeHeader(const TSharedRef<IPropertyHandle> InPropertyHandle,

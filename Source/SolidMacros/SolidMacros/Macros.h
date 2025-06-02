@@ -634,9 +634,9 @@ namespace Solid
 
 #ifndef HOT_CODE_PATH
 	#if IS_CLANG
-	#define HOT_CODE_PATH CLANG_ATTRIBUTE((hot))
+	#define HOT_CODE_PATH CLANG_ATTRIBUTE(hot)
 	#else // IS_CLANG
-	#define HOT_CODE_PATH
+	#define HOT_CODE_PATH 
 	#endif // IS_CLANG
 #endif // HOT_CODE_PATH
 
