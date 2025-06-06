@@ -105,4 +105,4 @@ namespace Solid
 	
 } // namespace Solid
 
-#endif // SOLID_CONCEPTS_H
+#endif // #if SOLID_CONCEPTS_H
