@@ -228,5 +228,7 @@ public:
 		solid_checkf(Val, TEXT("TSolidNotNull accessed with null value"));
 		return Val != Other;
 	}
+
+	
 	
 }; // class TSolidNotNull
