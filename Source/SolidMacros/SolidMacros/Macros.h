@@ -704,12 +704,19 @@ namespace Solid::detail
 #define solid_ensure(expr) ensure(expr)
 #define solid_ensuref(expr, format, ...) ensuref(expr, format, ##__VA_ARGS__)
 
+#define solid_verify(expr) verify(expr)
+#define solid_verifyf(expr, format, ...) verifyf(expr, format, ##__VA_ARGS__)
+
 #else // UE_BUILD_SHIPPING || USE_CHECKS_IN_SHIPPING
 
 #define solid_check(expr) ASSUME(expr)
 #define solid_checkf(expr, format, ...) ASSUME(expr)
+
 #define solid_ensure(expr)
 #define solid_ensuref(expr, format, ...)
+
+#define solid_verify(expr) { if UNLIKELY_IF(!(expr)) { ASSUME(false); } }
+#define solid_verifyf(expr, format, ...) { if UNLIKELY_IF(!(expr)) { ASSUME(false); } }
 
 #endif // UE_BUILD_SHIPPING || USE_CHECKS_IN_SHIPPING
 

@@ -24,7 +24,7 @@ namespace Solid
 	template <typename T>
 	NO_DISCARD FORCEINLINE constexpr bool IsBaseStructure()
 	{
-		return TModels_V<CBaseStructureProvider, T>;
+		return TModels<CBaseStructureProvider, T>::Value;
 	}
 
 	template <typename T>
@@ -55,7 +55,7 @@ namespace Solid
 	template <typename T>
 	NO_DISCARD FORCEINLINE constexpr bool IsStaticClass()
 	{
-		return TModels_V<CStaticClassProvider, T>;
+		return TModels<CStaticClassProvider, T>::Value;
 	}
 
 	template <typename T>
@@ -91,7 +91,7 @@ namespace Solid
 	template <typename T>
 	concept TClassConcept = requires
 	{
-		requires std::is_class_v<T>;
+		requires std::is_class<T>::value;
 	}; // concept TClassConcept
 
 	template <typename T>
