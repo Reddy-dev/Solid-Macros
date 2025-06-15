@@ -13,7 +13,6 @@ public class SolidMacros : ModuleRules
 		PublicIncludePaths.AddRange(
 			new string[] {
 				ModuleDirectory,
-				ModuleDirectory + "/Logs",
 			}
 			);
 				

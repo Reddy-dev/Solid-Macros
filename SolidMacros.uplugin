@@ -26,7 +26,7 @@
 		},
 		{
 			"Name": "SolidMacrosTests",
-			"Type": "Developer",
+			"Type": "DeveloperTool",
 			"LoadingPhase": "Default"
 		}
 	]
