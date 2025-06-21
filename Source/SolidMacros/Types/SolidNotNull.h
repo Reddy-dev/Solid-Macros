@@ -165,8 +165,8 @@ public:
 	 * Construct from a value convertible to T. Immediately checks non-null via solid_checkf,
 	 * then emits [[assume]] for the optimizer.
 	 */
-	template <typename U = T
-		UE_REQUIRES(std::is_convertible_v<U, T> && !std::is_same_v<U, std::nullptr_t>)>
+	template <typename U = T>
+	requires(std::is_convertible_v<U, T> && !std::is_same_v<U, std::nullptr_t>)
 	FORCEINLINE TSolidNotNull(U&& InVal)
 		: Val((U&&)InVal)
 	{
@@ -209,8 +209,8 @@ public:
 		return !(*this == Other);
 	}
 
-	template <typename U
-		UE_REQUIRES(std::is_convertible_v<U, T>)>
+	template <typename U>
+	requires(std::is_convertible_v<U, T>)
 	FORCEINLINE bool operator==(const U& Other) const
 	{
 		static_assert(!std::is_same_v<U, std::nullptr_t>, "Cannot compare TSolidNotNull with nullptr");
@@ -219,8 +219,8 @@ public:
 		return Val == Other;
 	}
 
-	template <typename U
-		UE_REQUIRES(std::is_convertible_v<U, T>)>
+	template <typename U>
+	requires(std::is_convertible_v<U, T>)
 	FORCEINLINE bool operator!=(const U& Other) const
 	{
 		static_assert(!std::is_same_v<U, std::nullptr_t>, "Cannot compare TSolidNotNull with nullptr");
@@ -228,7 +228,5 @@ public:
 		solid_checkf(Val, TEXT("TSolidNotNull accessed with null value"));
 		return Val != Other;
 	}
-
-	
 	
 }; // class TSolidNotNull
