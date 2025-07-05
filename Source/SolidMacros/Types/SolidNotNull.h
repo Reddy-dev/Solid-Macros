@@ -8,6 +8,13 @@
 #include "SolidMacros/Macros.h"
 #include <type_traits>
 
+#ifndef ENABLE_SOLID_NOT_NULL
+
+template <typename T>
+using TSolidNotNull = TNotNull<T>;
+
+#else // ENABLE_SOLID_NOT_NULL
+
 template <typename T>
 struct TSolidNotNull;
 
@@ -230,3 +237,5 @@ public:
 	}
 	
 }; // class TSolidNotNull
+
+#endif // ENABLE_SOLID_NOT_NULL
