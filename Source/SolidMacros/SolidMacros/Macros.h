@@ -51,9 +51,9 @@ namespace Solid
 		constexpr auto prefix   = std::string_view{"type_name_array<"};
 		constexpr auto suffix   = std::string_view{">(void)"};
 		constexpr auto function = std::string_view{__FUNCSIG__};
-		#else // defined(_MSC_VER)
+		#else // #if defined(_MSC_VER)
 		#error Unsupported compiler
-		#endif // defined(_MSC_VER)
+		#endif // #else defined(_MSC_VER)
 
 		constexpr size_t start = function.find(prefix) + prefix.size();
 		constexpr size_t end = function.rfind(suffix);
@@ -93,11 +93,11 @@ namespace Solid
 
 #define EXPECTS(x) [[expects : x]]
 
-#else // HAS_CPP_ATTRIBUTE(expects)
+#else // #if HAS_CPP_ATTRIBUTE(expects)
 
 #define EXPECTS(x)
 
-#endif // HAS_CPP_ATTRIBUTE(expects)
+#endif // #else HAS_CPP_ATTRIBUTE(expects)
 
 #endif // EXPECTS
 
@@ -107,11 +107,11 @@ namespace Solid
 
 #define ENSURES(x) [[ensures : x]]
 
-#else // HAS_CPP_ATTRIBUTE(ensures)
+#else // #if HAS_CPP_ATTRIBUTE(ensures)
 
 #define ENSURES(x)
 
-#endif // HAS_CPP_ATTRIBUTE(ensures)
+#endif // #else HAS_CPP_ATTRIBUTE(ensures)
 
 #endif // ENSURES
 
@@ -125,11 +125,11 @@ namespace Solid
 
 #define IS_CLANG 1
 
-#else // defined(__clang__)
+#else // #if defined(__clang__)
 
 #define IS_CLANG 0
 
-#endif // defined(__clang__)
+#endif // #else defined(__clang__)
 
 #endif // IS_CLANG
 
@@ -139,11 +139,11 @@ namespace Solid
 
 #define IS_GNU 1
 
-#else // defined(__GNUC__)
+#else // #if defined(__GNUC__)
 
 #define IS_GNU 0
 
-#endif // defined(__GNUC__)
+#endif // #else defined(__GNUC__)
 
 #endif // IS_GNU
 
@@ -481,7 +481,13 @@ namespace Solid
 
 #else // HAS_CPP_ATTRIBUTE(assume)
 
-#define ASSUME(x) UE_ASSUME(x)
+#if IS_MSVC
+#define ASSUME(x) __assume(x)
+#elif IS_GNU || IS_CLANG
+#define ASSUME(x) ((void)(x))
+#else // IS_GNU || IS_CLANG
+#define ASSUME(x) ((void)(x)) // No-op for other compilers
+#endif // IS_MSVC
 
 #endif // HAS_CPP_ATTRIBUTE(assume)
 
