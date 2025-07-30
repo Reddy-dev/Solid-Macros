@@ -481,7 +481,7 @@ namespace Solid
 
 #else // HAS_CPP_ATTRIBUTE(assume)
 
-#if IS_MSVC
+#if IS_MSVC && !IS_CLANG
 #define ASSUME(x) __assume(x)
 #elif IS_GNU || IS_CLANG
 #define ASSUME(x) ((void)(x))
