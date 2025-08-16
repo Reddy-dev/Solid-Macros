@@ -17,7 +17,7 @@ struct SOLIDMACROS_API FSolidEnumSelector
 public:
 	FSolidEnumSelector() = default;
 
-	FORCEINLINE FSolidEnumSelector(UEnum* InClass, int64 InValue)
+	FORCEINLINE FSolidEnumSelector(UEnum* InClass, const int64 InValue)
 		: Class(InClass), Value(InValue)
 	{
 	}
