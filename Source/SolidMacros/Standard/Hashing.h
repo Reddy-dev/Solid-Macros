@@ -12,7 +12,7 @@ namespace Solid
 {
 	
 	template <uint32 Count = 2>
-	NO_DISCARD FORCEINLINE static uint32 HashCombine(const uint32 (&Hashes)[Count])
+	static NO_DISCARD uint32 HashCombine(const uint32 (&Hashes)[Count])
 	{
 		uint32 Hash = 2166136261U;
 		
