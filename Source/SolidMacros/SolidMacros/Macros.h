@@ -8,7 +8,6 @@
 #include <algorithm>
 #include <array>
 #include <codecvt>
-#include <locale>
 #include <string_view>
 #include <utility>
 
