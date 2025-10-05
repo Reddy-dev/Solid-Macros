@@ -17,6 +17,7 @@ namespace Solid::Meta
     {
     private:
         static inline uint32 NextId = 0;
+        
     public:
         template <typename ...Type>
         static inline const uint32 Id = NextId++;

@@ -85,4 +85,5 @@ protected:
 
 	TSharedPtr<FString> ClassSelection;
 	FName ValueSelection;
+	
 }; // struct FEnumSelectorDetails

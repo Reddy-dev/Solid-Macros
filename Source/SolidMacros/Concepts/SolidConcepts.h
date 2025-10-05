@@ -4,8 +4,12 @@
 #define SOLID_CONCEPTS_H
 
 #include "CoreMinimal.h"
-#include "Concepts/BaseStructureProvider.h"
+
+#include "Templates/IsInvocable.h"
+#include "Templates/IsUEnumClass.h"
+
 #include "SolidMacros/Macros.h"
+#include "Concepts/BaseStructureProvider.h"
 
 namespace Solid
 {

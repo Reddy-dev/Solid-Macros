@@ -1,12 +1,16 @@
 ﻿// Elie Wiese-Namir © 2025. All Rights Reserved.
 
 #include "SolidEnumSelectorDetails.h"
+
+#include "UObject/UObjectIterator.h"
+#include "ScopedTransaction.h"
+
 #include "DetailLayoutBuilder.h"
 #include "DetailWidgetRow.h"
-#include "ScopedTransaction.h"
 #include "SSearchableComboBox.h"
+
+#include "SolidMacros/Macros.h"
 #include "Types/SolidEnumSelector.h"
-#include "UObject/UObjectIterator.h"
 
 #define LOCTEXT_NAMESPACE "EnumSelectorDetails"
 
@@ -16,6 +20,7 @@ namespace Solid::FSolidEnumSelectorDetailsConstants
 		"Edit Enum Selector Class");
 	inline static const FText SetEnumSelectorValueTransaction = LOCTEXT("EditEnumSelectorValue",
 		"Edit Enum Selector Value");
+	
 } // namespace Solid::FSolidEnumSelectorDetailsConstants
 
 void FSolidEnumSelectorDetails::CustomizeHeader(const TSharedRef<IPropertyHandle> InPropertyHandle,
@@ -25,7 +30,8 @@ void FSolidEnumSelectorDetails::CustomizeHeader(const TSharedRef<IPropertyHandle
 	check(PropertyHandle.IsValid());
 
 	const FSolidEnumSelector* Selector = GetEnumSelector();
-	if (!Selector)
+	
+	if UNLIKELY_IF(!Selector)
 	{
 		return;
 	}

@@ -13,6 +13,9 @@
 
 #include "CoreMinimal.h"
 
+#include "Misc/AssertionMacros.h"
+#include "GenericPlatform/GenericPlatformTime.h"
+
 namespace Solid
 {
 	constexpr std::string_view strip_prefix(std::string_view name)
@@ -653,7 +656,7 @@ namespace Solid
 	#endif // IS_CLANG
 #endif // COLD_CODE_PATH
 
-namespace Solid::detail
+/*namespace Solid::detail
 {
 	template<uint32 NumRuns, typename TestT>
 	void SolidBenchmark(const TCHAR* TestName, TestT&& TestBody)
@@ -694,7 +697,7 @@ namespace Solid::detail
 #define SOLID_BENCHMARK(NumRuns, ...) \
 	TRACE_CPUPROFILER_EVENT_SCOPE(TEXT(#__VA_ARGS__)); \
 	Solid::detail::SolidBenchmark<NumRuns>(TEXT(#__VA_ARGS__),
-#endif // SOLID_BENCHMARK
+#endif // SOLID_BENCHMARK*/
 
 #ifndef solid_check
 
