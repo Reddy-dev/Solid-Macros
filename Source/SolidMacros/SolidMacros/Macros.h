@@ -224,13 +224,13 @@ namespace Solid
 #define LIKELY_IF(x) (x) LIKELY_ATTRIBUTE
 #endif // LIKELY_IF
 
-#ifndef UNLIKELY_IF
-#define UNLIKELY_IF(x) (x) UNLIKELY_ATTRIBUTE
-#endif // UNLIKELY_IF
-
 #ifndef UNLIKELY_ATTRIBUTE
 #define UNLIKELY_ATTRIBUTE [[unlikely]]
 #endif // UNLIKELY_ATTRIBUTE
+
+#ifndef UNLIKELY_IF
+#define UNLIKELY_IF(x) (x) UNLIKELY_ATTRIBUTE
+#endif // UNLIKELY_IF
 
 #ifndef CPP_VERSION
 #define CPP_VERSION __cplusplus
