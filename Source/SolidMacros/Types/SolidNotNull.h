@@ -4,9 +4,11 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
-#include "SolidMacros/Macros.h"
 #include <type_traits>
+
+#include "CoreMinimal.h"
+
+#include "SolidMacros/Macros.h"
 
 #ifndef ENABLE_SOLID_NOT_NULL
 
