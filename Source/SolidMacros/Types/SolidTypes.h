@@ -10,6 +10,7 @@
 #include "CoreMinimal.h"
 #include "SolidMacros/Macros.h"
 
+// Taken from mustache ecs
 namespace Solid::Meta
 {
     template <typename...>
