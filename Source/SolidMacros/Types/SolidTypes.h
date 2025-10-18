@@ -107,7 +107,7 @@ namespace Solid::Meta
 
     /*
      * C++'s PRE-PROCESSOR SUCKS
-     **/
+     */
 
     static constexpr uint32 STRUCT_TO_TUPLE_MAX_TYPES_BITS = 4;
     static constexpr uint32 STRUCT_TO_TUPLE_MAX_TYPES = (1 << STRUCT_TO_TUPLE_MAX_TYPES_BITS) - 1;
