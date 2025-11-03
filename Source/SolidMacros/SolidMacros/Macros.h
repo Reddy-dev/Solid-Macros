@@ -479,17 +479,11 @@ namespace Solid
 
 #if HAS_CPP_ATTRIBUTE(assume)
 
-#define ASSUME(x) [[assume(x)]]
+#define SOLID_ASSUME(x) [[assume(x)]]
 
 #else // HAS_CPP_ATTRIBUTE(assume)
 
-#if IS_MSVC && !IS_CLANG
-#define ASSUME(x) __assume(x)
-#elif IS_GNU || IS_CLANG
-#define ASSUME(x) ((void)(x))
-#else // IS_GNU || IS_CLANG
-#define ASSUME(x) ((void)(x)) // No-op for other compilers
-#endif // IS_MSVC
+#define SOLID_ASSUME(x) UE_ASSUME(x)
 
 #endif // HAS_CPP_ATTRIBUTE(assume)
 
@@ -715,16 +709,25 @@ namespace Solid
 #define solid_verify(expr) verify(expr)
 #define solid_verifyf(expr, format, ...) verifyf(expr, format, ##__VA_ARGS__)
 
+// Compiles down to an assume in shipping builds
+#define solid_cassume(expr) check(expr)
+
+// Compiles down to an assume in shipping builds
+#define solid_cassumef(expr, format, ...) checkf(expr, format, ##__VA_ARGS__)
+
 #else // UE_BUILD_SHIPPING || USE_CHECKS_IN_SHIPPING
 
-#define solid_check(expr) ASSUME(expr)
-#define solid_checkf(expr, format, ...) ASSUME(expr)
+#define solid_check(expr) check(false)
+#define solid_checkf(expr, format, ...) checkf(false, format, ##__VA_ARGS__)
 
 #define solid_ensure(expr)
 #define solid_ensuref(expr, format, ...)
 
 #define solid_verify(expr) { if UNLIKELY_IF(!(expr)) { ASSUME(false); } }
 #define solid_verifyf(expr, format, ...) { if UNLIKELY_IF(!(expr)) { ASSUME(false); } }
+
+#define solid_cassume(expr) SOLID_ASSUME(expr)
+#define solid_cassumef(expr, format, ...) SOLID_ASSUME(expr)
 
 #endif // UE_BUILD_SHIPPING || USE_CHECKS_IN_SHIPPING
 
