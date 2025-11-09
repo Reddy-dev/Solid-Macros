@@ -147,6 +147,8 @@ namespace Solid
 	
 } // namespace Solid
 
+#ifndef DEFINE_SOLID_MOVEABLE_CPP_STRUCT
+
 #define DEFINE_SOLID_MOVEABLE_CPP_STRUCT(StructType) \
 	namespace \
 	{ \
@@ -164,3 +166,5 @@ namespace Solid
 		}; \
 		static FSolidOpsAutoReg_##StructType GAutoReg_SolidOps_##StructType;     \
 	} // namespace
+
+#endif // DEFINE_SOLID_MOVEABLE_CPP_STRUCT
