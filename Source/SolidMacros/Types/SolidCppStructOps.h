@@ -84,6 +84,13 @@ struct SOLIDMACROS_API FSolidMoveableStructRegistry : public FNoncopyable
 	{
 		// do nothing
 	}
+
+	template <typename TStructType>
+	requires (!Solid::TScriptStructConcept<TStructType>)
+	void RegisterMovableScriptStruct()
+	{
+		// do nothing
+	}
 	
 	NO_DISCARD bool IsStructMovable(const TSolidNotNull<const UScriptStruct*> InStruct) const;
 	NO_DISCARD bool IsStructMoveConstructible(const TSolidNotNull<const UScriptStruct*> InStruct) const;

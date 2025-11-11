@@ -3,6 +3,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
+#include "SolidMacros/Macros.h"
+#include "SolidMacros/Concepts/SolidConcepts.h"
+
 #include "SolidEnumSelector.generated.h"
 
 /**
@@ -15,6 +19,22 @@ struct SOLIDMACROS_API FSolidEnumSelector
 
 public:
 	FSolidEnumSelector() = default;
+
+	template <typename TEnum>
+	requires (std::is_enum<TEnum>::value)
+	static NO_DISCARD FSolidEnumSelector Make(const TEnum InValue)
+	{
+		// Concepts were giving a false error in rider.
+		using EnumType = decltype(InValue);
+		static_assert(Solid::TStaticEnumConcept<EnumType>, "FSolidEnumSelector::Make<TEnum>: TEnum must be a UENUM type.");
+		
+		return FSolidEnumSelector(StaticEnum<TEnum>(), static_cast<int64>(InValue));
+	}
+
+	static NO_DISCARD FSolidEnumSelector Make(UEnum* InClass, const int64 InValue)
+	{
+		return FSolidEnumSelector(InClass, InValue);
+	}
 
 	FORCEINLINE FSolidEnumSelector(UEnum* InClass, const int64 InValue)
 		: Class(InClass), Value(InValue)
