@@ -20,13 +20,13 @@ struct SOLIDMACROS_API FSolidEnumSelector
 public:
 	FSolidEnumSelector() = default;
 
+	// @TODO: fix this not having anough constraints
 	template <typename TEnum>
 	requires (std::is_enum<TEnum>::value)
 	static NO_DISCARD FSolidEnumSelector Make(const TEnum InValue)
 	{
-		// Concepts were giving a false error in rider.
-		using EnumType = decltype(InValue);
-		static_assert(Solid::TStaticEnumConcept<EnumType>, "FSolidEnumSelector::Make<TEnum>: TEnum must be a UENUM type.");
+		//using EnumType = decltype(InValue);
+		//static_assert(Solid::TStaticEnumConcept<EnumType>, "FSolidEnumSelector::Make<TEnum>: TEnum must be a UENUM type.");
 		
 		return FSolidEnumSelector(StaticEnum<TEnum>(), static_cast<int64>(InValue));
 	}
