@@ -9,6 +9,7 @@
 #include "CoreMinimal.h"
 
 #include "UObject/ObjectKey.h"
+#include "GameplayTagsManager.h"
 
 #include "SolidMacros/Macros.h"
 
@@ -81,6 +82,8 @@ namespace Solid
 DEFINE_STD_HASH(FName)
 DEFINE_STD_HASH(FString);
 DEFINE_STD_HASH(FStringView);
+DEFINE_STD_HASH(FGameplayTag);
+
 
 template <typename T>
 struct std::hash<TObjectKey<typename T>>

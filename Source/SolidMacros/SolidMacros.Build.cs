@@ -27,7 +27,8 @@ public class SolidMacros : ModuleRules
 			new string[]
 			{
 				"Core",
-				"CoreUObject"
+				"CoreUObject",
+				"GameplayTags",
 			}
 			);
 			
