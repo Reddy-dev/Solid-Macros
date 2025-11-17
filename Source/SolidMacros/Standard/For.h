@@ -30,24 +30,33 @@ namespace Solid
         }
     }
 
-    template <typename T, typename = void>
-    struct THasSizeMethod : std::false_type {};
+    template <typename T>
+    concept THasSizeConcept = requires(T InType)
+    {
+        InType.size();
+    }; // concept THasSizeConcept
 
     template <typename T>
-    struct THasSizeMethod<T, std::void_t<decltype(std::declval<T>().size())>> : std::true_type {};
+    concept THasNumConcept = requires(T InType)
+    {
+        InType.Num();
+    }; // concept THasNumConcept
 
-    // Trait to check for a Num method.
-    template <typename T, typename = void>
-    struct THasNumMethod : std::false_type {};
-
-    template <typename T>
-    struct THasNumMethod<T, std::void_t<decltype(std::declval<T>().Num())>> : std::true_type {};
-
-    template <typename ContainerType, typename FunctionType>
-    requires (THasSizeMethod<ContainerType>::value || THasNumMethod<ContainerType>::value)
+    template <THasSizeConcept ContainerType, typename FunctionType>
     FORCEINLINE constexpr void For(const ContainerType& Container, FunctionType Function)
     {
-        constexpr auto Size = THasSizeMethod<ContainerType>::value ? Container.size() : Container.Num();
+        constexpr auto Size = Container.size();
+        
+        for (decltype(Size) Index = 0; Index < Size; ++Index)
+        {
+            Function(Index, Container[Index]);
+        }
+    }
+
+    template <THasNumConcept ContainerType, typename FunctionType>
+    FORCEINLINE constexpr void For(const ContainerType& Container, FunctionType Function)
+    {
+        constexpr auto Size = Container.Num();
         
         for (decltype(Size) Index = 0; Index < Size; ++Index)
         {
@@ -98,7 +107,6 @@ namespace Solid
         ForEachTupleImpl<Start, End, Tuple, FunctionType>(
             Function, std::make_index_sequence<std::tuple_size_v<std::remove_reference_t<Tuple>>>{});
     }
-    
     
 } // namespace Solid
 
