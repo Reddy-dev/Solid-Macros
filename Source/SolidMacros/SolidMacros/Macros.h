@@ -80,6 +80,24 @@ namespace Solid
 		constexpr auto& value = type_name_holder<T>::value;
 		return std::string_view{value.data(), value.size()};
 	}
+
+	namespace internal
+	{
+		template <typename... T>
+		FORCEINLINE const TCHAR* BuildCheckTextFormat(const TCHAR* Format, T&&... Args)
+		{
+			FStringFormatOrderedArguments OrderedArgs;
+			OrderedArgs.Reserve(sizeof...(T));
+			
+			(OrderedArgs.Emplace(Forward<T>(Args)), ...);
+			
+			FString Buffer;
+			Buffer = FString::Format(Format, OrderedArgs);
+
+			return *Buffer;
+		}
+		
+	} // namespace internal
 	
 } // namespace Solid
 
@@ -703,11 +721,26 @@ namespace Solid
 #define solid_checkf(expr, format, ...) \
 	checkf(expr, format, ##__VA_ARGS__)
 
+#define solid_checkfmt(expr, format, ...) \
+	do \
+	{ \
+		UE_CHECK_F_IMPL(expr, TEXT("%s"), Solid::internal::BuildCheckTextFormat(format, ##__VA_ARGS__)); \
+	} while (false)
+
 #define solid_ensure(expr) ensure(expr)
-#define solid_ensuref(expr, format, ...) ensuref(expr, format, ##__VA_ARGS__)
+#define solid_ensureMsgf(expr, format, ...) ensureMsgf(expr, format, ##__VA_ARGS__)
+
+#define solid_ensurefmt(expr, format, ...) \
+	UE_ENSURE_F_IMPL(expr, TEXT("%s"), Solid::internal::BuildCheckTextFormat(format, ##__VA_ARGS__))
 
 #define solid_verify(expr) verify(expr)
 #define solid_verifyf(expr, format, ...) verifyf(expr, format, ##__VA_ARGS__)
+
+#define solid_verifyfmt(expr, format, ...) \
+	do \
+	{ \
+		UE_CHECK_F_IMPL(expr, TEXT("%s"), Solid::internal::BuildCheckTextFormat(format, ##__VA_ARGS__)); \
+	} while (false)
 
 // Compiles down to an assume in shipping builds
 #define solid_cassume(expr) check(expr)
@@ -715,19 +748,29 @@ namespace Solid
 // Compiles down to an assume in shipping builds
 #define solid_cassumef(expr, format, ...) checkf(expr, format, ##__VA_ARGS__)
 
+#define solid_cassumefmt(expr, format, ...) \
+	do \
+	{ \
+		UE_CHECK_F_IMPL(expr, TEXT("%s"), Solid::internal::BuildCheckTextFormat(format, ##__VA_ARGS__)); \
+	} while (false)
+
 #else // UE_BUILD_SHIPPING || USE_CHECKS_IN_SHIPPING
 
 #define solid_check(expr) check(false)
 #define solid_checkf(expr, format, ...) checkf(false, format, ##__VA_ARGS__)
+#define solid_checkfmt(expr, format, ...) UE_EMPTY
 
 #define solid_ensure(expr)
 #define solid_ensuref(expr, format, ...)
+#define solid_ensurefmt(expr, format, ...) UE_EMPTY
 
 #define solid_verify(expr) { if UNLIKELY_IF(!(expr)) { ASSUME(false); } }
 #define solid_verifyf(expr, format, ...) { if UNLIKELY_IF(!(expr)) { ASSUME(false); } }
+#define solid_verifyfmt(expr, format, ...) if UNLIKELY_IF(!(expr)) { ASSUME(false); }
 
 #define solid_cassume(expr) SOLID_ASSUME(expr)
 #define solid_cassumef(expr, format, ...) SOLID_ASSUME(expr)
+#define solid_cassumefmt(expr, format, ...) UE_EMPTY
 
 #endif // UE_BUILD_SHIPPING || USE_CHECKS_IN_SHIPPING
 
