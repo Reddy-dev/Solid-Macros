@@ -106,7 +106,7 @@ private:
 namespace Solid
 {
 	// @TODO: add a restrict keyword to this?
-	void MoveConstructScriptStruct(const TSolidNotNull<const UScriptStruct*> InStruct, void* Dest, void* Src,
+	inline void MoveConstructScriptStruct(const TSolidNotNull<const UScriptStruct*> InStruct, void* Dest, void* Src,
 	                             const uint32 Count = 1)
 	{
 		solid_checkf(IsValid(InStruct), TEXT("InStruct must be valid!"));
@@ -129,7 +129,7 @@ namespace Solid
 		}
 	}
 
-	void MoveAssignScriptStruct(const TSolidNotNull<const UScriptStruct*> InStruct, void* Dest, void* Src,
+	inline void MoveAssignScriptStruct(const TSolidNotNull<const UScriptStruct*> InStruct, void* Dest, void* Src,
 	                            const uint32 Count = 1)
 	{
 		solid_checkf(IsValid(InStruct), TEXT("InStruct must be valid!"));
