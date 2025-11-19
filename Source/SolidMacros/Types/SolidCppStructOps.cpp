@@ -29,3 +29,53 @@ const FSolidMoveableStructRegistry::FStructTypeHookInfo& FSolidMoveableStructReg
 	solid_checkf(IsStructMovable(InStruct), TEXT("InStruct is not registered as moveable!"));
 	return MoveableStructs.FindChecked(InStruct);
 }
+
+namespace Solid
+{
+	void MoveConstructScriptStruct(const TSolidNotNull<const UScriptStruct*> InStruct, void* Dest, void* Src,
+		const uint32 Count)
+	{
+		solid_checkf(IsValid(InStruct), TEXT("InStruct must be valid!"));
+			
+		solid_cassume(Dest);
+		solid_cassume(Src);
+
+		solid_checkf(FSolidMoveableStructRegistry::Get().IsStructMovable(InStruct),
+					 TEXT("InStruct is not registered as moveable!"));
+			
+		const FSolidMoveableStructRegistry::FMoveFunc MoveFunction =
+			FSolidMoveableStructRegistry::Get().GetStructTypeHookInfo(InStruct).MoveConstructor;
+				
+		for (uint32 Index = 0; Index < Count; ++Index)
+		{
+			MoveFunction(
+				reinterpret_cast<uint8*>(Dest) + Index * InStruct->GetStructureSize(),
+				reinterpret_cast<uint8*>(Src) + Index * InStruct->GetStructureSize()
+				);
+		}
+	}
+
+	void MoveAssignScriptStruct(const TSolidNotNull<const UScriptStruct*> InStruct, void* Dest, void* Src,
+		const uint32 Count)
+	{
+		solid_checkf(IsValid(InStruct), TEXT("InStruct must be valid!"));
+		
+		solid_cassume(Dest);
+		solid_cassume(Src);
+
+		solid_checkf(FSolidMoveableStructRegistry::Get().IsStructMovable(InStruct),
+		             TEXT("InStruct is not registered as moveable!"));
+		
+		const FSolidMoveableStructRegistry::FMoveFunc MoveFunction =
+			FSolidMoveableStructRegistry::Get().GetStructTypeHookInfo(InStruct).MoveAssignment;
+			
+		for (uint32 Index = 0; Index < Count; ++Index)
+		{
+			MoveFunction(
+				reinterpret_cast<uint8*>(Dest) + Index * InStruct->GetStructureSize(),
+				reinterpret_cast<uint8*>(Src) + Index * InStruct->GetStructureSize()
+				);
+		}
+	}
+
+} // namespace Solid
