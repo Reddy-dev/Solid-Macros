@@ -30,6 +30,7 @@ const FSolidMoveableStructRegistry::FStructTypeHookInfo& FSolidMoveableStructReg
 	return MoveableStructs.FindChecked(InStruct);
 }
 
+/*
 namespace Solid
 {
 	void MoveConstructScriptStruct(const TSolidNotNull<const UScriptStruct*> InStruct, void* Dest, void* Src,
@@ -79,3 +80,4 @@ namespace Solid
 	}
 
 } // namespace Solid
+*/
