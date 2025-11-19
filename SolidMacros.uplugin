@@ -23,11 +23,6 @@
 			"Name": "SolidMacrosEditor",
 			"Type": "Editor",
 			"LoadingPhase": "PreDefault"
-		},
-		{
-			"Name": "SolidMacrosTests",
-			"Type": "DeveloperTool",
-			"LoadingPhase": "Default"
 		}
 	]
 }
